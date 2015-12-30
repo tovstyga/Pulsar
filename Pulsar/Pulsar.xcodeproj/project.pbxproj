@@ -7,15 +7,37 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		40BD1F061C2C16F500828FD1 /* PRLockActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BD1F051C2C16F500828FD1 /* PRLockActivity.m */; };
+		40BD1F0A1C2C1FB200828FD1 /* PRLockActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40BD1F091C2C1FB200828FD1 /* PRLockActivity.xib */; };
+		40BD1F101C2C332500828FD1 /* PRRootLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BD1F0F1C2C332500828FD1 /* PRRootLoginViewController.m */; };
 		40E6B9C01C297EAA0083A449 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9BF1C297EAA0083A449 /* main.m */; };
 		40E6B9C31C297EAA0083A449 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9C21C297EAA0083A449 /* AppDelegate.m */; };
 		40E6B9C61C297EAA0083A449 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9C51C297EAA0083A449 /* ViewController.m */; };
 		40E6B9C91C297EAA0083A449 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40E6B9C71C297EAA0083A449 /* Main.storyboard */; };
 		40E6B9CB1C297EAA0083A449 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40E6B9CA1C297EAA0083A449 /* Assets.xcassets */; };
 		40E6B9CE1C297EAA0083A449 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40E6B9CC1C297EAA0083A449 /* LaunchScreen.storyboard */; };
+		40E6B9D81C2981610083A449 /* PRRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9D71C2981610083A449 /* PRRootViewController.m */; };
+		40E6B9DF1C2995760083A449 /* PRLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9DE1C2995760083A449 /* PRLoginViewController.m */; };
+		40E6B9E21C2995DF0083A449 /* PRRestoreAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9E11C2995DF0083A449 /* PRRestoreAccountViewController.m */; };
+		40E6B9E51C29964C0083A449 /* PRRegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9E41C29964C0083A449 /* PRRegistrationViewController.m */; };
+		40F65D991C33C6C900846449 /* PREmailValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65D981C33C6C900846449 /* PREmailValidator.m */; };
+		40F65D9C1C33CE0700846449 /* PRConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65D9B1C33CE0700846449 /* PRConfigurator.m */; };
+		40F65D9F1C33D6B200846449 /* PRLoginViewInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65D9E1C33D6B200846449 /* PRLoginViewInteractor.m */; };
+		40F65DA21C33D6DC00846449 /* PRRegistrationViewInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65DA11C33D6DC00846449 /* PRRegistrationViewInteractor.m */; };
+		40F65DA51C33D7B700846449 /* PRRestoreAccountInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65DA41C33D7B700846449 /* PRRestoreAccountInteractor.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		40BD1EFF1C2C0E8700828FD1 /* RPLoginViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPLoginViewInteractorProtocol.h; sourceTree = "<group>"; };
+		40BD1F001C2C0EAC00828FD1 /* RPRegistrationViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPRegistrationViewInteractorProtocol.h; sourceTree = "<group>"; };
+		40BD1F011C2C0EE100828FD1 /* PRRestoreAccountViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRRestoreAccountViewInteractorProtocol.h; sourceTree = "<group>"; };
+		40BD1F041C2C16F500828FD1 /* PRLockActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRLockActivity.h; sourceTree = "<group>"; };
+		40BD1F051C2C16F500828FD1 /* PRLockActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRLockActivity.m; sourceTree = "<group>"; };
+		40BD1F091C2C1FB200828FD1 /* PRLockActivity.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PRLockActivity.xib; sourceTree = "<group>"; };
+		40BD1F0E1C2C332500828FD1 /* PRRootLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRootLoginViewController.h; sourceTree = "<group>"; };
+		40BD1F0F1C2C332500828FD1 /* PRRootLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRootLoginViewController.m; sourceTree = "<group>"; };
+		40BD1F111C2C416300828FD1 /* PRConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRConstants.h; sourceTree = "<group>"; };
+		40BD1F121C2C429E00828FD1 /* PRMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRMacros.h; sourceTree = "<group>"; };
 		40E6B9BB1C297EAA0083A449 /* Pulsar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pulsar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E6B9BF1C297EAA0083A449 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		40E6B9C11C297EAA0083A449 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -26,6 +48,24 @@
 		40E6B9CA1C297EAA0083A449 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		40E6B9CD1C297EAA0083A449 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		40E6B9CF1C297EAA0083A449 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		40E6B9D61C2981610083A449 /* PRRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRootViewController.h; sourceTree = "<group>"; };
+		40E6B9D71C2981610083A449 /* PRRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRootViewController.m; sourceTree = "<group>"; };
+		40E6B9DD1C2995760083A449 /* PRLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRLoginViewController.h; sourceTree = "<group>"; };
+		40E6B9DE1C2995760083A449 /* PRLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRLoginViewController.m; sourceTree = "<group>"; };
+		40E6B9E01C2995DF0083A449 /* PRRestoreAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRestoreAccountViewController.h; sourceTree = "<group>"; };
+		40E6B9E11C2995DF0083A449 /* PRRestoreAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRestoreAccountViewController.m; sourceTree = "<group>"; };
+		40E6B9E31C29964C0083A449 /* PRRegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRegistrationViewController.h; sourceTree = "<group>"; };
+		40E6B9E41C29964C0083A449 /* PRRegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRegistrationViewController.m; sourceTree = "<group>"; };
+		40F65D971C33C6C900846449 /* PREmailValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PREmailValidator.h; sourceTree = "<group>"; };
+		40F65D981C33C6C900846449 /* PREmailValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PREmailValidator.m; sourceTree = "<group>"; };
+		40F65D9A1C33CE0700846449 /* PRConfigurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRConfigurator.h; sourceTree = "<group>"; };
+		40F65D9B1C33CE0700846449 /* PRConfigurator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRConfigurator.m; sourceTree = "<group>"; };
+		40F65D9D1C33D6B200846449 /* PRLoginViewInteractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRLoginViewInteractor.h; sourceTree = "<group>"; };
+		40F65D9E1C33D6B200846449 /* PRLoginViewInteractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRLoginViewInteractor.m; sourceTree = "<group>"; };
+		40F65DA01C33D6DC00846449 /* PRRegistrationViewInteractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRegistrationViewInteractor.h; sourceTree = "<group>"; };
+		40F65DA11C33D6DC00846449 /* PRRegistrationViewInteractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRegistrationViewInteractor.m; sourceTree = "<group>"; };
+		40F65DA31C33D7B700846449 /* PRRestoreAccountInteractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRestoreAccountInteractor.h; sourceTree = "<group>"; };
+		40F65DA41C33D7B700846449 /* PRRestoreAccountInteractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRestoreAccountInteractor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +79,50 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		40BD1EFD1C2C0E3A00828FD1 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				40BD1EFE1C2C0E5900828FD1 /* Protocols */,
+				40F65D9D1C33D6B200846449 /* PRLoginViewInteractor.h */,
+				40F65D9E1C33D6B200846449 /* PRLoginViewInteractor.m */,
+				40F65DA01C33D6DC00846449 /* PRRegistrationViewInteractor.h */,
+				40F65DA11C33D6DC00846449 /* PRRegistrationViewInteractor.m */,
+				40F65DA31C33D7B700846449 /* PRRestoreAccountInteractor.h */,
+				40F65DA41C33D7B700846449 /* PRRestoreAccountInteractor.m */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		40BD1EFE1C2C0E5900828FD1 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				40BD1EFF1C2C0E8700828FD1 /* RPLoginViewInteractorProtocol.h */,
+				40BD1F001C2C0EAC00828FD1 /* RPRegistrationViewInteractorProtocol.h */,
+				40BD1F011C2C0EE100828FD1 /* PRRestoreAccountViewInteractorProtocol.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		40BD1F021C2C127500828FD1 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				40BD1F031C2C143500828FD1 /* LockActivityIndicator */,
+				40F65D971C33C6C900846449 /* PREmailValidator.h */,
+				40F65D981C33C6C900846449 /* PREmailValidator.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		40BD1F031C2C143500828FD1 /* LockActivityIndicator */ = {
+			isa = PBXGroup;
+			children = (
+				40BD1F041C2C16F500828FD1 /* PRLockActivity.h */,
+				40BD1F051C2C16F500828FD1 /* PRLockActivity.m */,
+				40BD1F091C2C1FB200828FD1 /* PRLockActivity.xib */,
+			);
+			path = LockActivityIndicator;
+			sourceTree = "<group>";
+		};
 		40E6B9B21C297EAA0083A449 = {
 			isa = PBXGroup;
 			children = (
@@ -58,15 +142,20 @@
 		40E6B9BD1C297EAA0083A449 /* Pulsar */ = {
 			isa = PBXGroup;
 			children = (
+				40BD1F021C2C127500828FD1 /* Helpers */,
+				40E6B9DB1C298E2B0083A449 /* Model */,
+				40E6B9DA1C2987890083A449 /* Interactor */,
+				40E6B9D91C2985BD0083A449 /* View */,
+				40E6B9D51C29808B0083A449 /* Controller */,
 				40E6B9C11C297EAA0083A449 /* AppDelegate.h */,
 				40E6B9C21C297EAA0083A449 /* AppDelegate.m */,
 				40E6B9C41C297EAA0083A449 /* ViewController.h */,
 				40E6B9C51C297EAA0083A449 /* ViewController.m */,
-				40E6B9C71C297EAA0083A449 /* Main.storyboard */,
 				40E6B9CA1C297EAA0083A449 /* Assets.xcassets */,
-				40E6B9CC1C297EAA0083A449 /* LaunchScreen.storyboard */,
 				40E6B9CF1C297EAA0083A449 /* Info.plist */,
 				40E6B9BE1C297EAA0083A449 /* Supporting Files */,
+				40BD1F111C2C416300828FD1 /* PRConstants.h */,
+				40BD1F121C2C429E00828FD1 /* PRMacros.h */,
 			);
 			path = Pulsar;
 			sourceTree = "<group>";
@@ -77,6 +166,57 @@
 				40E6B9BF1C297EAA0083A449 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		40E6B9D51C29808B0083A449 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				40E6B9DC1C2995200083A449 /* Auth */,
+				40E6B9D61C2981610083A449 /* PRRootViewController.h */,
+				40E6B9D71C2981610083A449 /* PRRootViewController.m */,
+				40F65D9A1C33CE0700846449 /* PRConfigurator.h */,
+				40F65D9B1C33CE0700846449 /* PRConfigurator.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		40E6B9D91C2985BD0083A449 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				40E6B9C71C297EAA0083A449 /* Main.storyboard */,
+				40E6B9CC1C297EAA0083A449 /* LaunchScreen.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		40E6B9DA1C2987890083A449 /* Interactor */ = {
+			isa = PBXGroup;
+			children = (
+				40BD1EFD1C2C0E3A00828FD1 /* Auth */,
+			);
+			path = Interactor;
+			sourceTree = "<group>";
+		};
+		40E6B9DB1C298E2B0083A449 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		40E6B9DC1C2995200083A449 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				40E6B9DD1C2995760083A449 /* PRLoginViewController.h */,
+				40E6B9DE1C2995760083A449 /* PRLoginViewController.m */,
+				40E6B9E01C2995DF0083A449 /* PRRestoreAccountViewController.h */,
+				40E6B9E11C2995DF0083A449 /* PRRestoreAccountViewController.m */,
+				40E6B9E31C29964C0083A449 /* PRRegistrationViewController.h */,
+				40E6B9E41C29964C0083A449 /* PRRegistrationViewController.m */,
+				40BD1F0E1C2C332500828FD1 /* PRRootLoginViewController.h */,
+				40BD1F0F1C2C332500828FD1 /* PRRootLoginViewController.m */,
+			);
+			path = Auth;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -105,6 +245,7 @@
 		40E6B9B31C297EAA0083A449 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = PR;
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = TAB;
 				TargetAttributes = {
@@ -139,6 +280,7 @@
 				40E6B9CE1C297EAA0083A449 /* LaunchScreen.storyboard in Resources */,
 				40E6B9CB1C297EAA0083A449 /* Assets.xcassets in Resources */,
 				40E6B9C91C297EAA0083A449 /* Main.storyboard in Resources */,
+				40BD1F0A1C2C1FB200828FD1 /* PRLockActivity.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,9 +291,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40BD1F101C2C332500828FD1 /* PRRootLoginViewController.m in Sources */,
 				40E6B9C61C297EAA0083A449 /* ViewController.m in Sources */,
+				40E6B9DF1C2995760083A449 /* PRLoginViewController.m in Sources */,
+				40F65D9F1C33D6B200846449 /* PRLoginViewInteractor.m in Sources */,
+				40F65D9C1C33CE0700846449 /* PRConfigurator.m in Sources */,
 				40E6B9C31C297EAA0083A449 /* AppDelegate.m in Sources */,
+				40BD1F061C2C16F500828FD1 /* PRLockActivity.m in Sources */,
+				40E6B9D81C2981610083A449 /* PRRootViewController.m in Sources */,
 				40E6B9C01C297EAA0083A449 /* main.m in Sources */,
+				40E6B9E21C2995DF0083A449 /* PRRestoreAccountViewController.m in Sources */,
+				40F65DA21C33D6DC00846449 /* PRRegistrationViewInteractor.m in Sources */,
+				40E6B9E51C29964C0083A449 /* PRRegistrationViewController.m in Sources */,
+				40F65D991C33C6C900846449 /* PREmailValidator.m in Sources */,
+				40F65DA51C33D7B700846449 /* PRRestoreAccountInteractor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +317,7 @@
 				40E6B9C81C297EAA0083A449 /* Base */,
 			);
 			name = Main.storyboard;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		40E6B9CC1C297EAA0083A449 /* LaunchScreen.storyboard */ = {
@@ -172,6 +326,7 @@
 				40E6B9CD1C297EAA0083A449 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -298,6 +453,7 @@
 				40E6B9D41C297EAA0083A449 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
