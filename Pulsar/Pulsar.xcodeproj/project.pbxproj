@@ -7,12 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4005172E1C3A5FBB00FBFE11 /* PRDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005172D1C3A5FBB00FBFE11 /* PRDataProvider.m */; };
+		400517331C3A981000FBFE11 /* PRRemoteError.m in Sources */ = {isa = PBXBuildFile; fileRef = 400517321C3A981000FBFE11 /* PRRemoteError.m */; };
+		400517381C3ABFCB00FBFE11 /* PRRemoteLoginResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 400517371C3ABFCB00FBFE11 /* PRRemoteLoginResponse.m */; };
+		4005173C1C3ACAA100FBFE11 /* PRRemoteResetPasswordRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005173B1C3ACAA100FBFE11 /* PRRemoteResetPasswordRequest.m */; };
+		400517401C3BAD8000FBFE11 /* PRTokenValidationResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4005173F1C3BAD8000FBFE11 /* PRTokenValidationResponse.m */; };
+		400517431C3BE70200FBFE11 /* PRLaunchScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 400517421C3BE70200FBFE11 /* PRLaunchScreenViewController.m */; };
+		400517461C3C171B00FBFE11 /* PRErrorDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 400517451C3C171B00FBFE11 /* PRErrorDescriptor.m */; };
+		400517491C3C19A900FBFE11 /* PRAlertHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 400517481C3C19A900FBFE11 /* PRAlertHelper.m */; };
 		40BD1F061C2C16F500828FD1 /* PRLockActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BD1F051C2C16F500828FD1 /* PRLockActivity.m */; };
 		40BD1F0A1C2C1FB200828FD1 /* PRLockActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40BD1F091C2C1FB200828FD1 /* PRLockActivity.xib */; };
 		40BD1F101C2C332500828FD1 /* PRRootLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BD1F0F1C2C332500828FD1 /* PRRootLoginViewController.m */; };
 		40E6B9C01C297EAA0083A449 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9BF1C297EAA0083A449 /* main.m */; };
 		40E6B9C31C297EAA0083A449 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9C21C297EAA0083A449 /* AppDelegate.m */; };
-		40E6B9C61C297EAA0083A449 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9C51C297EAA0083A449 /* ViewController.m */; };
 		40E6B9C91C297EAA0083A449 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40E6B9C71C297EAA0083A449 /* Main.storyboard */; };
 		40E6B9CB1C297EAA0083A449 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40E6B9CA1C297EAA0083A449 /* Assets.xcassets */; };
 		40E6B9CE1C297EAA0083A449 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40E6B9CC1C297EAA0083A449 /* LaunchScreen.storyboard */; };
@@ -25,9 +32,30 @@
 		40F65D9F1C33D6B200846449 /* PRLoginViewInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65D9E1C33D6B200846449 /* PRLoginViewInteractor.m */; };
 		40F65DA21C33D6DC00846449 /* PRRegistrationViewInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65DA11C33D6DC00846449 /* PRRegistrationViewInteractor.m */; };
 		40F65DA51C33D7B700846449 /* PRRestoreAccountInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65DA41C33D7B700846449 /* PRRestoreAccountInteractor.m */; };
+		40F65DA91C33FB0400846449 /* PRNetworkDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65DA81C33FB0400846449 /* PRNetworkDataProvider.m */; };
+		40F65DAE1C3404B100846449 /* PRReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65DAD1C3404B100846449 /* PRReachability.m */; };
+		40F65DB61C3434E000846449 /* PRRemoteRegistrationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65DB51C3434E000846449 /* PRRemoteRegistrationRequest.m */; };
+		40F65DB91C34353800846449 /* PRRemoteRegistrationResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65DB81C34353800846449 /* PRRemoteRegistrationResponse.m */; };
+		40FF1A081C4393D4005A14BE /* PRScreenLock.m in Sources */ = {isa = PBXBuildFile; fileRef = 40FF1A071C4393D4005A14BE /* PRScreenLock.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4005172C1C3A5FBB00FBFE11 /* PRDataProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRDataProvider.h; sourceTree = "<group>"; };
+		4005172D1C3A5FBB00FBFE11 /* PRDataProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRDataProvider.m; sourceTree = "<group>"; };
+		400517311C3A981000FBFE11 /* PRRemoteError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteError.h; sourceTree = "<group>"; };
+		400517321C3A981000FBFE11 /* PRRemoteError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteError.m; sourceTree = "<group>"; };
+		400517361C3ABFCB00FBFE11 /* PRRemoteLoginResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteLoginResponse.h; sourceTree = "<group>"; };
+		400517371C3ABFCB00FBFE11 /* PRRemoteLoginResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteLoginResponse.m; sourceTree = "<group>"; };
+		4005173A1C3ACAA100FBFE11 /* PRRemoteResetPasswordRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteResetPasswordRequest.h; sourceTree = "<group>"; };
+		4005173B1C3ACAA100FBFE11 /* PRRemoteResetPasswordRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteResetPasswordRequest.m; sourceTree = "<group>"; };
+		4005173E1C3BAD8000FBFE11 /* PRTokenValidationResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRTokenValidationResponse.h; sourceTree = "<group>"; };
+		4005173F1C3BAD8000FBFE11 /* PRTokenValidationResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRTokenValidationResponse.m; sourceTree = "<group>"; };
+		400517411C3BE70200FBFE11 /* PRLaunchScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRLaunchScreenViewController.h; sourceTree = "<group>"; };
+		400517421C3BE70200FBFE11 /* PRLaunchScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRLaunchScreenViewController.m; sourceTree = "<group>"; };
+		400517441C3C171B00FBFE11 /* PRErrorDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRErrorDescriptor.h; sourceTree = "<group>"; };
+		400517451C3C171B00FBFE11 /* PRErrorDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRErrorDescriptor.m; sourceTree = "<group>"; };
+		400517471C3C19A900FBFE11 /* PRAlertHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRAlertHelper.h; sourceTree = "<group>"; };
+		400517481C3C19A900FBFE11 /* PRAlertHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRAlertHelper.m; sourceTree = "<group>"; };
 		40BD1EFF1C2C0E8700828FD1 /* RPLoginViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPLoginViewInteractorProtocol.h; sourceTree = "<group>"; };
 		40BD1F001C2C0EAC00828FD1 /* RPRegistrationViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPRegistrationViewInteractorProtocol.h; sourceTree = "<group>"; };
 		40BD1F011C2C0EE100828FD1 /* PRRestoreAccountViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRRestoreAccountViewInteractorProtocol.h; sourceTree = "<group>"; };
@@ -42,8 +70,6 @@
 		40E6B9BF1C297EAA0083A449 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		40E6B9C11C297EAA0083A449 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		40E6B9C21C297EAA0083A449 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		40E6B9C41C297EAA0083A449 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		40E6B9C51C297EAA0083A449 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		40E6B9C81C297EAA0083A449 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		40E6B9CA1C297EAA0083A449 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		40E6B9CD1C297EAA0083A449 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -66,6 +92,17 @@
 		40F65DA11C33D6DC00846449 /* PRRegistrationViewInteractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRegistrationViewInteractor.m; sourceTree = "<group>"; };
 		40F65DA31C33D7B700846449 /* PRRestoreAccountInteractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRestoreAccountInteractor.h; sourceTree = "<group>"; };
 		40F65DA41C33D7B700846449 /* PRRestoreAccountInteractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRestoreAccountInteractor.m; sourceTree = "<group>"; };
+		40F65DA71C33FB0400846449 /* PRNetworkDataProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRNetworkDataProvider.h; sourceTree = "<group>"; };
+		40F65DA81C33FB0400846449 /* PRNetworkDataProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRNetworkDataProvider.m; sourceTree = "<group>"; };
+		40F65DAC1C3404B100846449 /* PRReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRReachability.h; sourceTree = "<group>"; };
+		40F65DAD1C3404B100846449 /* PRReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRReachability.m; sourceTree = "<group>"; };
+		40F65DB01C342D2C00846449 /* PRJsonCompatable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRJsonCompatable.h; sourceTree = "<group>"; };
+		40F65DB41C3434E000846449 /* PRRemoteRegistrationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteRegistrationRequest.h; sourceTree = "<group>"; };
+		40F65DB51C3434E000846449 /* PRRemoteRegistrationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteRegistrationRequest.m; sourceTree = "<group>"; };
+		40F65DB71C34353800846449 /* PRRemoteRegistrationResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteRegistrationResponse.h; sourceTree = "<group>"; };
+		40F65DB81C34353800846449 /* PRRemoteRegistrationResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteRegistrationResponse.m; sourceTree = "<group>"; };
+		40FF1A061C4393D4005A14BE /* PRScreenLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRScreenLock.h; sourceTree = "<group>"; };
+		40FF1A071C4393D4005A14BE /* PRScreenLock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRScreenLock.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +116,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		400517351C3ABF2B00FBFE11 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				400517361C3ABFCB00FBFE11 /* PRRemoteLoginResponse.h */,
+				400517371C3ABFCB00FBFE11 /* PRRemoteLoginResponse.m */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		400517391C3ACA4E00FBFE11 /* ResetPassword */ = {
+			isa = PBXGroup;
+			children = (
+				4005173A1C3ACAA100FBFE11 /* PRRemoteResetPasswordRequest.h */,
+				4005173B1C3ACAA100FBFE11 /* PRRemoteResetPasswordRequest.m */,
+			);
+			path = ResetPassword;
+			sourceTree = "<group>";
+		};
+		4005173D1C3BAD3800FBFE11 /* TokenValidation */ = {
+			isa = PBXGroup;
+			children = (
+				4005173E1C3BAD8000FBFE11 /* PRTokenValidationResponse.h */,
+				4005173F1C3BAD8000FBFE11 /* PRTokenValidationResponse.m */,
+			);
+			path = TokenValidation;
+			sourceTree = "<group>";
+		};
 		40BD1EFD1C2C0E3A00828FD1 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +173,10 @@
 				40BD1F031C2C143500828FD1 /* LockActivityIndicator */,
 				40F65D971C33C6C900846449 /* PREmailValidator.h */,
 				40F65D981C33C6C900846449 /* PREmailValidator.m */,
+				400517441C3C171B00FBFE11 /* PRErrorDescriptor.h */,
+				400517451C3C171B00FBFE11 /* PRErrorDescriptor.m */,
+				400517471C3C19A900FBFE11 /* PRAlertHelper.h */,
+				400517481C3C19A900FBFE11 /* PRAlertHelper.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -119,6 +187,8 @@
 				40BD1F041C2C16F500828FD1 /* PRLockActivity.h */,
 				40BD1F051C2C16F500828FD1 /* PRLockActivity.m */,
 				40BD1F091C2C1FB200828FD1 /* PRLockActivity.xib */,
+				40FF1A061C4393D4005A14BE /* PRScreenLock.h */,
+				40FF1A071C4393D4005A14BE /* PRScreenLock.m */,
 			);
 			path = LockActivityIndicator;
 			sourceTree = "<group>";
@@ -149,8 +219,6 @@
 				40E6B9D51C29808B0083A449 /* Controller */,
 				40E6B9C11C297EAA0083A449 /* AppDelegate.h */,
 				40E6B9C21C297EAA0083A449 /* AppDelegate.m */,
-				40E6B9C41C297EAA0083A449 /* ViewController.h */,
-				40E6B9C51C297EAA0083A449 /* ViewController.m */,
 				40E6B9CA1C297EAA0083A449 /* Assets.xcassets */,
 				40E6B9CF1C297EAA0083A449 /* Info.plist */,
 				40E6B9BE1C297EAA0083A449 /* Supporting Files */,
@@ -176,6 +244,8 @@
 				40E6B9D71C2981610083A449 /* PRRootViewController.m */,
 				40F65D9A1C33CE0700846449 /* PRConfigurator.h */,
 				40F65D9B1C33CE0700846449 /* PRConfigurator.m */,
+				400517411C3BE70200FBFE11 /* PRLaunchScreenViewController.h */,
+				400517421C3BE70200FBFE11 /* PRLaunchScreenViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -200,6 +270,12 @@
 		40E6B9DB1C298E2B0083A449 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				40F65DB21C34331D00846449 /* LocalModel */,
+				40F65DB11C3432FE00846449 /* RemoteModel */,
+				40F65DAF1C342CE500846449 /* Protocols */,
+				40F65DA61C33FAA900846449 /* Network */,
+				4005172C1C3A5FBB00FBFE11 /* PRDataProvider.h */,
+				4005172D1C3A5FBB00FBFE11 /* PRDataProvider.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -217,6 +293,56 @@
 				40BD1F0F1C2C332500828FD1 /* PRRootLoginViewController.m */,
 			);
 			path = Auth;
+			sourceTree = "<group>";
+		};
+		40F65DA61C33FAA900846449 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				40F65DA71C33FB0400846449 /* PRNetworkDataProvider.h */,
+				40F65DA81C33FB0400846449 /* PRNetworkDataProvider.m */,
+				40F65DAC1C3404B100846449 /* PRReachability.h */,
+				40F65DAD1C3404B100846449 /* PRReachability.m */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		40F65DAF1C342CE500846449 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				40F65DB01C342D2C00846449 /* PRJsonCompatable.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		40F65DB11C3432FE00846449 /* RemoteModel */ = {
+			isa = PBXGroup;
+			children = (
+				4005173D1C3BAD3800FBFE11 /* TokenValidation */,
+				400517391C3ACA4E00FBFE11 /* ResetPassword */,
+				400517351C3ABF2B00FBFE11 /* Login */,
+				40F65DB31C34348F00846449 /* Registration */,
+				400517311C3A981000FBFE11 /* PRRemoteError.h */,
+				400517321C3A981000FBFE11 /* PRRemoteError.m */,
+			);
+			path = RemoteModel;
+			sourceTree = "<group>";
+		};
+		40F65DB21C34331D00846449 /* LocalModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = LocalModel;
+			sourceTree = "<group>";
+		};
+		40F65DB31C34348F00846449 /* Registration */ = {
+			isa = PBXGroup;
+			children = (
+				40F65DB41C3434E000846449 /* PRRemoteRegistrationRequest.h */,
+				40F65DB51C3434E000846449 /* PRRemoteRegistrationRequest.m */,
+				40F65DB71C34353800846449 /* PRRemoteRegistrationResponse.h */,
+				40F65DB81C34353800846449 /* PRRemoteRegistrationResponse.m */,
+			);
+			path = Registration;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -291,20 +417,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40F65DA91C33FB0400846449 /* PRNetworkDataProvider.m in Sources */,
 				40BD1F101C2C332500828FD1 /* PRRootLoginViewController.m in Sources */,
-				40E6B9C61C297EAA0083A449 /* ViewController.m in Sources */,
+				4005173C1C3ACAA100FBFE11 /* PRRemoteResetPasswordRequest.m in Sources */,
+				400517381C3ABFCB00FBFE11 /* PRRemoteLoginResponse.m in Sources */,
 				40E6B9DF1C2995760083A449 /* PRLoginViewController.m in Sources */,
 				40F65D9F1C33D6B200846449 /* PRLoginViewInteractor.m in Sources */,
 				40F65D9C1C33CE0700846449 /* PRConfigurator.m in Sources */,
 				40E6B9C31C297EAA0083A449 /* AppDelegate.m in Sources */,
 				40BD1F061C2C16F500828FD1 /* PRLockActivity.m in Sources */,
+				400517461C3C171B00FBFE11 /* PRErrorDescriptor.m in Sources */,
 				40E6B9D81C2981610083A449 /* PRRootViewController.m in Sources */,
 				40E6B9C01C297EAA0083A449 /* main.m in Sources */,
+				40FF1A081C4393D4005A14BE /* PRScreenLock.m in Sources */,
+				400517331C3A981000FBFE11 /* PRRemoteError.m in Sources */,
 				40E6B9E21C2995DF0083A449 /* PRRestoreAccountViewController.m in Sources */,
+				4005172E1C3A5FBB00FBFE11 /* PRDataProvider.m in Sources */,
 				40F65DA21C33D6DC00846449 /* PRRegistrationViewInteractor.m in Sources */,
 				40E6B9E51C29964C0083A449 /* PRRegistrationViewController.m in Sources */,
+				400517491C3C19A900FBFE11 /* PRAlertHelper.m in Sources */,
+				40F65DB91C34353800846449 /* PRRemoteRegistrationResponse.m in Sources */,
 				40F65D991C33C6C900846449 /* PREmailValidator.m in Sources */,
+				40F65DAE1C3404B100846449 /* PRReachability.m in Sources */,
 				40F65DA51C33D7B700846449 /* PRRestoreAccountInteractor.m in Sources */,
+				400517431C3BE70200FBFE11 /* PRLaunchScreenViewController.m in Sources */,
+				400517401C3BAD8000FBFE11 /* PRTokenValidationResponse.m in Sources */,
+				40F65DB61C3434E000846449 /* PRRemoteRegistrationRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

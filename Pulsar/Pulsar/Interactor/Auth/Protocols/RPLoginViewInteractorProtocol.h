@@ -8,6 +8,6 @@
 
 @protocol RPLoginViewInteractorProtocol <NSObject>
 
-- (void)loginUser:(NSString *)userName withPassword:(NSString *)password completion:(void(^)(BOOL success))completion;
+- (void)loginUser:(NSString *)userName withPassword:(NSString *)password completion:(void(^)(BOOL success, NSString *errorMessage))completion;
 
 @end

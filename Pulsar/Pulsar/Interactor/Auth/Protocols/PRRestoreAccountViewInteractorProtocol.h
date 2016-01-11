@@ -9,6 +9,6 @@
 @protocol PRRestoreAccountViewInteractorProtocol <NSObject>
 
 - (BOOL)validateEmail:(NSString *)email;
-- (void)restoreAccountForEmail:(NSString *)email;
+- (void)restoreAccountForEmail:(NSString *)email completion:(void(^)(BOOL success, NSString *errorMessage))completion;
 
 @end

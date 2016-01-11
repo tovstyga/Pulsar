@@ -38,15 +38,7 @@
                 <constraint firstItem="tet-ib-Jf8" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="6sA-aQ-3rV"/>
                 <constraint firstItem="tet-ib-Jf8" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Kh5-dZ-ona"/>
             </constraints>
-            <connections>
-                <outletCollection property="gestureRecognizers" destination="UXG-1M-AjL" appends="YES" id="vjq-rh-wfY"/>
-            </connections>
             <point key="canvasLocation" x="345" y="365"/>
         </view>
-        <tapGestureRecognizer id="UXG-1M-AjL">
-            <connections>
-                <action selector="tap:" destination="-1" id="Dhg-bp-zYE"/>
-            </connections>
-        </tapGestureRecognizer>
     </objects>
 </document>

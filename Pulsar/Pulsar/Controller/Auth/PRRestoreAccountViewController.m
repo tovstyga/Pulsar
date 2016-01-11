@@ -7,6 +7,7 @@
 //
 
 #import "PRRestoreAccountViewController.h"
+#import "PRScreenLock.h"
 
 @interface PRRestoreAccountViewController () <UITextFieldDelegate>
 
@@ -34,8 +35,19 @@
 
 - (IBAction)sendPasswordAction:(UIButton *)sender
 {
-    [self.interactor restoreAccountForEmail:self.emailTextField.text];
-    [self cancelAction:sender];
+    __weak typeof(self) wSelf = self;
+    [[PRScreenLock sharedInstance] lockView:self.view];
+    [self.interactor restoreAccountForEmail:self.emailTextField.text completion:^(BOOL success, NSString *errorMessage) {
+        [[PRScreenLock sharedInstance] unlock];
+        if (wSelf) {
+            __strong typeof(wSelf) sSelf = wSelf;
+            if (success) {
+                [sSelf cancelAction:sender];
+            } else {
+                [sSelf showAlertWithMessage:errorMessage];
+            }
+        }
+    }];
 }
 
 - (IBAction)cancelAction:(UIButton *)sender

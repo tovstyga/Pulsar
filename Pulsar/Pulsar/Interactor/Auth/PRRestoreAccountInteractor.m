@@ -7,6 +7,8 @@
 //
 
 #import "PRRestoreAccountInteractor.h"
+#import "PRDataProvider.h"
+#import "PRErrorDescriptor.h"
 
 @implementation PRRestoreAccountInteractor
 
@@ -15,9 +17,13 @@
     return [self.validator validateEmail:email];
 }
 
-- (void)restoreAccountForEmail:(NSString *)email
+- (void)restoreAccountForEmail:(NSString *)email completion:(void (^)(BOOL, NSString *))completion
 {
-    
+    [[PRDataProvider sharedInstance] sendNewPasswordOnEmail:email completion:^(NSError *error) {
+        if (completion) {
+            error ? completion(NO, [PRErrorDescriptor descriptionForError:error]) : completion(YES, nil);
+        }
+    }];
 }
 
 

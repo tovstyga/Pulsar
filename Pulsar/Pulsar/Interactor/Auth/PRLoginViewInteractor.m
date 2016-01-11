@@ -7,14 +7,18 @@
 //
 
 #import "PRLoginViewInteractor.h"
+#import "PRDataProvider.h"
+#import "PRErrorDescriptor.h"
 
 @implementation PRLoginViewInteractor
 
-- (void)loginUser:(NSString *)userName withPassword:(NSString *)password completion:(void(^)(BOOL success))completion
+- (void)loginUser:(NSString *)userName withPassword:(NSString *)password completion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
-    if (completion) {
-        completion(YES);
-    }
+    [[PRDataProvider sharedInstance] loginUser:userName password:password completion:^(NSError *error) {
+        if (completion) {
+            error ? completion(NO, [PRErrorDescriptor descriptionForError:error]) : completion(YES, nil);
+        }
+    }];
 }
 
 @end

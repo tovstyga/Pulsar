@@ -9,6 +9,6 @@
 @protocol RPRegistrationViewInteractorProtocol <NSObject>
 
 - (BOOL)validateEmail:(NSString *)email;
-- (void)registrateUser:(NSString *)userName withPassword:(NSString *)password email:(NSString *)email completion:(void(^)(BOOL success))completion;
+- (void)registrateUser:(NSString *)userName withPassword:(NSString *)password email:(NSString *)email completion:(void(^)(BOOL success, NSString *errorMessage))completion;
 
 @end

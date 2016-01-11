@@ -7,6 +7,8 @@
 //
 
 #import "PRRegistrationViewInteractor.h"
+#import "PRDataProvider.h"
+#import "PRErrorDescriptor.h"
 
 @implementation PRRegistrationViewInteractor
 
@@ -18,11 +20,13 @@
 - (void)registrateUser:(NSString *)userName
           withPassword:(NSString *)password
                  email:(NSString *)email
-            completion:(void(^)(BOOL success))completion
+            completion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
-    if (completion) {
-        completion(YES);
-    }
+    [[PRDataProvider sharedInstance] registrateUser:userName password:password email:email completion:^(NSError *error) {
+        if (completion) {
+            error ? completion(NO, [PRErrorDescriptor descriptionForError:error]) : completion(YES, nil);
+        }
+    }];
 }
 
 @end

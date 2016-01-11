@@ -7,6 +7,9 @@
 //
 
 #import "PRLoginViewController.h"
+#import "PRLoginViewInteractor.h"
+#import "PRAlertHelper.h"
+#import "PRScreenLock.h"
 
 @interface PRLoginViewController () <UITextFieldDelegate>
 
@@ -39,10 +42,20 @@
 
 - (IBAction)loginAction:(UIButton *)sender
 {
+    __weak typeof(self) wSelf = self;
+    [[PRScreenLock sharedInstance] lockView:self.view];
     [self.interactor loginUser:self.loginTextField.text
                   withPassword:self.passwordTextField.text
-                    completion:^(BOOL success) {
-                            
+                    completion:^(BOOL success, NSString *errorMessage) {
+                        [[PRScreenLock sharedInstance] unlock];
+                        if (wSelf) {
+                            __strong typeof(wSelf) sSelf = wSelf;
+                            if (success) {
+#warning navigate to content view
+                            } else {
+                                [sSelf showAlertWithMessage:errorMessage];
+                            }
+                        }
                     }];
 }
 

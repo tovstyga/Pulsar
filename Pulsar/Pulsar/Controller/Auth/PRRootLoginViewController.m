@@ -7,6 +7,7 @@
 //
 
 #import "PRRootLoginViewController.h"
+#import "PRAlertHelper.h"
 
 @interface PRRootLoginViewController ()
 
@@ -38,6 +39,17 @@
         } else {
             self.approvalButton.alpha = enable ? 1 : 0.5;
         }
+    }
+}
+
+- (void)showAlertWithMessage:(NSString *)message
+{
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showAlertWithMessage:message];
+        });
+    } else {
+        [PRAlertHelper showAlertWithMessage:message inViewController:self];
     }
 }
 

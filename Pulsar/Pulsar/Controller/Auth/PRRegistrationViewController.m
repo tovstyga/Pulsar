@@ -9,6 +9,7 @@
 #import "PRRegistrationViewController.h"
 #import "PRMacros.h"
 #import "PRConstants.h"
+#import "PRScreenLock.h"
 
 static int const kHeightFromKeyboard = 10;
 
@@ -26,12 +27,12 @@ static int const kHeightFromKeyboard = 10;
 @end
 
 @implementation PRRegistrationViewController{
-    UIColor *greenColor;
-    UIColor *redColor;
+    UIColor *_greenColor;
+    UIColor *_redColor;
     
-    BOOL registrationEnabled;
-    BOOL passwordConfirmed;
-    BOOL emailIsValid;
+    BOOL _registrationEnabled;
+    BOOL _passwordConfirmed;
+    BOOL _emailIsValid;
 }
 
 #pragma mark - LifeCycle
@@ -40,8 +41,8 @@ static int const kHeightFromKeyboard = 10;
 {
     [super viewDidLoad];
     
-    greenColor = UIColorFromRGB(kHexGreenTextFieldColor);
-    redColor = UIColorFromRGB(kHexRedTextFieldColor);
+    _greenColor = UIColorFromRGB(kHexGreenTextFieldColor);
+    _redColor = UIColorFromRGB(kHexRedTextFieldColor);
     
     self.loginTextField.delegate = self;
     self.mailTextField.delegate = self;
@@ -55,14 +56,14 @@ static int const kHeightFromKeyboard = 10;
     
     [self registerForKeyboardNotifications];
     
-    passwordConfirmed = NO;
-    registrationEnabled = NO;
-    emailIsValid = NO;
+    _passwordConfirmed = NO;
+    _registrationEnabled = NO;
+    _emailIsValid = NO;
     self.currentOffset = 0;
     
     for (UITextField *textField in @[self.loginTextField, self.mailTextField, self.passwordTextField, self.confirmTextField]) {
         textField.text = nil;
-        [textField setBackgroundColor:redColor];
+        [textField setBackgroundColor:_redColor];
     }
 }
 
@@ -91,11 +92,22 @@ static int const kHeightFromKeyboard = 10;
 
 - (IBAction)registerAction:(UIButton *)sender
 {
+    __weak typeof(self) wSelf = self;
+    [[PRScreenLock sharedInstance] lockView:self.view];
     [self.interactor registrateUser:self.loginTextField.text
                        withPassword:self.passwordTextField.text
                               email:self.mailTextField.text
-                         completion:^(BOOL success) {
-                             
+                         completion:^(BOOL success, NSString *errorMessage) {
+                             [[PRScreenLock sharedInstance] unlock];
+                             if (wSelf) {
+                                 __strong typeof(wSelf) sSelf = wSelf;
+                                 if (success) {
+#warning navigate to content view
+                                     [sSelf cancelAction:nil];
+                                 } else {
+                                     [sSelf showAlertWithMessage:errorMessage];
+                                 }
+                             }
                          }];
 }
 
@@ -143,7 +155,7 @@ static int const kHeightFromKeyboard = 10;
     } else if (textField == self.passwordTextField) {
         [self.confirmTextField becomeFirstResponder];
     } else if (textField == self.confirmTextField) {
-        if (registrationEnabled) {
+        if (_registrationEnabled) {
             [self registerAction:nil];
         }
     }
@@ -157,36 +169,36 @@ static int const kHeightFromKeyboard = 10;
     [string length] ? [newString insertString:string atIndex:range.location] : [newString deleteCharactersInRange:range];
     if ([string length]) {
         if (textField == self.loginTextField) {
-            if (self.mailTextField.text.length && passwordConfirmed && emailIsValid) {
+            if (self.mailTextField.text.length && _passwordConfirmed && _emailIsValid) {
                 [self enableRegistration:YES];
             }
-            [textField setBackgroundColor:greenColor];
+            [textField setBackgroundColor:_greenColor];
         } else if (textField == self.mailTextField) {
-            emailIsValid = [self.interactor validateEmail:newString];
-            if (emailIsValid) {
-                if (self.loginTextField.text.length && passwordConfirmed) {
+            _emailIsValid = [self.interactor validateEmail:newString];
+            if (_emailIsValid) {
+                if (self.loginTextField.text.length && _passwordConfirmed) {
                     [self enableRegistration:YES];
                 }
-                [textField setBackgroundColor:greenColor];
+                [textField setBackgroundColor:_greenColor];
             }
         } else {
             [self passwordTextField:textField changedTo:newString];
-            if (passwordConfirmed && self.loginTextField.text.length && self.loginTextField.text.length && emailIsValid) {
+            if (_passwordConfirmed && self.loginTextField.text.length && self.loginTextField.text.length && _emailIsValid) {
                 [self enableRegistration:YES];
             }
         }
     } else if (textField == self.passwordTextField || textField == self.confirmTextField) {
         [self passwordTextField:textField changedTo:newString];
-        [self enableRegistration:(passwordConfirmed && emailIsValid)];
+        [self enableRegistration:(_passwordConfirmed && _emailIsValid)];
     } else if (textField == self.mailTextField) {
-        emailIsValid = [self.interactor validateEmail:newString];
-        if (!emailIsValid) {
-            [textField setBackgroundColor:redColor];
+        _emailIsValid = [self.interactor validateEmail:newString];
+        if (!_emailIsValid) {
+            [textField setBackgroundColor:_redColor];
             [self enableRegistration:NO];
         }
     } else if (textField.text.length == 1) {
         [self enableRegistration:NO];
-        [textField setBackgroundColor:redColor];
+        [textField setBackgroundColor:_redColor];
     }
     
     return YES;
@@ -197,22 +209,22 @@ static int const kHeightFromKeyboard = 10;
 - (void)enableRegistration:(BOOL)enable;
 {
     [self enableApprovalButton:enable animated:YES];
-    registrationEnabled = enable;
+    _registrationEnabled = enable;
 }
 
 - (void)passwordTextField:(UITextField *)textField changedTo:(NSString *)newPassword
 {
-    passwordConfirmed = NO;
+    _passwordConfirmed = NO;
     if ([newPassword length]) {
         if (textField == self.passwordTextField && [newPassword isEqualToString:self.confirmTextField.text]) {
-            passwordConfirmed = YES;
+            _passwordConfirmed = YES;
         } else if (textField == self.confirmTextField && [newPassword isEqualToString:self.passwordTextField.text]) {
-            passwordConfirmed = YES;
+            _passwordConfirmed = YES;
         }
     }
     
-    [self.passwordTextField setBackgroundColor:passwordConfirmed ? greenColor : redColor];
-    [self.confirmTextField setBackgroundColor:passwordConfirmed ? greenColor : redColor];
+    [self.passwordTextField setBackgroundColor:_passwordConfirmed ? _greenColor : _redColor];
+    [self.confirmTextField setBackgroundColor:_passwordConfirmed ? _greenColor : _redColor];
 }
 
 - (void)moveViewTo:(CGFloat)yPosition

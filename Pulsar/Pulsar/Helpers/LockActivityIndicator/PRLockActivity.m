@@ -17,9 +17,5 @@
     [super viewDidLoad];
     activityIndicatorBackground.layer.cornerRadius = 10;
 }
-- (IBAction)tap:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
 
 @end
