@@ -10,14 +10,4 @@
 
 @implementation PRTokenValidationResponse
 
-- (instancetype)initWithJSON:(id)jsonCompatableOblect
-{
-    return nil;
-}
-
-- (id)toJSONCompatable
-{
-    return nil;
-}
-
 @end

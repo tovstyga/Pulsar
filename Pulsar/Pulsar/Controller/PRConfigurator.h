@@ -13,6 +13,6 @@
 
 + (instancetype)sharedInstance;
 
-- (void)configureViewController:(UIViewController *)viewController;
+- (void)configureViewController:(UIViewController *)viewController sourceViewController:(UIViewController *)sourceViewController;
 
 @end

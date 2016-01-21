@@ -1,23 +1,20 @@
 //
-//  PRRemoteLoginResponse.m
+//  PRRemoteCategories.m
 //  Pulsar
 //
-//  Created by fantom on 04.01.16.
+//  Created by fantom on 12.01.16.
 //  Copyright © 2016 TAB. All rights reserved.
 //
 
-#import "PRRemoteLoginResponse.h"
+#import "PRRemoteCategory.h"
 #import "PRConstants.h"
 
-@implementation PRRemoteLoginResponse
+@implementation PRRemoteCategory
 
-static NSString *kCreatedAtKey = @"createdAt";
-static NSString *kEmailKey = @"email";
-static NSString *kEmailVerifiedKey = @"emailVerified";
-static NSString *kObjectIdKey = @"objectId";
-static NSString *kSessionTokenKey = @"sessionToken";
-static NSString *kUpdatedAtKey = @"updatedAt";
-static NSString *kUserNameKey = @"username";
+static NSString * const kCreatedAtKey = @"createdAt";
+static NSString * const kObjectIdKey = @"objectId";
+static NSString * const kUpdatedAtKey = @"updatedAt";
+static NSString * const kNameKey = @"name";
 
 - (instancetype)initWithJSON:(id)jsonCompatableOblect
 {
@@ -28,12 +25,9 @@ static NSString *kUserNameKey = @"username";
         [formatter setDateFormat:kParseDateFormat];
         
         _createdAt = [formatter dateFromString:[source objectForKey:kCreatedAtKey]];
-        _email = [source objectForKey:kEmailKey];
-        _emailVerified = [[source objectForKey:kEmailVerifiedKey] boolValue];
         _objectId = [source objectForKey:kObjectIdKey];
-        _sessionToken = [source objectForKey:kSessionTokenKey];
         _updatedAt = [formatter dateFromString:[source objectForKey:kUpdatedAtKey]];
-        _userName = [source objectForKey:kUserNameKey];
+        _name = [source objectForKey:kNameKey];
     }
     
     return self;

@@ -20,6 +20,8 @@
 
 @implementation PRLoginViewController
 
+static NSString * const kToContentSegueIdentifier = @"login_to_content_segue";
+
 #pragma mark - LifeCycle
 
 - (void)viewDidLoad
@@ -51,7 +53,9 @@
                         if (wSelf) {
                             __strong typeof(wSelf) sSelf = wSelf;
                             if (success) {
-#warning navigate to content view
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [sSelf performSegueWithIdentifier:kToContentSegueIdentifier sender:sSelf];
+                                });
                             } else {
                                 [sSelf showAlertWithMessage:errorMessage];
                             }

@@ -11,8 +11,6 @@
 #import "PRConstants.h"
 #import "PRScreenLock.h"
 
-static int const kHeightFromKeyboard = 10;
-
 @interface PRRegistrationViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *loginTextField;
@@ -34,6 +32,9 @@ static int const kHeightFromKeyboard = 10;
     BOOL _passwordConfirmed;
     BOOL _emailIsValid;
 }
+
+static NSString * const kToContentSegueIdentifier = @"registration_to_content_segue";
+static int const kHeightFromKeyboard = 10;
 
 #pragma mark - LifeCycle
 
@@ -102,8 +103,9 @@ static int const kHeightFromKeyboard = 10;
                              if (wSelf) {
                                  __strong typeof(wSelf) sSelf = wSelf;
                                  if (success) {
-#warning navigate to content view
-                                     [sSelf cancelAction:nil];
+                                     dispatch_async(dispatch_get_main_queue(), ^{
+                                         [sSelf performSegueWithIdentifier:kToContentSegueIdentifier sender:sSelf];
+                                     });
                                  } else {
                                      [sSelf showAlertWithMessage:errorMessage];
                                  }

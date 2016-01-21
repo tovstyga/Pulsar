@@ -8,10 +8,10 @@
 
 #import "PRRemoteError.h"
 
+@implementation PRRemoteError
+
 static NSString * kErrorKey = @"error";
 static NSString * kCodeKey = @"code";
-
-@implementation PRRemoteError
 
 - (instancetype)initWithJSON:(id)jsonCompatableOblect
 {

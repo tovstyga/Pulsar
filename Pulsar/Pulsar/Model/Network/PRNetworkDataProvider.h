@@ -26,4 +26,17 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
 
 - (void)validateSessionToken:(NSString *)token success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
 
+- (void)requestCategoriesWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestCategoriesForCurrentUserWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestAddCategoriesWithIdsForCurrentUser:(NSArray *)ids success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestRemoveCategoriesWithIdsForCurrentUser:(NSArray *)ids success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestUpdateUserCategoriesForAdd:(NSArray *)addIds
+                                   remove:(NSArray *)removeIds
+                                  success:(PRNetworkSuccessBlock)success
+                                  failure:(PRNetworkFailureBlock)failure;
+
 @end

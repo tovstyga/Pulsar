@@ -13,16 +13,22 @@
 #import "PRRestoreAccountViewInteractorProtocol.h"
 #import "RPRegistrationViewInteractorProtocol.h"
 #import "RPLoginViewInteractorProtocol.h"
+#import "PRContentViewInteractorProtocol.h"
+#import "PRMenuViewInteractorProtocol.h"
 
 //classes
 
 #import "PRLoginViewInteractor.h"
 #import "PRRestoreAccountInteractor.h"
 #import "PRRegistrationViewInteractor.h"
+#import "PRContentViewInteractor.h"
+#import "PRMenuViewInteractor.h"
 
 #import "PRLoginViewController.h"
 #import "PRRegistrationViewController.h"
 #import "PRRestoreAccountViewController.h"
+#import "PRContentViewController.h"
+#import "PRMenuViewController.h"
 
 #import "PREmailValidator.h"
 
@@ -48,7 +54,7 @@ static PRConfigurator *sharedInstance;
     return sharedInstance;
 }
 
-- (void)configureViewController:(UIViewController *)viewController
+- (void)configureViewController:(UIViewController *)viewController sourceViewController:(UIViewController *)sourceViewController
 {
     if ([viewController isMemberOfClass:[PRLoginViewController class]]) {
         [(PRLoginViewController *)viewController setInteractor:[self loginInteractor]];
@@ -56,6 +62,13 @@ static PRConfigurator *sharedInstance;
         [(PRRegistrationViewController *)viewController setInteractor:[self registrationInteractor]];
     } else if ([viewController isMemberOfClass:[PRRestoreAccountViewController class]]) {
         [(PRRestoreAccountViewController *)viewController setInteractor:[self restoreAccountInteractor]];
+    } else if ([viewController isMemberOfClass:[PRContentViewController class]]) {
+        [(PRContentViewController *)viewController setInteractor:[self contentInteractor]];
+    } else if ([viewController isMemberOfClass:[PRMenuViewController class]]) {
+        [(PRMenuViewController *)viewController setInteractor:[self menuInteractorWithDelegate:sourceViewController]];
+        if ([viewController conformsToProtocol:@protocol(PRContentViewDelegate)] && [sourceViewController isKindOfClass:[PRContentViewController class]]) {
+            [(PRContentViewController *)sourceViewController setDelegate:(id<PRContentViewDelegate>)viewController];
+        }
     }
 }
 
@@ -78,6 +91,20 @@ static PRConfigurator *sharedInstance;
 - (id<RPLoginViewInteractorProtocol>)loginInteractor
 {
     return [[PRLoginViewInteractor alloc] init];
+}
+
+- (id<PRContentViewInteractorProtocol>)contentInteractor
+{
+    return [[PRContentViewInteractor alloc] init];
+}
+
+- (id<PRMenuViewInteractorProtocol>)menuInteractorWithDelegate:(id)delegate;
+{
+    PRMenuViewInteractor *interactor = [[PRMenuViewInteractor alloc] init];
+    if ([delegate conformsToProtocol:@protocol(PRMenuInteractorDelegate)]) {
+        interactor.delegate = delegate;
+    }
+    return interactor;
 }
 
 @end

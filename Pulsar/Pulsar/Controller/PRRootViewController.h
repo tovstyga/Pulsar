@@ -10,4 +10,6 @@
 
 @interface PRRootViewController : UIViewController
 
+- (void)showAlertWithMessage:(NSString *)message;
+
 @end

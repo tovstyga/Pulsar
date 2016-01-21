@@ -8,11 +8,11 @@
 
 #import "PRRemoteRegistrationResponse.h"
 
+@implementation PRRemoteRegistrationResponse
+
 static NSString *kCreatedAtKey = @"createdAt";
 static NSString *kObjectIdKey = @"objectId";
 static NSString *kSessionTokenKey = @"sessionToken";
-
-@implementation PRRemoteRegistrationResponse
 
 - (instancetype)initWithJSON:(id)jsonCompatableOblect
 {

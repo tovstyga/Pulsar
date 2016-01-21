@@ -1,0 +1,16 @@
+//
+//  PRMenuCategoryCell.h
+//  Pulsar
+//
+//  Created by fantom on 21.01.16.
+//  Copyright © 2016 TAB. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "PRLocalCategory.h"
+
+@interface PRMenuCategoryCell : UITableViewCell
+
+@property (strong, nonatomic) PRLocalCategory *category;
+
+@end

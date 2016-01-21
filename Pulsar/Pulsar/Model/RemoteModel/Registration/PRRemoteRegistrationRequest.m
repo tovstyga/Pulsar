@@ -8,11 +8,11 @@
 
 #import "PRRemoteRegistrationRequest.h"
 
+@implementation PRRemoteRegistrationRequest
+
 static NSString *kUserNameKey = @"username";
 static NSString *kPasswordKey = @"password";
 static NSString *kEmailKey = @"email";
-
-@implementation PRRemoteRegistrationRequest
 
 - (instancetype)initWithUserName:(NSString *)name password:(NSString *)password email:(NSString *)email
 {

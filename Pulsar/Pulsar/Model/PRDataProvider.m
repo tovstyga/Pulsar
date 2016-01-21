@@ -13,6 +13,9 @@
 #import "PRRemoteLoginResponse.h"
 #import "PRRemoteRegistrationResponse.h"
 
+#import "PRRemoteResults.h"
+#import "PRRemoteCategory.h"
+
 @interface PRDataProvider()
 
 @property (strong, nonatomic) NSString *networkSessionKey;
@@ -43,6 +46,8 @@ static PRDataProvider *sharedInstance;
     });
     return sharedInstance;
 }
+
+#pragma mark - session and autрorization
 
 - (void)registrateUser:(NSString *)userName
               password:(NSString *)password
@@ -124,7 +129,103 @@ static PRDataProvider *sharedInstance;
     }];
 }
 
+#pragma mark - Categories
+
+- (void)allCategories:(void(^)(NSArray *categories, NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestCategoriesWithSuccess:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion([self localCategoriesFromResponseData:data], nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void)categoriesForCurrentUser:(void(^)(NSArray *categories, NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestCategoriesForCurrentUserWithSuccess:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion([self localCategoriesFromResponseData:data], nil);
+        }
+    } failure:^(NSError *error) {
+        completion(nil, error);
+    }];
+}
+
+- (void)addCategoryForCurrentUser:(PRLocalCategory *)category completion:(void(^)(NSError *error))completion
+{
+    [self addCategoriesForCurrentUser:@[category.identifier] completion:completion];
+}
+
+- (void)addCategoriesForCurrentUser:(NSArray *)categories completion:(void(^)(NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestAddCategoriesWithIdsForCurrentUser:[self categoriesIdsFrom:categories] success:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion(nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(error);
+        }
+    }];
+}
+
+- (void)removeCategoryForCurrentUser:(PRLocalCategory *)category completion:(void(^)(NSError *error))completion
+{
+    [self removeCategoriesForCurrentUser:@[category.identifier] completion:completion];
+}
+
+- (void)removeCategoriesForCurrentUser:(NSArray *)categories completion:(void(^)(NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestRemoveCategoriesWithIdsForCurrentUser:[self categoriesIdsFrom:categories] success:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion(nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(error);
+        }
+    }];
+}
+
+- (void)userCategoryAdd:(NSArray *)addCategories remove:(NSArray *)removeCategories completion:(void(^)(NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestUpdateUserCategoriesForAdd:[self categoriesIdsFrom:addCategories] remove:[self categoriesIdsFrom:removeCategories] success:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion(nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(nil);
+        }
+    }];
+}
+
 #pragma mark - Internal
+
+- (NSArray *)localCategoriesFromResponseData:(NSData *)data
+{
+    id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    NSArray *results = [PRRemoteResults resultsWithData:json contentType:[PRRemoteCategory class]];
+    NSMutableArray *localResults = [[NSMutableArray alloc] initWithCapacity:[results count]];
+#warning update database
+    for (PRRemoteCategory *category in results) {
+        [localResults addObject:[[PRLocalCategory alloc] initWithRemoteCategory:category]];
+    }
+    return localResults;
+}
+
+- (NSArray *)categoriesIdsFrom:(NSArray *)categories
+{
+    NSMutableArray *ids = [[NSMutableArray alloc] initWithCapacity:[categories count]];
+    for (PRLocalCategory *category in categories) {
+        [ids addObject:category.identifier];
+    }
+    return ids;
+}
 
 - (void)setNetworkSessionKey:(NSString *)networkSessionKey
 {

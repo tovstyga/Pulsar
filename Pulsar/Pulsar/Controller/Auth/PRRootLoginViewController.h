@@ -12,6 +12,4 @@
 
 - (void)enableApprovalButton:(BOOL)enable animated:(BOOL)animated;
 
-- (void)showAlertWithMessage:(NSString *)message;
-
 @end

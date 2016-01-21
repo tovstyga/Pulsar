@@ -8,9 +8,9 @@
 
 #import "PRRemoteResetPasswordRequest.h"
 
-static NSString *kEmailKey = @"email";
-
 @implementation PRRemoteResetPasswordRequest
+
+static NSString *kEmailKey = @"email";
 
 - (instancetype)initWithJSON:(id)jsonCompatableOblect
 {
