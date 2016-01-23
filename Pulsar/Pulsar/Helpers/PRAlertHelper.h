@@ -12,4 +12,9 @@
 
 + (void)showAlertWithMessage:(NSString *)message inViewController:(UIViewController *)parent;
 
++ (void)showAlertInputDialogWithTitle:(NSString *)title
+                              message:(NSString *)message
+                   rootViewController:(UIViewController *)parent
+                           completion:(void(^)(BOOL accept, NSString *text))completion;
+
 @end

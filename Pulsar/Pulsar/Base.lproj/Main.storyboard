@@ -477,6 +477,62 @@
             </objects>
             <point key="canvasLocation" x="1639" y="-419"/>
         </scene>
+        <!--Map View Controller-->
+        <scene sceneID="k2Y-P5-9M0">
+            <objects>
+                <viewController id="WBA-94-xCi" customClass="PRMapViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="a19-Cy-JL5"/>
+                        <viewControllerLayoutGuide type="bottom" id="mpp-6L-nEm"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dyA-KX-kKQ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o1J-4J-we2">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                <items>
+                                    <navigationItem id="IJM-RW-1yh">
+                                        <barButtonItem key="leftBarButtonItem" title="Close" id="foZ-Gs-LaZ">
+                                            <connections>
+                                                <action selector="closeAction:" destination="WBA-94-xCi" id="zgL-cL-y9k"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Save location" id="QB5-NX-J3u">
+                                            <connections>
+                                                <action selector="saveLocationAction:" destination="WBA-94-xCi" id="1f8-Dk-a9N"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CdC-m4-5vn">
+                                <rect key="frame" x="0.0" y="44" width="414" height="692"/>
+                                <connections>
+                                    <outlet property="delegate" destination="WBA-94-xCi" id="Kwl-YW-cPg"/>
+                                </connections>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="o1J-4J-we2" firstAttribute="top" secondItem="dyA-KX-kKQ" secondAttribute="topMargin" id="9CT-CI-3SH"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="o1J-4J-we2" secondAttribute="trailing" constant="-20" id="Crf-Sh-kSx"/>
+                            <constraint firstItem="o1J-4J-we2" firstAttribute="leading" secondItem="dyA-KX-kKQ" secondAttribute="leadingMargin" constant="-20" id="G8Z-PS-N03"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="CdC-m4-5vn" secondAttribute="trailing" constant="-20" id="MbT-NR-uuh"/>
+                            <constraint firstItem="CdC-m4-5vn" firstAttribute="top" secondItem="o1J-4J-we2" secondAttribute="bottom" id="NWG-TA-kIp"/>
+                            <constraint firstItem="CdC-m4-5vn" firstAttribute="leading" secondItem="dyA-KX-kKQ" secondAttribute="leadingMargin" constant="-20" id="luK-Ad-nNp"/>
+                            <constraint firstItem="mpp-6L-nEm" firstAttribute="top" secondItem="CdC-m4-5vn" secondAttribute="bottom" id="tZ2-nO-mfH"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <connections>
+                        <outlet property="mapView" destination="CdC-m4-5vn" id="x20-Yv-FyA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="U7X-Zl-ItU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="526" y="1406"/>
+        </scene>
         <!--Menu View Controller-->
         <scene sceneID="DQl-7l-nQT">
             <objects>
@@ -491,7 +547,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="3zH-pE-CM5">
                                 <rect key="frame" x="20" y="0.0" width="374" height="736"/>
-                                <color key="backgroundColor" red="0.76085069439999997" green="0.76085069439999997" blue="0.76085069439999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="menu_category_cell_identifier" selectionStyle="none" indentationWidth="10" id="NUv-4U-sR7" customClass="PRMenuCategoryCell">
                                         <rect key="frame" x="0.0" y="28" width="374" height="44"/>
@@ -505,6 +561,14 @@
                                         <rect key="frame" x="0.0" y="72" width="374" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QMu-io-zpA" id="1kt-cF-AZj">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Suo-58-4v1">
+                                        <rect key="frame" x="0.0" y="116" width="374" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Suo-58-4v1" id="JFm-s4-WxB">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
@@ -528,6 +592,7 @@
                     <size key="freeformSize" width="414" height="736"/>
                     <connections>
                         <outlet property="tableView" destination="3zH-pE-CM5" id="nkp-Jv-iBs"/>
+                        <segue destination="WBA-94-xCi" kind="show" identifier="map_screen_segue_identifier" id="Icj-uZ-JOm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XIr-5m-t4W" userLabel="First Responder" sceneMemberID="firstResponder"/>

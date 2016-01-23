@@ -23,6 +23,13 @@
 		404D33261C4FBA9300C4735E /* PRMenuViewInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D33251C4FBA9300C4735E /* PRMenuViewInteractor.m */; };
 		404D332F1C50C8A200C4735E /* PRMenuCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D332E1C50C8A200C4735E /* PRMenuCategoryCell.m */; };
 		404D33321C50C8E100C4735E /* PRMenuLocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D33311C50C8E100C4735E /* PRMenuLocationCell.m */; };
+		404D33361C51266600C4735E /* PRRemoteGeoPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D33351C51266600C4735E /* PRRemoteGeoPoint.m */; };
+		404D333A1C5129E800C4735E /* PRLocalGeoPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D33391C5129E800C4735E /* PRLocalGeoPoint.m */; };
+		404D333E1C5135AE00C4735E /* PRMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D333D1C5135AE00C4735E /* PRMapViewController.m */; };
+		404D33421C51361400C4735E /* PRMapViewInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D33411C51361400C4735E /* PRMapViewInteractor.m */; };
+		404D33451C51439E00C4735E /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 404D33441C51439D00C4735E /* MapKit.framework */; };
+		404D33481C5222C900C4735E /* PRMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D33471C5222C900C4735E /* PRMapAnnotation.m */; };
+		404D334C1C52843200C4735E /* PRRemoteArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D334B1C52843200C4735E /* PRRemoteArray.m */; };
 		407B1C511C46A1A70071A123 /* PRRemoteResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 407B1C501C46A1A70071A123 /* PRRemoteResults.m */; };
 		40BD1F061C2C16F500828FD1 /* PRLockActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BD1F051C2C16F500828FD1 /* PRLockActivity.m */; };
 		40BD1F0A1C2C1FB200828FD1 /* PRLockActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40BD1F091C2C1FB200828FD1 /* PRLockActivity.xib */; };
@@ -86,6 +93,21 @@
 		404D332E1C50C8A200C4735E /* PRMenuCategoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRMenuCategoryCell.m; sourceTree = "<group>"; };
 		404D33301C50C8E100C4735E /* PRMenuLocationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRMenuLocationCell.h; sourceTree = "<group>"; };
 		404D33311C50C8E100C4735E /* PRMenuLocationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRMenuLocationCell.m; sourceTree = "<group>"; };
+		404D33341C51266600C4735E /* PRRemoteGeoPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteGeoPoint.h; sourceTree = "<group>"; };
+		404D33351C51266600C4735E /* PRRemoteGeoPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteGeoPoint.m; sourceTree = "<group>"; };
+		404D33381C5129E800C4735E /* PRLocalGeoPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRLocalGeoPoint.h; sourceTree = "<group>"; };
+		404D33391C5129E800C4735E /* PRLocalGeoPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRLocalGeoPoint.m; sourceTree = "<group>"; };
+		404D333C1C5135AE00C4735E /* PRMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRMapViewController.h; sourceTree = "<group>"; };
+		404D333D1C5135AE00C4735E /* PRMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRMapViewController.m; sourceTree = "<group>"; };
+		404D33401C51361400C4735E /* PRMapViewInteractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRMapViewInteractor.h; sourceTree = "<group>"; };
+		404D33411C51361400C4735E /* PRMapViewInteractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRMapViewInteractor.m; sourceTree = "<group>"; };
+		404D33431C51363A00C4735E /* PRMapViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRMapViewInteractorProtocol.h; sourceTree = "<group>"; };
+		404D33441C51439D00C4735E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		404D33461C5222C900C4735E /* PRMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRMapAnnotation.h; sourceTree = "<group>"; };
+		404D33471C5222C900C4735E /* PRMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRMapAnnotation.m; sourceTree = "<group>"; };
+		404D33491C52619C00C4735E /* PRMapInteractorDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRMapInteractorDelegate.h; sourceTree = "<group>"; };
+		404D334A1C52843200C4735E /* PRRemoteArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteArray.h; sourceTree = "<group>"; };
+		404D334B1C52843200C4735E /* PRRemoteArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteArray.m; sourceTree = "<group>"; };
 		407B1C4F1C46A1A70071A123 /* PRRemoteResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteResults.h; sourceTree = "<group>"; };
 		407B1C501C46A1A70071A123 /* PRRemoteResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteResults.m; sourceTree = "<group>"; };
 		40BD1EFF1C2C0E8700828FD1 /* RPLoginViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPLoginViewInteractorProtocol.h; sourceTree = "<group>"; };
@@ -148,6 +170,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				404D33451C51439E00C4735E /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,6 +243,44 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		404D33331C51260900C4735E /* GeoPoint */ = {
+			isa = PBXGroup;
+			children = (
+				404D33341C51266600C4735E /* PRRemoteGeoPoint.h */,
+				404D33351C51266600C4735E /* PRRemoteGeoPoint.m */,
+			);
+			path = GeoPoint;
+			sourceTree = "<group>";
+		};
+		404D33371C5129A100C4735E /* GeoPoint */ = {
+			isa = PBXGroup;
+			children = (
+				404D33381C5129E800C4735E /* PRLocalGeoPoint.h */,
+				404D33391C5129E800C4735E /* PRLocalGeoPoint.m */,
+			);
+			path = GeoPoint;
+			sourceTree = "<group>";
+		};
+		404D333B1C51356500C4735E /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				404D333C1C5135AE00C4735E /* PRMapViewController.h */,
+				404D333D1C5135AE00C4735E /* PRMapViewController.m */,
+				404D33461C5222C900C4735E /* PRMapAnnotation.h */,
+				404D33471C5222C900C4735E /* PRMapAnnotation.m */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		404D333F1C5135E500C4735E /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				404D33401C51361400C4735E /* PRMapViewInteractor.h */,
+				404D33411C51361400C4735E /* PRMapViewInteractor.m */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
 		40BD1EFD1C2C0E3A00828FD1 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -273,6 +334,7 @@
 		40C161D91C44E85E00E1E6F5 /* Content */ = {
 			isa = PBXGroup;
 			children = (
+				404D333B1C51356500C4735E /* Map */,
 				404D33271C4FBB7000C4735E /* Protocols */,
 				404D331E1C4FB6E400C4735E /* Menu */,
 				40C161DA1C44E8DA00E1E6F5 /* PRContentViewController.h */,
@@ -284,6 +346,7 @@
 		40C161DD1C451BD500E1E6F5 /* Content */ = {
 			isa = PBXGroup;
 			children = (
+				404D333F1C5135E500C4735E /* Map */,
 				404D33221C4FB7F800C4735E /* Menu */,
 				40C161DE1C451BF100E1E6F5 /* Protocols */,
 				40C161E01C451D3600E1E6F5 /* PRContentViewInteractor.h */,
@@ -298,6 +361,8 @@
 				40C161DF1C451C4400E1E6F5 /* PRContentViewInteractorProtocol.h */,
 				404D33231C4FBA4500C4735E /* PRMenuViewInteractorProtocol.h */,
 				404D33291C4FBC0C00C4735E /* PRMenuInteractorDelegateProtocol.h */,
+				404D33431C51363A00C4735E /* PRMapViewInteractorProtocol.h */,
+				404D33491C52619C00C4735E /* PRMapInteractorDelegate.h */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -314,6 +379,7 @@
 		40E6B9B21C297EAA0083A449 = {
 			isa = PBXGroup;
 			children = (
+				404D33441C51439D00C4735E /* MapKit.framework */,
 				40E6B9BD1C297EAA0083A449 /* Pulsar */,
 				40E6B9BC1C297EAA0083A449 /* Products */,
 			);
@@ -436,6 +502,7 @@
 		40F65DB11C3432FE00846449 /* RemoteModel */ = {
 			isa = PBXGroup;
 			children = (
+				404D33331C51260900C4735E /* GeoPoint */,
 				40C161E31C4528EC00E1E6F5 /* Categories */,
 				4005173D1C3BAD3800FBFE11 /* TokenValidation */,
 				400517391C3ACA4E00FBFE11 /* ResetPassword */,
@@ -451,6 +518,8 @@
 				404D33131C4E901D00C4735E /* PRRemoteQuery.m */,
 				404D33161C4F806400C4735E /* PRRemoteBatchRequestObject.h */,
 				404D33171C4F806400C4735E /* PRRemoteBatchRequestObject.m */,
+				404D334A1C52843200C4735E /* PRRemoteArray.h */,
+				404D334B1C52843200C4735E /* PRRemoteArray.m */,
 			);
 			path = RemoteModel;
 			sourceTree = "<group>";
@@ -458,6 +527,7 @@
 		40F65DB21C34331D00846449 /* LocalModel */ = {
 			isa = PBXGroup;
 			children = (
+				404D33371C5129A100C4735E /* GeoPoint */,
 				404D33191C4FABC200C4735E /* Categories */,
 			);
 			path = LocalModel;
@@ -506,6 +576,11 @@
 				TargetAttributes = {
 					40E6B9BA1C297EAA0083A449 = {
 						CreatedOnToolsVersion = 7.2;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -557,11 +632,16 @@
 				40F65D9F1C33D6B200846449 /* PRLoginViewInteractor.m in Sources */,
 				40F65D9C1C33CE0700846449 /* PRConfigurator.m in Sources */,
 				40C161E21C451D3600E1E6F5 /* PRContentViewInteractor.m in Sources */,
+				404D33421C51361400C4735E /* PRMapViewInteractor.m in Sources */,
 				407B1C511C46A1A70071A123 /* PRRemoteResults.m in Sources */,
+				404D333E1C5135AE00C4735E /* PRMapViewController.m in Sources */,
+				404D334C1C52843200C4735E /* PRRemoteArray.m in Sources */,
 				40C161DC1C44E8DA00E1E6F5 /* PRContentViewController.m in Sources */,
 				40E6B9C31C297EAA0083A449 /* AppDelegate.m in Sources */,
 				404D33321C50C8E100C4735E /* PRMenuLocationCell.m in Sources */,
 				40BD1F061C2C16F500828FD1 /* PRLockActivity.m in Sources */,
+				404D33481C5222C900C4735E /* PRMapAnnotation.m in Sources */,
+				404D33361C51266600C4735E /* PRRemoteGeoPoint.m in Sources */,
 				400517461C3C171B00FBFE11 /* PRErrorDescriptor.m in Sources */,
 				404D33141C4E901D00C4735E /* PRRemoteQuery.m in Sources */,
 				40E6B9D81C2981610083A449 /* PRRootViewController.m in Sources */,
@@ -574,6 +654,7 @@
 				40E6B9E51C29964C0083A449 /* PRRegistrationViewController.m in Sources */,
 				404D33261C4FBA9300C4735E /* PRMenuViewInteractor.m in Sources */,
 				400517491C3C19A900FBFE11 /* PRAlertHelper.m in Sources */,
+				404D333A1C5129E800C4735E /* PRLocalGeoPoint.m in Sources */,
 				40F65DB91C34353800846449 /* PRRemoteRegistrationResponse.m in Sources */,
 				404D332F1C50C8A200C4735E /* PRMenuCategoryCell.m in Sources */,
 				40F65D991C33C6C900846449 /* PREmailValidator.m in Sources */,

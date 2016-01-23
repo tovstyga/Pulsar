@@ -39,4 +39,10 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
                                   success:(PRNetworkSuccessBlock)success
                                   failure:(PRNetworkFailureBlock)failure;
 
+- (void)requesGeoPointsWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestAddGeopoints:(NSArray *)geopoints success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestRemoveGeopoints:(NSArray *)geopoints success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
 @end

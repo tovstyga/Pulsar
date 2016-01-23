@@ -24,7 +24,7 @@
 
 - (instancetype)initWithJSON:(id)jsonCompatableOblect
 {
-    return [super init];
+    return [self init];
 }
 
 - (id)toJSONCompatable

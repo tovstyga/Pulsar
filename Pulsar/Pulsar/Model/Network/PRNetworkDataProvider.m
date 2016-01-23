@@ -19,6 +19,7 @@
 #import "PRRemotePointer.h"
 #import "PRRemoteQuery.h"
 #import "PRRemoteBatchRequestObject.h"
+#import "PRRemoteArray.h"
 
 @interface PRNetworkDataProvider()
 
@@ -41,7 +42,8 @@ typedef NS_ENUM(NSUInteger, PRRequestType) {
     PRRequestTypeAllCategories,
     PRRequestTypeCategoriesForUser,
     PRRequestTypeCategoryRelation,
-    PRRequestTypeBatch
+    PRRequestTypeBatch,
+    PRREquestTypeUserGeoPoints
 };
 
 //constants
@@ -107,7 +109,7 @@ static PRNetworkDataProvider *sharedInstance;
     return sharedInstance;
 }
 
-#pragma mark - Public
+#pragma mark - Account
 
 - (void)requestRegistration:(id<PRJsonCompatable>)registrationRequest
                     success:(PRNetworkSuccessBlock)success
@@ -209,6 +211,8 @@ static PRNetworkDataProvider *sharedInstance;
         
     }
 }
+
+#pragma mark - Categories
 
 - (void)requestCategoriesWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
 {
@@ -314,6 +318,51 @@ static PRNetworkDataProvider *sharedInstance;
     }
 }
 
+#pragma mark - Geopoints
+
+- (void)requesGeoPointsWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    if ([self isNetworkAvailable:failure]) {
+        NSMutableURLRequest *request = [self requestForType:PRRequestTypeSessionValidation];
+        [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
+        [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
+}
+
+- (void)requestAddGeopoints:(NSArray *)geopoints success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    PRRemoteArray *array = [[PRRemoteArray alloc] initWithField:@"locations" action:PRRemoteArrayActionAddUnique objects:geopoints];
+    [self requestToUserGeoPointsWith:[array toJSONCompatable] success:success failure:failure];
+}
+
+- (void)requestRemoveGeopoints:(NSArray *)geopoints success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    PRRemoteArray *array = [[PRRemoteArray alloc] initWithField:@"locations" action:PRRemoteArrayActionRemove objects:geopoints];
+    [self requestToUserGeoPointsWith:[array toJSONCompatable] success:success failure:failure];
+}
+
+- (void)requestToUserGeoPointsWith:(NSDictionary *)body success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    if ([self isNetworkAvailable:failure]) {
+        NSMutableURLRequest *request = [self requestForType:PRREquestTypeUserGeoPoints];
+        NSData *data = [NSJSONSerialization dataWithJSONObject:body options:NSJSONWritingPrettyPrinted error:nil];
+        [request setHTTPBody:data];
+        [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
+}
+
 #pragma mark - Internal
 
 - (void)performRequest:(NSURLRequest *)request completion:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completion
@@ -392,6 +441,12 @@ static PRNetworkDataProvider *sharedInstance;
             [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
             [request setValue:kHeaderContentTypeKey forHTTPHeaderField:kContentTypeApplicationJSON];
             [request setHTTPMethod:kHTTPMethodPOST];
+            return request;
+        case PRREquestTypeUserGeoPoints:
+            request.URL = [_baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"users/%@", _currentUser]];
+            [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
+            [request setValue:kHeaderContentTypeKey forHTTPHeaderField:kContentTypeApplicationJSON];
+            [request setHTTPMethod:kHTTPMethodPUT];
             return request;
         default:
             return nil;

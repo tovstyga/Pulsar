@@ -50,6 +50,9 @@ static NSString * const kToContentSegueIdentifier = @"content_to_login_segue";
     _isOpenedMenu = NO;
     [self.categoriesMenuConstraint setConstant:_closedMenuDefaultConstraint];
     [self.view setNeedsLayout];
+    if (_isOpenedMenu) {
+        [self toggleMenu];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -60,9 +63,6 @@ static NSString * const kToContentSegueIdentifier = @"content_to_login_segue";
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (_isOpenedMenu) {
-        [self toggleMenu];
-    }
 }
 
 #pragma mark - Events

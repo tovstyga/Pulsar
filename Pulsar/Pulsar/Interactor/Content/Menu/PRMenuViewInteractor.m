@@ -15,6 +15,9 @@
     NSArray *_categories;
     NSArray *_defaultState;
     
+    NSArray *_locations;
+    NSMutableArray *_editableLocations;
+    
     NSOperationQueue *_loadingQueue;
 }
 
@@ -28,11 +31,10 @@
     return self;
 }
 
-- (void)fetchDataWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion
+- (void)fetchCategoriesWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
-#warning synchrinization!!!
+#warning переписать!!!
     __weak typeof(self) wSelf = self;
-    
     if (_loadingQueue.operationCount) {
         [_loadingQueue cancelAllOperations];
         _categories = [NSArray new];
@@ -64,11 +66,31 @@
     }];
 }
 
+- (void)fetchGeoPointsWithCompletion:(void (^)(BOOL, NSString *))completion
+{
+    [[PRDataProvider sharedInstance] allGeopoints:^(NSArray *geopoints, NSError *error) {
+        if (!error) {
+            _locations = geopoints;
+            _editableLocations = [[NSMutableArray alloc] initWithArray:geopoints];
+            if (completion) {
+                completion(YES, nil);
+            }
+        } else {
+            if (completion) {
+                completion(NO, [PRErrorDescriptor descriptionForError:error]);
+            }
+        }
+    }];
+}
+
 - (void)saveDataWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
     if ([self.delegate respondsToSelector:@selector(willUpdateUserSettings)]) {
         [self.delegate willUpdateUserSettings];
     }
+    
+    __block NSMutableArray *locationsForRemove = [[NSMutableArray alloc] initWithArray:_locations];
+    [locationsForRemove removeObjectsInArray:_editableLocations];
     
     NSMutableArray *categoriesForRemove = [NSMutableArray new];
     NSMutableArray *categoriesForAdd = [NSMutableArray new];
@@ -100,25 +122,35 @@
         }
     };
     
-//    if (([categoriesForAdd count] || [categoriesForRemove count]) && [self.delegate respondsToSelector:@selector(willUpdateUserSettings)]) {
-//        [self.delegate willUpdateUserSettings];
-//    }
+    void(^updateLocations)() = ^(NSError *externalError){
+        if ([locationsForRemove count]) {
+            [[PRDataProvider sharedInstance] removeGeoPoints:locationsForRemove completion:^(NSError *error) {
+                if (error) {
+                    finishedBlock(error);
+                } else {
+                    finishedBlock(externalError);
+                }
+            }];
+        } else {
+            finishedBlock(externalError);
+        }
+    };
     
     if ([categoriesForAdd  count] && [categoriesForRemove count]) {
         [[PRDataProvider sharedInstance] userCategoryAdd:categoriesForAdd remove:categoriesForRemove completion:^(NSError *error) {
-            finishedBlock(error);
+            updateLocations(error);
         }];
     } else if ([categoriesForAdd count]) {
         [[PRDataProvider sharedInstance] addCategoriesForCurrentUser:categoriesForAdd completion:^(NSError *error) {
-            finishedBlock(error);
+            updateLocations(error);
         }];
     } else if ([categoriesForRemove count]) {
         [[PRDataProvider sharedInstance] removeCategoriesForCurrentUser:categoriesForRemove completion:^(NSError *error) {
-            finishedBlock(error);
+            updateLocations(error);
         }];
     }
     
-    if (![categoriesForAdd count] && ![categoriesForRemove count] && [self.delegate respondsToSelector:@selector(didUpdateUserSettings)]) {
+    if (![categoriesForAdd count] && ![categoriesForRemove count] && ![locationsForRemove count] && [self.delegate respondsToSelector:@selector(didUpdateUserSettings)]) {
         [self.delegate didUpdateUserSettings];
     }
     
@@ -139,14 +171,24 @@
 
 - (NSUInteger)availableLocations
 {
-    return 0;
+    return [_editableLocations count];
 }
 
-- (id)locationForIndex:(NSInteger)index
+- (PRLocalGeoPoint *)locationForIndex:(NSInteger)index
 {
+    if (index > 0 && index <= [_editableLocations count]) {
+        return _editableLocations[index - 1];
+    }
     return nil;
 }
 
+- (void)removeLocationAtIndex:(NSInteger)index
+{
+    if (index > 0 && index <= [_editableLocations count]) {
+        [_editableLocations removeObjectAtIndex:(index - 1)];
+    }
+
+}
 
 #pragma mark - Internal
 

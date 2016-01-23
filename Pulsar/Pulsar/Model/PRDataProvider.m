@@ -15,10 +15,13 @@
 
 #import "PRRemoteResults.h"
 #import "PRRemoteCategory.h"
+#import "PRLocalGeoPoint.h"
+#import "PRRemoteGeoPoint.h"
 
 @interface PRDataProvider()
 
 @property (strong, nonatomic) NSString *networkSessionKey;
+@property (copy, nonatomic) NSArray *templateGeoPoints;
 
 @end
 
@@ -199,12 +202,93 @@ static PRDataProvider *sharedInstance;
         }
     } failure:^(NSError *error) {
         if (completion) {
+            completion(error);
+        }
+    }];
+}
+
+- (void)addGeoPoint:(PRLocalGeoPoint *)geoPoint completion:(void(^)(NSError *error))completion
+{
+    [self addGeoPoints:@[geoPoint] completion:completion];
+}
+
+- (void)addGeoPoints:(NSArray *)geoPoints completion:(void(^)(NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestAddGeopoints:[self remoteGeoPointsFromLocal:geoPoints] success:^(NSData *data, NSURLResponse *response) {
+        [self localGeoPointsFromResponseData:data];
+        if (completion) {
             completion(nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(error);
+        }
+    }];
+}
+
+- (void)removeGeoPoint:(PRLocalGeoPoint *)geoPoint completion:(void(^)(NSError *error))completion
+{
+    [self removeGeoPoints:@[geoPoint] completion:completion];
+}
+
+- (void)removeGeoPoints:(NSArray *)geoPoints completion:(void(^)(NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestRemoveGeopoints:[self remoteGeoPointsFromLocal:geoPoints] success:^(NSData *data, NSURLResponse *response) {
+        [self localGeoPointsFromResponseData:data];
+        if (completion) {
+            completion(nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(error);
+        }
+    }];
+}
+
+- (void)allGeopoints:(void(^)(NSArray *geopoints, NSError *error))completion
+{
+    if (self.templateGeoPoints && completion) {
+        completion(self.templateGeoPoints, nil);
+        return;
+    }
+    
+    [[PRNetworkDataProvider sharedInstance] requesGeoPointsWithSuccess:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion([self localGeoPointsFromResponseData:data], nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(nil, error);
         }
     }];
 }
 
 #pragma mark - Internal
+
+- (NSArray *)remoteGeoPointsFromLocal:(NSArray *)localGeoPoints
+{
+    NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[localGeoPoints count]];
+    for (PRLocalGeoPoint *point in localGeoPoints) {
+        [array addObject:[[PRRemoteGeoPoint alloc] initWithLocalGeoPoint:point]];
+    }
+    return array;
+}
+
+- (NSArray *)localGeoPointsFromResponseData:(NSData *)data
+{
+    id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    NSArray *source = [(NSDictionary *)json objectForKey:@"locations"];
+    NSMutableArray *remoteGeoPoints = [NSMutableArray new];
+    for (id object in source) {
+        [remoteGeoPoints addObject:[[PRRemoteGeoPoint alloc] initWithJSON:object]];
+    }
+    NSMutableArray *localResults = [[NSMutableArray alloc] initWithCapacity:remoteGeoPoints.count];
+    for (PRRemoteGeoPoint *point in remoteGeoPoints) {
+        [localResults addObject:[[PRLocalGeoPoint alloc] initWithRemoteGeoPoint:point]];
+    }
+    self.templateGeoPoints = localResults;
+    return localResults;
+}
 
 - (NSArray *)localCategoriesFromResponseData:(NSData *)data
 {

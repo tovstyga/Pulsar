@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PRLocalGeoPoint.h"
 
 @interface PRMenuLocationCell : UITableViewCell
+
+@property (strong, nonatomic) PRLocalGeoPoint *geoPoint;
 
 @end

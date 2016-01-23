@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "PRLocalCategory.h"
+#import "PRLocalGeoPoint.h"
 
 @interface PRDataProvider : NSObject
 
@@ -41,5 +42,17 @@
 - (void)removeCategoriesForCurrentUser:(NSArray *)categories completion:(void(^)(NSError *error))completion;
 
 - (void)userCategoryAdd:(NSArray *)addCategories remove:(NSArray *)removeCategories completion:(void(^)(NSError *error))completion;
+
+//geo points
+
+- (void)addGeoPoint:(PRLocalGeoPoint *)geoPoint completion:(void(^)(NSError *error))completion;
+
+- (void)addGeoPoints:(NSArray *)geoPoints completion:(void(^)(NSError *error))completion;
+
+- (void)removeGeoPoint:(PRLocalGeoPoint *)geoPoint completion:(void(^)(NSError *error))completion;
+
+- (void)removeGeoPoints:(NSArray *)geoPoints completion:(void(^)(NSError *error))completion;
+
+- (void)allGeopoints:(void(^)(NSArray *geopoints, NSError *error))completion;
 
 @end

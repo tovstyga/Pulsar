@@ -10,4 +10,10 @@
 
 @implementation PRMenuLocationCell
 
+- (void)setGeoPoint:(PRLocalGeoPoint *)geoPoint
+{
+    _geoPoint = geoPoint;
+    self.textLabel.text = geoPoint.title;
+}
+
 @end

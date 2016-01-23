@@ -7,10 +7,13 @@
 //
 
 #import "PRLocalCategory.h"
+#import "PRLocalGeoPoint.h"
 
 @protocol PRMenuViewInteractorProtocol <NSObject>
 
-- (void)fetchDataWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion;
+- (void)fetchCategoriesWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion;
+
+- (void)fetchGeoPointsWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion;
 
 - (void)saveDataWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion;
 
@@ -20,6 +23,8 @@
 
 - (NSUInteger)availableLocations;
 
-- (id)locationForIndex:(NSInteger)index;
+- (PRLocalGeoPoint *)locationForIndex:(NSInteger)index;
+
+- (void)removeLocationAtIndex:(NSInteger)index;
 
 @end
