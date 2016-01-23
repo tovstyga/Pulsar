@@ -30,6 +30,7 @@
 		404D33451C51439E00C4735E /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 404D33441C51439D00C4735E /* MapKit.framework */; };
 		404D33481C5222C900C4735E /* PRMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D33471C5222C900C4735E /* PRMapAnnotation.m */; };
 		404D334C1C52843200C4735E /* PRRemoteArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D334B1C52843200C4735E /* PRRemoteArray.m */; };
+		404D334F1C539EF500C4735E /* PRLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D334E1C539EF500C4735E /* PRLocationManager.m */; };
 		407B1C511C46A1A70071A123 /* PRRemoteResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 407B1C501C46A1A70071A123 /* PRRemoteResults.m */; };
 		40BD1F061C2C16F500828FD1 /* PRLockActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BD1F051C2C16F500828FD1 /* PRLockActivity.m */; };
 		40BD1F0A1C2C1FB200828FD1 /* PRLockActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40BD1F091C2C1FB200828FD1 /* PRLockActivity.xib */; };
@@ -108,6 +109,8 @@
 		404D33491C52619C00C4735E /* PRMapInteractorDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRMapInteractorDelegate.h; sourceTree = "<group>"; };
 		404D334A1C52843200C4735E /* PRRemoteArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteArray.h; sourceTree = "<group>"; };
 		404D334B1C52843200C4735E /* PRRemoteArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteArray.m; sourceTree = "<group>"; };
+		404D334D1C539EF500C4735E /* PRLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRLocationManager.h; sourceTree = "<group>"; };
+		404D334E1C539EF500C4735E /* PRLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRLocationManager.m; sourceTree = "<group>"; };
 		407B1C4F1C46A1A70071A123 /* PRRemoteResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteResults.h; sourceTree = "<group>"; };
 		407B1C501C46A1A70071A123 /* PRRemoteResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteResults.m; sourceTree = "<group>"; };
 		40BD1EFF1C2C0E8700828FD1 /* RPLoginViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPLoginViewInteractorProtocol.h; sourceTree = "<group>"; };
@@ -315,6 +318,8 @@
 				400517451C3C171B00FBFE11 /* PRErrorDescriptor.m */,
 				400517471C3C19A900FBFE11 /* PRAlertHelper.h */,
 				400517481C3C19A900FBFE11 /* PRAlertHelper.m */,
+				404D334D1C539EF500C4735E /* PRLocationManager.h */,
+				404D334E1C539EF500C4735E /* PRLocationManager.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -629,6 +634,7 @@
 				404D33181C4F806400C4735E /* PRRemoteBatchRequestObject.m in Sources */,
 				40E6B9DF1C2995760083A449 /* PRLoginViewController.m in Sources */,
 				404D331C1C4FAC0200C4735E /* PRLocalCategory.m in Sources */,
+				404D334F1C539EF500C4735E /* PRLocationManager.m in Sources */,
 				40F65D9F1C33D6B200846449 /* PRLoginViewInteractor.m in Sources */,
 				40F65D9C1C33CE0700846449 /* PRConfigurator.m in Sources */,
 				40C161E21C451D3600E1E6F5 /* PRContentViewInteractor.m in Sources */,
