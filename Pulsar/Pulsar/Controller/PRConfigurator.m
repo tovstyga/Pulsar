@@ -17,6 +17,8 @@
 #import "PRMenuViewInteractorProtocol.h"
 #import "PRMapViewInteractorProtocol.h"
 #import "PRMapInteractorDelegate.h"
+#import "PRDetailsViewInteractorProtocol.h"
+#import "PRCreationViewInteractorProtocol.h"
 
 //interactors
 
@@ -26,6 +28,8 @@
 #import "PRContentViewInteractor.h"
 #import "PRMenuViewInteractor.h"
 #import "PRMapViewInteractor.h"
+#import "PRCreationViewInteractor.h"
+#import "PRDetailsViewInteractor.h"
 
 //controllers
 
@@ -35,6 +39,8 @@
 #import "PRContentViewController.h"
 #import "PRMenuViewController.h"
 #import "PRMapViewController.h"
+#import "PRDetailsViewController.h"
+#import "PRCreationViewController.h"
 
 #import "PREmailValidator.h"
 
@@ -77,6 +83,10 @@ static PRConfigurator *sharedInstance;
         }
     } else if ([viewController isMemberOfClass:[PRMapViewController class]]) {
         [(PRMapViewController *)viewController setInteractor:[self mapInteractorWithDelegate:sourceViewController]];
+    } else if ([viewController isMemberOfClass:[PRCreationViewController class]]) {
+        [(PRCreationViewController *)viewController setInteractor:[self creatorInteractor]];
+    } else if ([viewController isMemberOfClass:[PRDetailsViewInteractor class]]) {
+        [(PRDetailsViewController *)viewController setInteractor:[self detailsInteractor]];
     }
 }
 
@@ -122,6 +132,16 @@ static PRConfigurator *sharedInstance;
         interactor.delegate = delegate;
     }
     return interactor;
+}
+
+- (id<PRDetailsViewInteractorProtocol>)detailsInteractor
+{
+    return [[PRDetailsViewInteractor alloc] init];
+}
+
+- (id<PRCreationViewInteractorProtocol>)creatorInteractor
+{
+    return [[PRCreationViewInteractor alloc] init];
 }
 
 @end

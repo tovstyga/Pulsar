@@ -171,9 +171,9 @@ static NSString * const kToContentSegueIdentifier = @"content_to_login_segue";
         }
     }
     _isOpenedMenu = !hide;
-    [UIView animateWithDuration:1.f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.categoriesMenuConstraint.constant = hide ? _closedMenuDefaultConstraint : kSpaceFromMenuToRightBorder;
-        [self.view setNeedsLayout];
+    self.categoriesMenuConstraint.constant = hide ? _closedMenuDefaultConstraint : kSpaceFromMenuToRightBorder;
+    [UIView animateWithDuration:0.3f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
         if (hide) {
             if ([self.delegate respondsToSelector:@selector(menuDidClose)]) {

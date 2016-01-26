@@ -31,6 +31,13 @@
 		404D33481C5222C900C4735E /* PRMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D33471C5222C900C4735E /* PRMapAnnotation.m */; };
 		404D334C1C52843200C4735E /* PRRemoteArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D334B1C52843200C4735E /* PRRemoteArray.m */; };
 		404D334F1C539EF500C4735E /* PRLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D334E1C539EF500C4735E /* PRLocationManager.m */; };
+		4073DFC51C5612C400D46C8E /* PRRemoteArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFC41C5612C400D46C8E /* PRRemoteArticle.m */; };
+		4073DFC91C56135500D46C8E /* PRRemoteMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFC81C56135500D46C8E /* PRRemoteMedia.m */; };
+		4073DFCD1C5640BB00D46C8E /* PRCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFCC1C5640BB00D46C8E /* PRCreationViewController.m */; };
+		4073DFD11C56410500D46C8E /* PRDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFD01C56410500D46C8E /* PRDetailsViewController.m */; };
+		4073DFD71C5642E400D46C8E /* PRCreationViewInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFD61C5642E400D46C8E /* PRCreationViewInteractor.m */; };
+		4073DFDD1C5643CA00D46C8E /* PRDetailsViewInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFDC1C5643CA00D46C8E /* PRDetailsViewInteractor.m */; };
+		4073DFE01C566C5B00D46C8E /* PRCreationCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFDF1C566C5B00D46C8E /* PRCreationCollectionViewCell.m */; };
 		407B1C511C46A1A70071A123 /* PRRemoteResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 407B1C501C46A1A70071A123 /* PRRemoteResults.m */; };
 		40BD1F061C2C16F500828FD1 /* PRLockActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BD1F051C2C16F500828FD1 /* PRLockActivity.m */; };
 		40BD1F0A1C2C1FB200828FD1 /* PRLockActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40BD1F091C2C1FB200828FD1 /* PRLockActivity.xib */; };
@@ -38,6 +45,9 @@
 		40C161DC1C44E8DA00E1E6F5 /* PRContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40C161DB1C44E8DA00E1E6F5 /* PRContentViewController.m */; };
 		40C161E21C451D3600E1E6F5 /* PRContentViewInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 40C161E11C451D3600E1E6F5 /* PRContentViewInteractor.m */; };
 		40C161E61C45293200E1E6F5 /* PRRemoteCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 40C161E51C45293200E1E6F5 /* PRRemoteCategory.m */; };
+		40CFE88B1C5688D20065017C /* PRActionSheetPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40CFE88A1C5688D20065017C /* PRActionSheetPickerView.xib */; };
+		40CFE88E1C5688F70065017C /* PRActionSheetPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40CFE88D1C5688F70065017C /* PRActionSheetPickerView.m */; };
+		40CFE8911C5763110065017C /* PRPickerViewPresenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 40CFE8901C5763110065017C /* PRPickerViewPresenter.m */; };
 		40E6B9C01C297EAA0083A449 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9BF1C297EAA0083A449 /* main.m */; };
 		40E6B9C31C297EAA0083A449 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9C21C297EAA0083A449 /* AppDelegate.m */; };
 		40E6B9C91C297EAA0083A449 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40E6B9C71C297EAA0083A449 /* Main.storyboard */; };
@@ -111,6 +121,22 @@
 		404D334B1C52843200C4735E /* PRRemoteArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteArray.m; sourceTree = "<group>"; };
 		404D334D1C539EF500C4735E /* PRLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRLocationManager.h; sourceTree = "<group>"; };
 		404D334E1C539EF500C4735E /* PRLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRLocationManager.m; sourceTree = "<group>"; };
+		4073DFC31C5612C400D46C8E /* PRRemoteArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteArticle.h; sourceTree = "<group>"; };
+		4073DFC41C5612C400D46C8E /* PRRemoteArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteArticle.m; sourceTree = "<group>"; };
+		4073DFC71C56135500D46C8E /* PRRemoteMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteMedia.h; sourceTree = "<group>"; };
+		4073DFC81C56135500D46C8E /* PRRemoteMedia.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteMedia.m; sourceTree = "<group>"; };
+		4073DFCB1C5640BB00D46C8E /* PRCreationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRCreationViewController.h; sourceTree = "<group>"; };
+		4073DFCC1C5640BB00D46C8E /* PRCreationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRCreationViewController.m; sourceTree = "<group>"; };
+		4073DFCF1C56410500D46C8E /* PRDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRDetailsViewController.h; sourceTree = "<group>"; };
+		4073DFD01C56410500D46C8E /* PRDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRDetailsViewController.m; sourceTree = "<group>"; };
+		4073DFD41C5642B100D46C8E /* PRCreationViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRCreationViewInteractorProtocol.h; sourceTree = "<group>"; };
+		4073DFD51C5642E400D46C8E /* PRCreationViewInteractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRCreationViewInteractor.h; sourceTree = "<group>"; };
+		4073DFD61C5642E400D46C8E /* PRCreationViewInteractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRCreationViewInteractor.m; sourceTree = "<group>"; };
+		4073DFDA1C5643A300D46C8E /* PRDetailsViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRDetailsViewInteractorProtocol.h; sourceTree = "<group>"; };
+		4073DFDB1C5643CA00D46C8E /* PRDetailsViewInteractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRDetailsViewInteractor.h; sourceTree = "<group>"; };
+		4073DFDC1C5643CA00D46C8E /* PRDetailsViewInteractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRDetailsViewInteractor.m; sourceTree = "<group>"; };
+		4073DFDE1C566C5B00D46C8E /* PRCreationCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRCreationCollectionViewCell.h; sourceTree = "<group>"; };
+		4073DFDF1C566C5B00D46C8E /* PRCreationCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRCreationCollectionViewCell.m; sourceTree = "<group>"; };
 		407B1C4F1C46A1A70071A123 /* PRRemoteResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteResults.h; sourceTree = "<group>"; };
 		407B1C501C46A1A70071A123 /* PRRemoteResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteResults.m; sourceTree = "<group>"; };
 		40BD1EFF1C2C0E8700828FD1 /* RPLoginViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPLoginViewInteractorProtocol.h; sourceTree = "<group>"; };
@@ -130,6 +156,11 @@
 		40C161E11C451D3600E1E6F5 /* PRContentViewInteractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRContentViewInteractor.m; sourceTree = "<group>"; };
 		40C161E41C45293200E1E6F5 /* PRRemoteCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteCategory.h; sourceTree = "<group>"; };
 		40C161E51C45293200E1E6F5 /* PRRemoteCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteCategory.m; sourceTree = "<group>"; };
+		40CFE88A1C5688D20065017C /* PRActionSheetPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PRActionSheetPickerView.xib; sourceTree = "<group>"; };
+		40CFE88C1C5688F70065017C /* PRActionSheetPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRActionSheetPickerView.h; sourceTree = "<group>"; };
+		40CFE88D1C5688F70065017C /* PRActionSheetPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRActionSheetPickerView.m; sourceTree = "<group>"; };
+		40CFE88F1C5763110065017C /* PRPickerViewPresenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRPickerViewPresenter.h; sourceTree = "<group>"; };
+		40CFE8901C5763110065017C /* PRPickerViewPresenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRPickerViewPresenter.m; sourceTree = "<group>"; };
 		40E6B9BB1C297EAA0083A449 /* Pulsar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pulsar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E6B9BF1C297EAA0083A449 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		40E6B9C11C297EAA0083A449 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -284,6 +315,80 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
+		4073DFC21C56126000D46C8E /* Article */ = {
+			isa = PBXGroup;
+			children = (
+				4073DFC31C5612C400D46C8E /* PRRemoteArticle.h */,
+				4073DFC41C5612C400D46C8E /* PRRemoteArticle.m */,
+			);
+			path = Article;
+			sourceTree = "<group>";
+		};
+		4073DFC61C56131300D46C8E /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				4073DFC71C56135500D46C8E /* PRRemoteMedia.h */,
+				4073DFC81C56135500D46C8E /* PRRemoteMedia.m */,
+			);
+			path = Media;
+			sourceTree = "<group>";
+		};
+		4073DFCA1C56406700D46C8E /* Creation */ = {
+			isa = PBXGroup;
+			children = (
+				4073DFCB1C5640BB00D46C8E /* PRCreationViewController.h */,
+				4073DFCC1C5640BB00D46C8E /* PRCreationViewController.m */,
+				4073DFDE1C566C5B00D46C8E /* PRCreationCollectionViewCell.h */,
+				4073DFDF1C566C5B00D46C8E /* PRCreationCollectionViewCell.m */,
+			);
+			path = Creation;
+			sourceTree = "<group>";
+		};
+		4073DFCE1C5640D500D46C8E /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				4073DFCF1C56410500D46C8E /* PRDetailsViewController.h */,
+				4073DFD01C56410500D46C8E /* PRDetailsViewController.m */,
+			);
+			path = Details;
+			sourceTree = "<group>";
+		};
+		4073DFD21C5641D700D46C8E /* Creation */ = {
+			isa = PBXGroup;
+			children = (
+				4073DFD31C56425200D46C8E /* Protocols */,
+				4073DFD51C5642E400D46C8E /* PRCreationViewInteractor.h */,
+				4073DFD61C5642E400D46C8E /* PRCreationViewInteractor.m */,
+			);
+			path = Creation;
+			sourceTree = "<group>";
+		};
+		4073DFD31C56425200D46C8E /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				4073DFD41C5642B100D46C8E /* PRCreationViewInteractorProtocol.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		4073DFD81C56432E00D46C8E /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				4073DFD91C56434800D46C8E /* Protocols */,
+				4073DFDB1C5643CA00D46C8E /* PRDetailsViewInteractor.h */,
+				4073DFDC1C5643CA00D46C8E /* PRDetailsViewInteractor.m */,
+			);
+			path = Details;
+			sourceTree = "<group>";
+		};
+		4073DFD91C56434800D46C8E /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				4073DFDA1C5643A300D46C8E /* PRDetailsViewInteractorProtocol.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		40BD1EFD1C2C0E3A00828FD1 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -311,6 +416,7 @@
 		40BD1F021C2C127500828FD1 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				40CFE8871C5687610065017C /* ActionSheetPicker */,
 				40BD1F031C2C143500828FD1 /* LockActivityIndicator */,
 				40F65D971C33C6C900846449 /* PREmailValidator.h */,
 				40F65D981C33C6C900846449 /* PREmailValidator.m */,
@@ -339,6 +445,7 @@
 		40C161D91C44E85E00E1E6F5 /* Content */ = {
 			isa = PBXGroup;
 			children = (
+				4073DFCE1C5640D500D46C8E /* Details */,
 				404D333B1C51356500C4735E /* Map */,
 				404D33271C4FBB7000C4735E /* Protocols */,
 				404D331E1C4FB6E400C4735E /* Menu */,
@@ -351,6 +458,7 @@
 		40C161DD1C451BD500E1E6F5 /* Content */ = {
 			isa = PBXGroup;
 			children = (
+				4073DFD81C56432E00D46C8E /* Details */,
 				404D333F1C5135E500C4735E /* Map */,
 				404D33221C4FB7F800C4735E /* Menu */,
 				40C161DE1C451BF100E1E6F5 /* Protocols */,
@@ -379,6 +487,18 @@
 				40C161E51C45293200E1E6F5 /* PRRemoteCategory.m */,
 			);
 			path = Categories;
+			sourceTree = "<group>";
+		};
+		40CFE8871C5687610065017C /* ActionSheetPicker */ = {
+			isa = PBXGroup;
+			children = (
+				40CFE88A1C5688D20065017C /* PRActionSheetPickerView.xib */,
+				40CFE88C1C5688F70065017C /* PRActionSheetPickerView.h */,
+				40CFE88D1C5688F70065017C /* PRActionSheetPickerView.m */,
+				40CFE88F1C5763110065017C /* PRPickerViewPresenter.h */,
+				40CFE8901C5763110065017C /* PRPickerViewPresenter.m */,
+			);
+			path = ActionSheetPicker;
 			sourceTree = "<group>";
 		};
 		40E6B9B21C297EAA0083A449 = {
@@ -428,6 +548,7 @@
 		40E6B9D51C29808B0083A449 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				4073DFCA1C56406700D46C8E /* Creation */,
 				40C161D91C44E85E00E1E6F5 /* Content */,
 				40E6B9DC1C2995200083A449 /* Auth */,
 				40E6B9D61C2981610083A449 /* PRRootViewController.h */,
@@ -451,6 +572,7 @@
 		40E6B9DA1C2987890083A449 /* Interactor */ = {
 			isa = PBXGroup;
 			children = (
+				4073DFD21C5641D700D46C8E /* Creation */,
 				40C161DD1C451BD500E1E6F5 /* Content */,
 				40BD1EFD1C2C0E3A00828FD1 /* Auth */,
 			);
@@ -507,6 +629,8 @@
 		40F65DB11C3432FE00846449 /* RemoteModel */ = {
 			isa = PBXGroup;
 			children = (
+				4073DFC61C56131300D46C8E /* Media */,
+				4073DFC21C56126000D46C8E /* Article */,
 				404D33331C51260900C4735E /* GeoPoint */,
 				40C161E31C4528EC00E1E6F5 /* Categories */,
 				4005173D1C3BAD3800FBFE11 /* TokenValidation */,
@@ -614,6 +738,7 @@
 			files = (
 				40E6B9CB1C297EAA0083A449 /* Assets.xcassets in Resources */,
 				40E6B9C91C297EAA0083A449 /* Main.storyboard in Resources */,
+				40CFE88B1C5688D20065017C /* PRActionSheetPickerView.xib in Resources */,
 				40BD1F0A1C2C1FB200828FD1 /* PRLockActivity.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -633,12 +758,14 @@
 				400517381C3ABFCB00FBFE11 /* PRRemoteLoginResponse.m in Sources */,
 				404D33181C4F806400C4735E /* PRRemoteBatchRequestObject.m in Sources */,
 				40E6B9DF1C2995760083A449 /* PRLoginViewController.m in Sources */,
+				40CFE88E1C5688F70065017C /* PRActionSheetPickerView.m in Sources */,
 				404D331C1C4FAC0200C4735E /* PRLocalCategory.m in Sources */,
 				404D334F1C539EF500C4735E /* PRLocationManager.m in Sources */,
 				40F65D9F1C33D6B200846449 /* PRLoginViewInteractor.m in Sources */,
 				40F65D9C1C33CE0700846449 /* PRConfigurator.m in Sources */,
 				40C161E21C451D3600E1E6F5 /* PRContentViewInteractor.m in Sources */,
 				404D33421C51361400C4735E /* PRMapViewInteractor.m in Sources */,
+				4073DFD11C56410500D46C8E /* PRDetailsViewController.m in Sources */,
 				407B1C511C46A1A70071A123 /* PRRemoteResults.m in Sources */,
 				404D333E1C5135AE00C4735E /* PRMapViewController.m in Sources */,
 				404D334C1C52843200C4735E /* PRRemoteArray.m in Sources */,
@@ -646,26 +773,33 @@
 				40E6B9C31C297EAA0083A449 /* AppDelegate.m in Sources */,
 				404D33321C50C8E100C4735E /* PRMenuLocationCell.m in Sources */,
 				40BD1F061C2C16F500828FD1 /* PRLockActivity.m in Sources */,
+				40CFE8911C5763110065017C /* PRPickerViewPresenter.m in Sources */,
 				404D33481C5222C900C4735E /* PRMapAnnotation.m in Sources */,
 				404D33361C51266600C4735E /* PRRemoteGeoPoint.m in Sources */,
 				400517461C3C171B00FBFE11 /* PRErrorDescriptor.m in Sources */,
+				4073DFC91C56135500D46C8E /* PRRemoteMedia.m in Sources */,
 				404D33141C4E901D00C4735E /* PRRemoteQuery.m in Sources */,
 				40E6B9D81C2981610083A449 /* PRRootViewController.m in Sources */,
 				40E6B9C01C297EAA0083A449 /* main.m in Sources */,
 				40FF1A081C4393D4005A14BE /* PRScreenLock.m in Sources */,
+				4073DFC51C5612C400D46C8E /* PRRemoteArticle.m in Sources */,
+				4073DFE01C566C5B00D46C8E /* PRCreationCollectionViewCell.m in Sources */,
 				400517331C3A981000FBFE11 /* PRRemoteError.m in Sources */,
 				40E6B9E21C2995DF0083A449 /* PRRestoreAccountViewController.m in Sources */,
 				4005172E1C3A5FBB00FBFE11 /* PRDataProvider.m in Sources */,
+				4073DFDD1C5643CA00D46C8E /* PRDetailsViewInteractor.m in Sources */,
 				40F65DA21C33D6DC00846449 /* PRRegistrationViewInteractor.m in Sources */,
 				40E6B9E51C29964C0083A449 /* PRRegistrationViewController.m in Sources */,
 				404D33261C4FBA9300C4735E /* PRMenuViewInteractor.m in Sources */,
 				400517491C3C19A900FBFE11 /* PRAlertHelper.m in Sources */,
+				4073DFD71C5642E400D46C8E /* PRCreationViewInteractor.m in Sources */,
 				404D333A1C5129E800C4735E /* PRLocalGeoPoint.m in Sources */,
 				40F65DB91C34353800846449 /* PRRemoteRegistrationResponse.m in Sources */,
 				404D332F1C50C8A200C4735E /* PRMenuCategoryCell.m in Sources */,
 				40F65D991C33C6C900846449 /* PREmailValidator.m in Sources */,
 				40F65DAE1C3404B100846449 /* PRReachability.m in Sources */,
 				40F65DA51C33D7B700846449 /* PRRestoreAccountInteractor.m in Sources */,
+				4073DFCD1C5640BB00D46C8E /* PRCreationViewController.m in Sources */,
 				400517431C3BE70200FBFE11 /* PRLaunchScreenViewController.m in Sources */,
 				40C161E61C45293200E1E6F5 /* PRRemoteCategory.m in Sources */,
 				400517401C3BAD8000FBFE11 /* PRTokenValidationResponse.m in Sources */,
