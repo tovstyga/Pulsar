@@ -55,6 +55,7 @@ static NSString * const kAddLocationLabel = @"Add new location";
     self.tableView.userInteractionEnabled = NO;
     [self.refreshControll beginRefreshing];
     __weak typeof(self) wSelf = self;
+    [self fetchLocations];
     _tasksInProcess++;
     [self.interactor fetchCategoriesWithCompletion:^(BOOL success, NSString *errorMessage) {
         __strong typeof(wSelf) sSelf = wSelf;
@@ -71,7 +72,6 @@ static NSString * const kAddLocationLabel = @"Add new location";
             });
         }
     }];
-    [self fetchLocations];
 }
 
 - (void)menuDidOpen
@@ -80,6 +80,11 @@ static NSString * const kAddLocationLabel = @"Add new location";
 }
 
 - (void)menuWillClose
+{
+
+}
+
+- (void)menuDidClose
 {
     __weak typeof(self) wSelf = self;
     [self.interactor saveDataWithCompletion:^(BOOL success, NSString *errorMessage) {
@@ -90,11 +95,6 @@ static NSString * const kAddLocationLabel = @"Add new location";
             }
         }
     }];
-}
-
-- (void)menuDidClose
-{
-
 }
 
 #pragma mark - MapInteractorDelegate
