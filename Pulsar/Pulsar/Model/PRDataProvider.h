@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "PRLocalCategory.h"
 #import "PRLocalGeoPoint.h"
+#import "PRLocalNewArticle.h"
 
 @interface PRDataProvider : NSObject
 
@@ -54,5 +55,9 @@
 - (void)removeGeoPoints:(NSArray *)geoPoints completion:(void(^)(NSError *error))completion;
 
 - (void)allGeopoints:(void(^)(NSArray *geopoints, NSError *error))completion;
+
+//articles
+
+- (void)publishNewArticle:(PRLocalNewArticle *)localArticle completion:(void(^)(NSError *error))completion;
 
 @end

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "PRRemotePointer.h"
 #import "PRJsonCompatable.h"
+#import "PRRemoteGeoPoint.h"
 
 @interface PRRemoteArticle : NSObject<PRJsonCompatable>
 
@@ -19,8 +20,10 @@
 @property (strong, nonatomic) NSString *annotation;
 @property (strong, nonatomic) NSString *text;
 @property (strong, nonatomic) PRRemotePointer *category;
-@property (strong, nonatomic) NSArray *likes;
-@property (strong, nonatomic) NSArray *disLikes;
-@property (strong, nonatomic) NSNumber *rating;
+@property (strong, nonatomic) PRRemotePointer *image;
+@property (strong, nonatomic) PRRemoteGeoPoint *location;
+@property (strong, nonatomic, readonly) NSArray *likes;
+@property (strong, nonatomic, readonly) NSArray *disLikes;
+@property (strong, nonatomic, readonly) NSNumber *rating;
 
 @end

@@ -7,7 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PRJsonCompatable.h"
+#import "PRRemotePointer.h"
 
-@interface PRRemoteMedia : NSObject
+typedef NS_ENUM(NSUInteger, PRRemoteMediaType) {
+    PRRemoteMediaTypeImage
+};
+
+
+@interface PRRemoteMedia : NSObject<PRJsonCompatable>
+
+@property (strong, nonatomic) PRRemotePointer *articlePointer;
+
+@property (strong, nonatomic, readonly) NSString *contentType;
+@property (strong, nonatomic, readonly) NSString *mediaFileIdentifier;
+@property (strong, nonatomic, readonly) NSString *thumbnailIdentifier;
+
+- (instancetype)initWithMediaFileIdentifier:(NSString *)mediaIdentifier
+                        thumbnailIdentifier:(NSString *)thumbnailIdentifier
+                                contentType:(PRRemoteMediaType)mediaType;
 
 @end

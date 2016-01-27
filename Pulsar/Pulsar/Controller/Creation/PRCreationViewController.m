@@ -33,6 +33,7 @@
     NSMutableArray *_images;
     BOOL _gallerySelection;
     NSInteger _selectedCategory;
+    NSInteger _acceptedCategory;
 }
 
 static NSString * const kAddImageCellIdentifier = @"add_image_cell_identifier";
@@ -49,6 +50,7 @@ static int const kHeightFromKeyboard = 10;
     tapOnImageRecognizer.numberOfTapsRequired = 1;
     [self.imageView setUserInteractionEnabled:YES];
     [self.imageView addGestureRecognizer:tapOnImageRecognizer];
+    _acceptedCategory = -1;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -94,6 +96,29 @@ static int const kHeightFromKeyboard = 10;
 - (IBAction)publishAction:(UIBarButtonItem *)sender
 {
     [self hideKeyboard];
+    __weak typeof(self) wSelf = self;
+    if ([self.titleTextField.text length] && [self.mainTextView.text length] && _acceptedCategory) {
+        [[PRScreenLock sharedInstance] lockView:self.view animated:YES];
+        [self.interactor publishNewArticleWithTitle:self.titleTextField.text
+                                         annotation:self.annotationTextView.text
+                                               text:self.mainTextView.text
+                                           gategory:[[self.interactor allAvailableCategoriesNames] objectAtIndex:_acceptedCategory]
+                                              image:self.imageView.image
+                                             images:_images completion:^(BOOL success, NSString *errorMessage) {
+                                                 [[PRScreenLock sharedInstance] unlockAnimated:YES];
+                                                 __strong typeof(wSelf) sSelf = wSelf;
+                                                 if (sSelf) {
+                                                     if (!success) {
+                                                         [sSelf showAlertWithMessage:errorMessage];
+                                                     }
+                                                     dispatch_async(dispatch_get_main_queue(), ^{
+                                                         [sSelf cancelAction:nil];
+                                                     });
+                                                 }
+                                             }];
+    } else {
+        [self showAlertWithMessage:@"For publishing articles needs title, article and category. Please cheack items state."];
+    }
 }
 
 - (IBAction)selectCategoryAction:(UIButton *)sender
@@ -102,10 +127,12 @@ static int const kHeightFromKeyboard = 10;
     __block NSArray *categories = [self.interactor allAvailableCategoriesNames];
     
     void(^actionBlock)() = ^(){
+        
         [[PRPickerViewPresenter sharedInstance] presentActionSheetInView:self.view contentData:categories selectedItem:_selectedCategory completion:^(BOOL accept, NSInteger lastSelectedIndex) {
             _selectedCategory = lastSelectedIndex;
             if (accept) {
                 [self.categoryButton setTitle:categories[lastSelectedIndex] forState:UIControlStateNormal];
+                _acceptedCategory = lastSelectedIndex;
             }
         }];
     };

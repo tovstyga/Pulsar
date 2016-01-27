@@ -14,6 +14,8 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
 
 @interface PRNetworkDataProvider : NSObject
 
+@property (strong, nonatomic, readonly) NSString *currentUser;
+
 + (instancetype)sharedInstance;
 
 - (void)requestRegistration:(id<PRJsonCompatable>)registrationRequest success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
@@ -44,5 +46,11 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
 - (void)requestAddGeopoints:(NSArray *)geopoints success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
 
 - (void)requestRemoveGeopoints:(NSArray *)geopoints success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)uploadData:(NSData *)data fileName:(NSString *)fileName success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestPublishArticle:(id<PRJsonCompatable>)article success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestNewMedia:(id<PRJsonCompatable>)media success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
 
 @end

@@ -33,7 +33,6 @@
 
 - (void)fetchCategoriesWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
-#warning переписать!!!
     __weak typeof(self) wSelf = self;
     if (_loadingQueue.operationCount) {
         [_loadingQueue cancelAllOperations];

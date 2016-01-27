@@ -17,11 +17,15 @@
 #import "PRRemoteCategory.h"
 #import "PRLocalGeoPoint.h"
 #import "PRRemoteGeoPoint.h"
+#import "PRRemoteArticle.h"
+#import "PRRemotePointer.h"
+#import "PRUploadMediaOperation.h"
 
 @interface PRDataProvider()
 
 @property (strong, nonatomic) NSString *networkSessionKey;
 @property (copy, nonatomic) NSArray *templateGeoPoints;
+@property (strong, atomic) NSOperationQueue *uploadQueue;
 
 @end
 
@@ -31,13 +35,25 @@
 
 static PRDataProvider *sharedInstance;
 
+static NSString * const kObjectIdentifierKey = @"objectId";
+static NSString * const kUserClassName = @"_User";
+static NSString * const kArticleClassName = @"Article";
+static NSString * const kCategoryClassName = @"Tag";
+static NSString * const kMediaClassName = @"Media";
+
 - (instancetype)init
 {
     if (sharedInstance) {
         return sharedInstance;
     } else {
-        [PRNetworkDataProvider sharedInstance];
-        return [super init];
+        self = [super init];
+        if (self) {
+            [PRNetworkDataProvider sharedInstance];
+            self.uploadQueue = [[NSOperationQueue alloc] init];
+            self.uploadQueue.maxConcurrentOperationCount = 1;
+            self.uploadQueue.name = @"upload data queue";
+        }
+        return self;
     }
 }
 
@@ -261,6 +277,63 @@ static PRDataProvider *sharedInstance;
             completion(nil, error);
         }
     }];
+}
+
+- (void)publishNewArticle:(PRLocalNewArticle *)localArticle completion:(void(^)(NSError *error))completion
+{
+    __block PRRemoteArticle *remoteArticle = [[PRRemoteArticle alloc] init];
+    remoteArticle.title = localArticle.title;
+    remoteArticle.annotation = localArticle.annotation;
+    remoteArticle.text = localArticle.text;
+    remoteArticle.author = [[PRRemotePointer alloc] initWithClass:kUserClassName remoteObjectId:[PRNetworkDataProvider sharedInstance].currentUser];
+    remoteArticle.category = [[PRRemotePointer alloc] initWithClass:kCategoryClassName remoteObjectId:localArticle.category.identifier];
+    remoteArticle.location = [[PRRemoteGeoPoint alloc] initWithLocalGeoPoint:localArticle.location];
+    void(^publishBlock)(PRRemotePointer *image) = ^(PRRemotePointer *image){
+        if (image) {
+            remoteArticle.image = image;
+        }
+        dispatch_group_t publishGroup = dispatch_group_create();
+        dispatch_group_enter(publishGroup);
+        [self.uploadQueue addOperationWithBlock:^{
+            [[PRNetworkDataProvider sharedInstance] requestPublishArticle:remoteArticle success:^(NSData *data, NSURLResponse *response) {
+                if (completion) {
+                    completion(nil);
+                }
+                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+                PRRemotePointer *pointerToNewArticle = [[PRRemotePointer alloc] initWithClass:kArticleClassName remoteObjectId:[json objectForKey:kObjectIdentifierKey]];
+                
+                for (UIImage *image in localArticle.images) {
+                    PRUploadMediaOperation *uploadOperation = [[PRUploadMediaOperation alloc] init];
+                    uploadOperation.uploadImage = image;
+                    uploadOperation.article = pointerToNewArticle;
+                    [self.uploadQueue addOperation:uploadOperation];
+                }
+                dispatch_group_leave(publishGroup);
+            } failure:^(NSError *error) {
+                if (completion) {
+                    completion(error);
+                }
+                dispatch_group_leave(publishGroup);
+            }];
+            dispatch_group_wait(publishGroup, DISPATCH_TIME_FOREVER);
+        }];
+    };
+    
+    if (localArticle.image) {
+        PRUploadMediaOperation *uploadImageOperation = [[PRUploadMediaOperation alloc] init];
+        uploadImageOperation.uploadImage = localArticle.image;
+        uploadImageOperation.uploadCompletion = ^(NSString *identifier){
+            if (identifier) {
+                PRRemotePointer *imagePointer = [[PRRemotePointer alloc] initWithClass:kMediaClassName remoteObjectId:identifier];
+                publishBlock(imagePointer);
+            } else {
+                publishBlock(nil);
+            }
+        };
+        [self.uploadQueue addOperation:uploadImageOperation];
+    } else {
+        publishBlock(nil);
+    }
 }
 
 #pragma mark - Internal

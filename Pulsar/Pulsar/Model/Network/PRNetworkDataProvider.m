@@ -29,9 +29,10 @@
 
 @implementation PRNetworkDataProvider{
     NSString *_sessionToken;
-    NSString *_currentUser;
     NSURL *_baseURL;
 }
+
+@synthesize currentUser = _currentUser;
 
 typedef NS_ENUM(NSUInteger, PRRequestType) {
     PRRequestTypeLogin,
@@ -43,7 +44,10 @@ typedef NS_ENUM(NSUInteger, PRRequestType) {
     PRRequestTypeCategoriesForUser,
     PRRequestTypeCategoryRelation,
     PRRequestTypeBatch,
-    PRREquestTypeUserGeoPoints
+    PRREquestTypeUserGeoPoints,
+    PRRequestTypeUpload,
+    PRRequestTypePublishArticle,
+    PRRequestTypeNewMedia
 };
 
 //constants
@@ -76,6 +80,7 @@ static NSString * const kPathParamIncludeKey = @"include";
 //content types
 
 static NSString * const kContentTypeApplicationJSON = @"application/json";
+static NSString * const kContentTypeImagePng = @"image/png";
 
 //ids
 
@@ -129,6 +134,7 @@ static PRNetworkDataProvider *sharedInstance;
                 PRRemoteRegistrationResponse *sessionInfo = [[PRRemoteRegistrationResponse alloc] initWithJSON:json];
                 _sessionToken = sessionInfo.sessionToken;
                 if (success) success(data, response);
+                [self validateSessionToken:_sessionToken success:nil failure:nil];//for get user identifier;
             }
         }];
     }
@@ -363,6 +369,54 @@ static PRNetworkDataProvider *sharedInstance;
     }
 }
 
+- (void)uploadData:(NSData *)data fileName:(NSString *)fileName success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    if ([self isNetworkAvailable:failure]) {
+        NSMutableURLRequest *request = [self requestForType:PRRequestTypeUpload];
+        request.URL = [request.URL URLByAppendingPathComponent:fileName];
+        [request setHTTPBody:data];
+        [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
+}
+
+- (void)requestPublishArticle:(id<PRJsonCompatable>)article success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    if ([self isNetworkAvailable:failure]) {
+        NSMutableURLRequest *request = [self requestForType:PRRequestTypePublishArticle];
+        NSData *body = [NSJSONSerialization dataWithJSONObject:[article toJSONCompatable] options:NSJSONWritingPrettyPrinted error:nil];
+        [request setHTTPBody:body];
+        [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
+}
+
+- (void)requestNewMedia:(id<PRJsonCompatable>)media success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    if ([self isNetworkAvailable:failure]) {
+        NSMutableURLRequest *request = [self requestForType:PRRequestTypeNewMedia];
+        NSData *body = [NSJSONSerialization dataWithJSONObject:[media toJSONCompatable] options:NSJSONWritingPrettyPrinted error:nil];
+        [request setHTTPBody:body];
+        [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
+}
+
 #pragma mark - Internal
 
 - (void)performRequest:(NSURLRequest *)request completion:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completion
@@ -447,6 +501,24 @@ static PRNetworkDataProvider *sharedInstance;
             [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
             [request setValue:kHeaderContentTypeKey forHTTPHeaderField:kContentTypeApplicationJSON];
             [request setHTTPMethod:kHTTPMethodPUT];
+            return request;
+        case PRRequestTypeUpload:
+            request.URL = [_baseURL URLByAppendingPathComponent:@"files"];
+            [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
+            [request setValue:kHeaderContentTypeKey forHTTPHeaderField:kContentTypeImagePng];
+            [request setHTTPMethod:kHTTPMethodPOST];
+            return request;
+        case PRRequestTypeNewMedia:
+            request.URL = [_baseURL URLByAppendingPathComponent:@"classes/Media"];
+            [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
+            [request setValue:kHeaderContentTypeKey forHTTPHeaderField:kContentTypeApplicationJSON];
+            [request setHTTPMethod:kHTTPMethodPOST];
+            return request;
+        case PRRequestTypePublishArticle:
+            request.URL = [_baseURL URLByAppendingPathComponent:@"classes/Article"];
+            [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
+            [request setValue:kHeaderContentTypeKey forHTTPHeaderField:kContentTypeApplicationJSON];
+            [request setHTTPMethod:kHTTPMethodPOST];
             return request;
         default:
             return nil;

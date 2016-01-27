@@ -238,8 +238,9 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="plus" translatesAutoresizingMaskIntoConstraints="NO" id="aEG-iY-nE9">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aEG-iY-nE9">
                                 <rect key="frame" x="317" y="126" width="77" height="77"/>
+                                <color key="backgroundColor" red="0.76085069439999997" green="0.76085069439999997" blue="0.76085069439999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="77" id="5ig-pM-VD2"/>
                                     <constraint firstAttribute="width" constant="77" id="vk7-oN-Bkf"/>
