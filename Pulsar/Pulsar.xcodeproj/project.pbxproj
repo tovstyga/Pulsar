@@ -31,7 +31,7 @@
 		404D33481C5222C900C4735E /* PRMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D33471C5222C900C4735E /* PRMapAnnotation.m */; };
 		404D334C1C52843200C4735E /* PRRemoteArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D334B1C52843200C4735E /* PRRemoteArray.m */; };
 		404D334F1C539EF500C4735E /* PRLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D334E1C539EF500C4735E /* PRLocationManager.m */; };
-		4073DFC51C5612C400D46C8E /* PRRemoteArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFC41C5612C400D46C8E /* PRRemoteArticle.m */; };
+		4073DFC51C5612C400D46C8E /* PRRemotePublishedArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFC41C5612C400D46C8E /* PRRemotePublishedArticle.m */; };
 		4073DFC91C56135500D46C8E /* PRRemoteMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFC81C56135500D46C8E /* PRRemoteMedia.m */; };
 		4073DFCD1C5640BB00D46C8E /* PRCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFCC1C5640BB00D46C8E /* PRCreationViewController.m */; };
 		4073DFD11C56410500D46C8E /* PRDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFD01C56410500D46C8E /* PRDetailsViewController.m */; };
@@ -69,6 +69,11 @@
 		40F65DAE1C3404B100846449 /* PRReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65DAD1C3404B100846449 /* PRReachability.m */; };
 		40F65DB61C3434E000846449 /* PRRemoteRegistrationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65DB51C3434E000846449 /* PRRemoteRegistrationRequest.m */; };
 		40F65DB91C34353800846449 /* PRRemoteRegistrationResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F65DB81C34353800846449 /* PRRemoteRegistrationResponse.m */; };
+		40FC3EAA1C59FACA00C528E9 /* PRRemoteArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 40FC3EA91C59FACA00C528E9 /* PRRemoteArticle.m */; };
+		40FC3EAD1C5A04D400C528E9 /* PRLocalArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 40FC3EAC1C5A04D400C528E9 /* PRLocalArticle.m */; };
+		40FC3EB11C5A17BB00C528E9 /* PRLocalMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = 40FC3EB01C5A17BB00C528E9 /* PRLocalMedia.m */; };
+		40FC3EB41C5A186F00C528E9 /* PRRemoteFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 40FC3EB31C5A186F00C528E9 /* PRRemoteFile.m */; };
+		40FC3EB71C5A495D00C528E9 /* PRContentViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 40FC3EB61C5A495D00C528E9 /* PRContentViewCell.m */; };
 		40FF1A081C4393D4005A14BE /* PRScreenLock.m in Sources */ = {isa = PBXBuildFile; fileRef = 40FF1A071C4393D4005A14BE /* PRScreenLock.m */; };
 /* End PBXBuildFile section */
 
@@ -125,8 +130,8 @@
 		404D334B1C52843200C4735E /* PRRemoteArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteArray.m; sourceTree = "<group>"; };
 		404D334D1C539EF500C4735E /* PRLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRLocationManager.h; sourceTree = "<group>"; };
 		404D334E1C539EF500C4735E /* PRLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRLocationManager.m; sourceTree = "<group>"; };
-		4073DFC31C5612C400D46C8E /* PRRemoteArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteArticle.h; sourceTree = "<group>"; };
-		4073DFC41C5612C400D46C8E /* PRRemoteArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteArticle.m; sourceTree = "<group>"; };
+		4073DFC31C5612C400D46C8E /* PRRemotePublishedArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemotePublishedArticle.h; sourceTree = "<group>"; };
+		4073DFC41C5612C400D46C8E /* PRRemotePublishedArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemotePublishedArticle.m; sourceTree = "<group>"; };
 		4073DFC71C56135500D46C8E /* PRRemoteMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteMedia.h; sourceTree = "<group>"; };
 		4073DFC81C56135500D46C8E /* PRRemoteMedia.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteMedia.m; sourceTree = "<group>"; };
 		4073DFCB1C5640BB00D46C8E /* PRCreationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRCreationViewController.h; sourceTree = "<group>"; };
@@ -207,6 +212,16 @@
 		40F65DB51C3434E000846449 /* PRRemoteRegistrationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteRegistrationRequest.m; sourceTree = "<group>"; };
 		40F65DB71C34353800846449 /* PRRemoteRegistrationResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteRegistrationResponse.h; sourceTree = "<group>"; };
 		40F65DB81C34353800846449 /* PRRemoteRegistrationResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteRegistrationResponse.m; sourceTree = "<group>"; };
+		40FC3EA81C59FACA00C528E9 /* PRRemoteArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteArticle.h; sourceTree = "<group>"; };
+		40FC3EA91C59FACA00C528E9 /* PRRemoteArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteArticle.m; sourceTree = "<group>"; };
+		40FC3EAB1C5A04D400C528E9 /* PRLocalArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRLocalArticle.h; sourceTree = "<group>"; };
+		40FC3EAC1C5A04D400C528E9 /* PRLocalArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRLocalArticle.m; sourceTree = "<group>"; };
+		40FC3EAF1C5A17BB00C528E9 /* PRLocalMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRLocalMedia.h; sourceTree = "<group>"; };
+		40FC3EB01C5A17BB00C528E9 /* PRLocalMedia.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRLocalMedia.m; sourceTree = "<group>"; };
+		40FC3EB21C5A186F00C528E9 /* PRRemoteFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteFile.h; sourceTree = "<group>"; };
+		40FC3EB31C5A186F00C528E9 /* PRRemoteFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteFile.m; sourceTree = "<group>"; };
+		40FC3EB51C5A495D00C528E9 /* PRContentViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRContentViewCell.h; sourceTree = "<group>"; };
+		40FC3EB61C5A495D00C528E9 /* PRContentViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRContentViewCell.m; sourceTree = "<group>"; };
 		40FF1A061C4393D4005A14BE /* PRScreenLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRScreenLock.h; sourceTree = "<group>"; };
 		40FF1A071C4393D4005A14BE /* PRScreenLock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRScreenLock.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -330,8 +345,10 @@
 		4073DFC21C56126000D46C8E /* Article */ = {
 			isa = PBXGroup;
 			children = (
-				4073DFC31C5612C400D46C8E /* PRRemoteArticle.h */,
-				4073DFC41C5612C400D46C8E /* PRRemoteArticle.m */,
+				4073DFC31C5612C400D46C8E /* PRRemotePublishedArticle.h */,
+				4073DFC41C5612C400D46C8E /* PRRemotePublishedArticle.m */,
+				40FC3EA81C59FACA00C528E9 /* PRRemoteArticle.h */,
+				40FC3EA91C59FACA00C528E9 /* PRRemoteArticle.m */,
 			);
 			path = Article;
 			sourceTree = "<group>";
@@ -343,6 +360,8 @@
 				4073DFC81C56135500D46C8E /* PRRemoteMedia.m */,
 				40CFE89C1C57CE280065017C /* PRUploadMediaOperation.h */,
 				40CFE89D1C57CE280065017C /* PRUploadMediaOperation.m */,
+				40FC3EB21C5A186F00C528E9 /* PRRemoteFile.h */,
+				40FC3EB31C5A186F00C528E9 /* PRRemoteFile.m */,
 			);
 			path = Media;
 			sourceTree = "<group>";
@@ -467,6 +486,8 @@
 				404D331E1C4FB6E400C4735E /* Menu */,
 				40C161DA1C44E8DA00E1E6F5 /* PRContentViewController.h */,
 				40C161DB1C44E8DA00E1E6F5 /* PRContentViewController.m */,
+				40FC3EB51C5A495D00C528E9 /* PRContentViewCell.h */,
+				40FC3EB61C5A495D00C528E9 /* PRContentViewCell.m */,
 			);
 			path = Content;
 			sourceTree = "<group>";
@@ -522,6 +543,8 @@
 			children = (
 				40CFE8961C57B1D00065017C /* PRLocalNewArticle.h */,
 				40CFE8971C57B1D00065017C /* PRLocalNewArticle.m */,
+				40FC3EAB1C5A04D400C528E9 /* PRLocalArticle.h */,
+				40FC3EAC1C5A04D400C528E9 /* PRLocalArticle.m */,
 			);
 			path = Articles;
 			sourceTree = "<group>";
@@ -683,6 +706,7 @@
 		40F65DB21C34331D00846449 /* LocalModel */ = {
 			isa = PBXGroup;
 			children = (
+				40FC3EAE1C5A17A100C528E9 /* Media */,
 				40CFE8951C57B12B0065017C /* Articles */,
 				404D33371C5129A100C4735E /* GeoPoint */,
 				404D33191C4FABC200C4735E /* Categories */,
@@ -699,6 +723,15 @@
 				40F65DB81C34353800846449 /* PRRemoteRegistrationResponse.m */,
 			);
 			path = Registration;
+			sourceTree = "<group>";
+		};
+		40FC3EAE1C5A17A100C528E9 /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				40FC3EAF1C5A17BB00C528E9 /* PRLocalMedia.h */,
+				40FC3EB01C5A17BB00C528E9 /* PRLocalMedia.m */,
+			);
+			path = Media;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -780,11 +813,13 @@
 			files = (
 				404D33211C4FB74E00C4735E /* PRMenuViewController.m in Sources */,
 				40F65DA91C33FB0400846449 /* PRNetworkDataProvider.m in Sources */,
+				40FC3EB71C5A495D00C528E9 /* PRContentViewCell.m in Sources */,
 				404D33111C4E8CCB00C4735E /* PRRemotePointer.m in Sources */,
 				40BD1F101C2C332500828FD1 /* PRRootLoginViewController.m in Sources */,
 				4005173C1C3ACAA100FBFE11 /* PRRemoteResetPasswordRequest.m in Sources */,
 				400517381C3ABFCB00FBFE11 /* PRRemoteLoginResponse.m in Sources */,
 				404D33181C4F806400C4735E /* PRRemoteBatchRequestObject.m in Sources */,
+				40FC3EB41C5A186F00C528E9 /* PRRemoteFile.m in Sources */,
 				40E6B9DF1C2995760083A449 /* PRLoginViewController.m in Sources */,
 				40CFE88E1C5688F70065017C /* PRActionSheetPickerView.m in Sources */,
 				404D331C1C4FAC0200C4735E /* PRLocalCategory.m in Sources */,
@@ -798,6 +833,7 @@
 				407B1C511C46A1A70071A123 /* PRRemoteResults.m in Sources */,
 				404D333E1C5135AE00C4735E /* PRMapViewController.m in Sources */,
 				404D334C1C52843200C4735E /* PRRemoteArray.m in Sources */,
+				40FC3EAD1C5A04D400C528E9 /* PRLocalArticle.m in Sources */,
 				40C161DC1C44E8DA00E1E6F5 /* PRContentViewController.m in Sources */,
 				40CFE8941C57A5620065017C /* PRThumbnailMaker.m in Sources */,
 				40E6B9C31C297EAA0083A449 /* AppDelegate.m in Sources */,
@@ -814,7 +850,9 @@
 				40E6B9D81C2981610083A449 /* PRRootViewController.m in Sources */,
 				40E6B9C01C297EAA0083A449 /* main.m in Sources */,
 				40FF1A081C4393D4005A14BE /* PRScreenLock.m in Sources */,
-				4073DFC51C5612C400D46C8E /* PRRemoteArticle.m in Sources */,
+				40FC3EB11C5A17BB00C528E9 /* PRLocalMedia.m in Sources */,
+				4073DFC51C5612C400D46C8E /* PRRemotePublishedArticle.m in Sources */,
+				40FC3EAA1C59FACA00C528E9 /* PRRemoteArticle.m in Sources */,
 				4073DFE01C566C5B00D46C8E /* PRCreationCollectionViewCell.m in Sources */,
 				400517331C3A981000FBFE11 /* PRRemoteError.m in Sources */,
 				40E6B9E21C2995DF0083A449 /* PRRestoreAccountViewController.m in Sources */,

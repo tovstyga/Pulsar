@@ -11,7 +11,6 @@
 
 @class PRRemoteGeoPoint;
 
-#warning must be replased NSManagedObject from model
 @interface PRLocalGeoPoint : NSObject
 
 @property (nonatomic, readonly) float latitude;

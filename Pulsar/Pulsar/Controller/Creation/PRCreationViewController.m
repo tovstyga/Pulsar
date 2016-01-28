@@ -97,7 +97,7 @@ static int const kHeightFromKeyboard = 10;
 {
     [self hideKeyboard];
     __weak typeof(self) wSelf = self;
-    if ([self.titleTextField.text length] && [self.mainTextView.text length] && _acceptedCategory) {
+    if ([self.titleTextField.text length] && [self.mainTextView.text length] && _acceptedCategory >= 0) {
         [[PRScreenLock sharedInstance] lockView:self.view animated:YES];
         [self.interactor publishNewArticleWithTitle:self.titleTextField.text
                                          annotation:self.annotationTextView.text

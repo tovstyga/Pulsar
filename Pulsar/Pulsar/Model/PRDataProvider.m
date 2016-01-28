@@ -17,15 +17,17 @@
 #import "PRRemoteCategory.h"
 #import "PRLocalGeoPoint.h"
 #import "PRRemoteGeoPoint.h"
-#import "PRRemoteArticle.h"
+#import "PRRemotePublishedArticle.h"
 #import "PRRemotePointer.h"
 #import "PRUploadMediaOperation.h"
+#import "PRLocalArticle.h"
 
 @interface PRDataProvider()
 
 @property (strong, nonatomic) NSString *networkSessionKey;
 @property (copy, nonatomic) NSArray *templateGeoPoints;
 @property (strong, atomic) NSOperationQueue *uploadQueue;
+@property (strong, atomic) NSOperationQueue *downloadQueue;
 
 @end
 
@@ -49,9 +51,14 @@ static NSString * const kMediaClassName = @"Media";
         self = [super init];
         if (self) {
             [PRNetworkDataProvider sharedInstance];
+            
             self.uploadQueue = [[NSOperationQueue alloc] init];
             self.uploadQueue.maxConcurrentOperationCount = 1;
             self.uploadQueue.name = @"upload data queue";
+            
+            self.downloadQueue = [[NSOperationQueue alloc] init];
+            self.downloadQueue.maxConcurrentOperationCount = 1;
+            self.downloadQueue.name = @"download data queue";
         }
         return self;
     }
@@ -66,7 +73,7 @@ static NSString * const kMediaClassName = @"Media";
     return sharedInstance;
 }
 
-#pragma mark - session and autрorization
+#pragma mark - session and autorization
 
 - (void)registrateUser:(NSString *)userName
               password:(NSString *)password
@@ -281,7 +288,7 @@ static NSString * const kMediaClassName = @"Media";
 
 - (void)publishNewArticle:(PRLocalNewArticle *)localArticle completion:(void(^)(NSError *error))completion
 {
-    __block PRRemoteArticle *remoteArticle = [[PRRemoteArticle alloc] init];
+    __block PRRemotePublishedArticle *remoteArticle = [[PRRemotePublishedArticle alloc] init];
     remoteArticle.title = localArticle.title;
     remoteArticle.annotation = localArticle.annotation;
     remoteArticle.text = localArticle.text;
@@ -336,6 +343,39 @@ static NSString * const kMediaClassName = @"Media";
     }
 }
 
+- (void)articlesWithCompletion:(void(^)(NSArray *actilles, NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestArticlesWithSuccess:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion([self localArticlesFromResponseData:data], nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void)loadDataFromUrl:(NSURL *)url completion:(void (^)(NSData *, NSError *))completion
+{
+    [self.downloadQueue addOperationWithBlock:^{
+        dispatch_group_t downloadGroup = dispatch_group_create();
+        dispatch_group_enter(downloadGroup);
+        [[PRNetworkDataProvider sharedInstance] loadDataFromURL:url success:^(NSData *data, NSURLResponse *response) {
+            if (completion) {
+                completion(data, nil);
+            }
+            dispatch_group_leave(downloadGroup);
+        } failure:^(NSError *error) {
+            if (completion) {
+                completion(nil, error);
+            }
+            dispatch_group_leave(downloadGroup);
+        }];
+        dispatch_group_wait(downloadGroup, DISPATCH_TIME_FOREVER);
+    }];
+}
+
 #pragma mark - Internal
 
 - (NSArray *)remoteGeoPointsFromLocal:(NSArray *)localGeoPoints
@@ -368,9 +408,19 @@ static NSString * const kMediaClassName = @"Media";
     id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     NSArray *results = [PRRemoteResults resultsWithData:json contentType:[PRRemoteCategory class]];
     NSMutableArray *localResults = [[NSMutableArray alloc] initWithCapacity:[results count]];
-#warning update database
     for (PRRemoteCategory *category in results) {
         [localResults addObject:[[PRLocalCategory alloc] initWithRemoteCategory:category]];
+    }
+    return localResults;
+}
+
+- (NSArray *)localArticlesFromResponseData:(NSData *)data
+{
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    NSArray *results = [PRRemoteResults resultsWithData:json contentType:[PRRemoteArticle class]];
+    NSMutableArray *localResults = [[NSMutableArray alloc] initWithCapacity:[results count]];
+    for (PRRemoteArticle *article in results) {
+        [localResults addObject:[[PRLocalArticle alloc] initWithRemoteArticle:article]];
     }
     return localResults;
 }

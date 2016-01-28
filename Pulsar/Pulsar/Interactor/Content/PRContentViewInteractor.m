@@ -10,7 +10,9 @@
 #import "PRDataProvider.h"
 #import "PRErrorDescriptor.h"
 
-@implementation PRContentViewInteractor
+@implementation PRContentViewInteractor{
+    NSArray *_articles;
+}
 
 @synthesize activeFeed = _activeFeed;
 
@@ -29,15 +31,22 @@
 
 - (void)reloadDataWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
-#warning implement reloading
-    if (completion) {
-        completion(YES, nil);
-    }
+    [[PRDataProvider sharedInstance] articlesWithCompletion:^(NSArray *actilles, NSError *error) {
+        if (!error) {
+            _articles = actilles;
+            if (completion) {
+                completion(YES, nil);
+            }
+        } else {
+            if (completion) {
+                completion(NO, [PRErrorDescriptor descriptionForError:error]);
+            }
+        }
+    }];
 }
 
 - (void)loadNewDataForFeed:(PRFeedType)feedType WithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
-#warning implement loading
     if (completion) {
         completion(YES, nil);
     }
@@ -46,6 +55,19 @@
 - (void)setActiveFeed:(PRFeedType)feedType
 {
 
+}
+
+- (NSInteger)numberOfItemsInFeed:(PRFeedType)type
+{
+    return [_articles count];
+}
+
+- (PRLocalArticle *)articleForFeed:(PRFeedType)type atIndex:(NSInteger)index
+{
+    if (index >= 0 && index < [_articles count]) {
+        return _articles[index];
+    }
+    return nil;
 }
 
 @end

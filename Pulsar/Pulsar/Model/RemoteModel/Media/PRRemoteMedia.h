@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "PRJsonCompatable.h"
 #import "PRRemotePointer.h"
+#import "PRRemoteFile.h"
 
 typedef NS_ENUM(NSUInteger, PRRemoteMediaType) {
     PRRemoteMediaTypeImage
@@ -20,11 +21,11 @@ typedef NS_ENUM(NSUInteger, PRRemoteMediaType) {
 @property (strong, nonatomic) PRRemotePointer *articlePointer;
 
 @property (strong, nonatomic, readonly) NSString *contentType;
-@property (strong, nonatomic, readonly) NSString *mediaFileIdentifier;
-@property (strong, nonatomic, readonly) NSString *thumbnailIdentifier;
+@property (strong, nonatomic, readonly) PRRemoteFile *mediaFile;
+@property (strong, nonatomic, readonly) PRRemoteFile *thumbnailFile;
 
-- (instancetype)initWithMediaFileIdentifier:(NSString *)mediaIdentifier
-                        thumbnailIdentifier:(NSString *)thumbnailIdentifier
-                                contentType:(PRRemoteMediaType)mediaType;
+- (instancetype)initWithMediaFile:(PRRemoteFile *)mediaFile
+                        thumbnail:(PRRemoteFile *)thumbnailFile
+                      contentType:(PRRemoteMediaType)mediaType;
 
 @end

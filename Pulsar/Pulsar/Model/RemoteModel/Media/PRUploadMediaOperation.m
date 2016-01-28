@@ -11,6 +11,7 @@
 #import "PRThumbnailMaker.h"
 #import "PRNetworkDataProvider.h"
 #import "PRRemoteMedia.h"
+#import "PRRemoteFile.h"
 
 @implementation PRUploadMediaOperation
 
@@ -43,7 +44,12 @@ static NSUInteger const kMaxImageSize = 1024 * 1024 * 11;
             
                 NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
                 PRRemoteUploadFileResponse *uploadThumbnailResponse = [[PRRemoteUploadFileResponse alloc] initWithJSON:json];
-                PRRemoteMedia *media = [[PRRemoteMedia alloc] initWithMediaFileIdentifier:uploadContentResponse.resourceIdentifier thumbnailIdentifier:uploadThumbnailResponse.resourceIdentifier contentType:PRRemoteMediaTypeImage];
+                
+                PRRemoteFile *thumbnail = [[PRRemoteFile alloc] initWithName:uploadThumbnailResponse.resourceIdentifier url:nil];
+                PRRemoteFile *contentFile = [[PRRemoteFile alloc] initWithName:uploadContentResponse.resourceIdentifier url:nil];
+                
+                PRRemoteMedia *media = [[PRRemoteMedia alloc] initWithMediaFile:contentFile thumbnail:thumbnail contentType:PRRemoteMediaTypeImage];
+                
                 __strong  typeof(wSelf) sSelf = wSelf;
                 if (sSelf) {
                     media.articlePointer = sSelf.article;

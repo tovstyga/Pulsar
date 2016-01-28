@@ -11,7 +11,7 @@
 #import "PRContentViewDelegateProtocol.h"
 #import "PRMenuInteractorDelegateProtocol.h"
 
-@interface PRContentViewController : PRRootViewController<PRMenuInteractorDelegate>
+@interface PRContentViewController : PRRootViewController<PRMenuInteractorDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) id<PRContentViewInteractorProtocol> interactor;
 

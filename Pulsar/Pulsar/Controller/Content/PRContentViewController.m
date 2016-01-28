@@ -8,6 +8,7 @@
 
 #import "PRContentViewController.h"
 #import "PRScreenLock.h"
+#import "PRContentViewCell.h"
 
 @interface PRContentViewController()<UITabBarDelegate>
 
@@ -25,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topBarConstraint;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *categoriesMenuConstraint;
+@property (weak, nonatomic) IBOutlet UITableView *contentTableView;
 
 @end
 
@@ -36,6 +38,8 @@
 
 static CGFloat const kSpaceFromMenuToRightBorder = 40;
 static NSString * const kToContentSegueIdentifier = @"content_to_login_segue";
+
+static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
 #pragma mark - Life
 
@@ -75,7 +79,11 @@ static NSString * const kToContentSegueIdentifier = @"content_to_login_segue";
 - (IBAction)refresh:(UIBarButtonItem *)sender
 {
     [self.interactor reloadDataWithCompletion:^(BOOL success, NSString *errorMessage) {
-        
+        if (success) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.contentTableView reloadData];
+            });
+        }
     }];
 }
 
@@ -149,6 +157,26 @@ static NSString * const kToContentSegueIdentifier = @"content_to_login_segue";
         });
     }];
 }
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [self.interactor numberOfItemsInFeed:PRFeedTypeTop];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kContentCellIdentifier];
+    if (!cell) {
+        cell = [[PRContentViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kContentCellIdentifier];
+    }
+    [(PRContentViewCell *)cell setArticle:[self.interactor articleForFeed:PRFeedTypeTop atIndex:indexPath.row]];
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
 
 #pragma mark - Internal
 

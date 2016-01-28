@@ -6,6 +6,8 @@
 //  Copyright © 2016 TAB. All rights reserved.
 //
 
+#import "PRLocalArticle.h"
+
 typedef NS_ENUM(NSUInteger, PRFeedType) {
     PRFeedTypeNew,
     PRFeedTypeHot,
@@ -23,5 +25,9 @@ typedef NS_ENUM(NSUInteger, PRFeedType) {
 - (void)reloadDataWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion;
 
 - (void)loadNewDataForFeed:(PRFeedType)feedType WithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion;
+
+- (NSInteger)numberOfItemsInFeed:(PRFeedType)type;
+
+- (PRLocalArticle *)articleForFeed:(PRFeedType)type atIndex:(NSInteger)index;
 
 @end

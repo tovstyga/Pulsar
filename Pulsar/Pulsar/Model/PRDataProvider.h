@@ -28,6 +28,8 @@
 
 - (void)resumeSession:(void(^)(BOOL success))completion;
 
+- (void)loadDataFromUrl:(NSURL *)url completion:(void(^)(NSData *data, NSError *error))completion;
+
 //categories
 
 - (void)allCategories:(void(^)(NSArray *categories, NSError *error))completion;
@@ -59,5 +61,7 @@
 //articles
 
 - (void)publishNewArticle:(PRLocalNewArticle *)localArticle completion:(void(^)(NSError *error))completion;
+
+- (void)articlesWithCompletion:(void(^)(NSArray *actilles, NSError *error))completion;
 
 @end

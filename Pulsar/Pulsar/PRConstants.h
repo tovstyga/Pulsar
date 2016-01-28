@@ -14,4 +14,4 @@ static int const kHexGreenTextFieldColor = 0xCBE2CC;
 static NSString *const kPRParseServer = @"https://api.parse.com";
 static NSInteger const kPRParseAPIVersion = 1;
 
-static NSString * const kParseDateFormat = @"YYYY'-'MM'-'DD'T'HH':'MM':'SS'.'MMM'Z";
+static NSString * const kParseDateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z";

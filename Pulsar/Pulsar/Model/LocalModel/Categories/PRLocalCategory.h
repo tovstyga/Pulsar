@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "PRRemoteCategory.h"
 
-#warning must be replased NSManagedObject from model
 @interface PRLocalCategory : NSObject
 
 @property (strong, nonatomic, readonly) NSString *identifier;

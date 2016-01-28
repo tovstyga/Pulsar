@@ -10,14 +10,14 @@
 
 @implementation PRRemoteMedia
 
-- (instancetype)initWithMediaFileIdentifier:(NSString *)mediaIdentifier
-                        thumbnailIdentifier:(NSString *)thumbnailIdentifier
+- (instancetype)initWithMediaFile:(PRRemoteFile *)mediaFile
+                        thumbnail:(PRRemoteFile *)thumbnailFile
                                 contentType:(PRRemoteMediaType)mediaType
 {
     self = [super init];
     if (self) {
-        _mediaFileIdentifier = mediaIdentifier;
-        _thumbnailIdentifier = thumbnailIdentifier;
+        _mediaFile = mediaFile;
+        _thumbnailFile = thumbnailFile;
         _contentType = [self descriptionForMediaType:mediaType];
     }
     return self;
@@ -29,15 +29,15 @@
     if (self && [jsonCompatableOblect isKindOfClass:[NSDictionary class]]) {
         NSDictionary *source = (NSDictionary *)jsonCompatableOblect;
         _contentType = [source objectForKey:@"contentType"];
-        _thumbnailIdentifier = [(NSDictionary *)[source objectForKey:@"thumbnail"] objectForKey:@"name"];
-        _mediaFileIdentifier = [(NSDictionary *)[source objectForKey:@"content"] objectForKey:@"name"];
+        _thumbnailFile = [[PRRemoteFile alloc] initWithJSON:[source objectForKey:@"thumbnail"]];
+        _mediaFile = [[PRRemoteFile alloc] initWithJSON:[source objectForKey:@"content"]];
     }
-    return nil;
+    return self;
 }
 
 - (id)toJSONCompatable
 {
-    NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:@{@"contentType" : self.contentType, @"thumbnail" : @{@"__type": @"File", @"name" : self.thumbnailIdentifier}, @"content" : @{@"__type": @"File", @"name" : self.mediaFileIdentifier}}];
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:@{@"contentType" : self.contentType, @"thumbnail" : [self.thumbnailFile toJSONCompatable], @"content" : [self.mediaFile toJSONCompatable]}];
     if (self.articlePointer) {
         [result setValue:[self.articlePointer toJSONCompatable] forKey:@"article"];
     }

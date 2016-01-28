@@ -47,7 +47,9 @@ typedef NS_ENUM(NSUInteger, PRRequestType) {
     PRREquestTypeUserGeoPoints,
     PRRequestTypeUpload,
     PRRequestTypePublishArticle,
-    PRRequestTypeNewMedia
+    PRRequestTypeNewMedia,
+    PRRequestTypeLoadData,
+    PRRequestTypeArticle
 };
 
 //constants
@@ -87,6 +89,8 @@ static NSString * const kContentTypeImagePng = @"image/png";
 static NSString * const kParseApplicationId = @"HbQ3zhjz45cliycC3EoBxKWM4qf9LH7F6dpatiP8";
 static NSString * const kParseRestApiKey = @"NePEmzWEYQJ1jfAGOruWhLqyahlNrdLzWspgGMxe";
 static NSString * const kParseRevocableSession = @"1";
+
+static NSString * const kArticleIncludeFields = @"author,image,tag";
 
 static PRNetworkDataProvider *sharedInstance;
 
@@ -369,6 +373,8 @@ static PRNetworkDataProvider *sharedInstance;
     }
 }
 
+#pragma mark - Publishing
+
 - (void)uploadData:(NSData *)data fileName:(NSString *)fileName success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
 {
     if ([self isNetworkAvailable:failure]) {
@@ -415,6 +421,33 @@ static PRNetworkDataProvider *sharedInstance;
             }
         }];
     }
+}
+
+#pragma mark - Articles
+
+- (void)requestArticlesWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    NSMutableURLRequest *request = [self requestForType:PRRequestTypeArticle params:@{kPathParamIncludeKey : kArticleIncludeFields}];
+    [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error && failure) {
+            failure(error);
+        } else {
+            if (success) success(data, response);
+        }
+    }];
+}
+
+- (void)loadDataFromURL:(NSURL *)url success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    NSMutableURLRequest *request = [self requestForType:PRRequestTypeLoadData];
+    request.URL = url;
+    [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error && failure) {
+            failure(error);
+        } else {
+            if (success) success(data, response);
+        }
+    }];
 }
 
 #pragma mark - Internal
@@ -519,6 +552,15 @@ static PRNetworkDataProvider *sharedInstance;
             [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
             [request setValue:kHeaderContentTypeKey forHTTPHeaderField:kContentTypeApplicationJSON];
             [request setHTTPMethod:kHTTPMethodPOST];
+            return request;
+        case PRRequestTypeArticle:
+            request.URL = [self appendParams:params forURL:[_baseURL URLByAppendingPathComponent:@"classes/Article"]];
+            [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
+            [request setHTTPMethod:kHTTPMethodGET];
+            return request;
+        case PRRequestTypeLoadData:
+            [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
+            [request setHTTPMethod:kHTTPMethodGET];
             return request;
         default:
             return nil;
