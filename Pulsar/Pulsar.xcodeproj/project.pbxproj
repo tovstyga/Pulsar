@@ -42,6 +42,7 @@
 		4081B5B11C5B62B30023383E /* PRImagePresenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4081B5AF1C5B62B30023383E /* PRImagePresenter.m */; };
 		4081B5B21C5B62B30023383E /* PRImagePresenter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4081B5B01C5B62B30023383E /* PRImagePresenter.xib */; };
 		4081B5B51C5B93590023383E /* PRDetailsCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4081B5B41C5B93590023383E /* PRDetailsCollectionViewCell.m */; };
+		4081B5B91C5BB55A0023383E /* PRDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4081B5B71C5BB55A0023383E /* PRDataModel.xcdatamodeld */; };
 		40BD1F061C2C16F500828FD1 /* PRLockActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BD1F051C2C16F500828FD1 /* PRLockActivity.m */; };
 		40BD1F0A1C2C1FB200828FD1 /* PRLockActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40BD1F091C2C1FB200828FD1 /* PRLockActivity.xib */; };
 		40BD1F101C2C332500828FD1 /* PRRootLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BD1F0F1C2C332500828FD1 /* PRRootLoginViewController.m */; };
@@ -156,6 +157,7 @@
 		4081B5B01C5B62B30023383E /* PRImagePresenter.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PRImagePresenter.xib; sourceTree = "<group>"; };
 		4081B5B31C5B93590023383E /* PRDetailsCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRDetailsCollectionViewCell.h; sourceTree = "<group>"; };
 		4081B5B41C5B93590023383E /* PRDetailsCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRDetailsCollectionViewCell.m; sourceTree = "<group>"; };
+		4081B5B81C5BB55A0023383E /* PRDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PRDataModel.xcdatamodel; sourceTree = "<group>"; };
 		40BD1EFF1C2C0E8700828FD1 /* RPLoginViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPLoginViewInteractorProtocol.h; sourceTree = "<group>"; };
 		40BD1F001C2C0EAC00828FD1 /* RPRegistrationViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPRegistrationViewInteractorProtocol.h; sourceTree = "<group>"; };
 		40BD1F011C2C0EE100828FD1 /* PRRestoreAccountViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRRestoreAccountViewInteractorProtocol.h; sourceTree = "<group>"; };
@@ -440,6 +442,14 @@
 				4081B5B01C5B62B30023383E /* PRImagePresenter.xib */,
 			);
 			path = ImagePresenter;
+			sourceTree = "<group>";
+		};
+		4081B5B61C5BB1B90023383E /* DataBase */ = {
+			isa = PBXGroup;
+			children = (
+				4081B5B71C5BB55A0023383E /* PRDataModel.xcdatamodeld */,
+			);
+			path = DataBase;
 			sourceTree = "<group>";
 		};
 		40BD1EFD1C2C0E3A00828FD1 /* Auth */ = {
@@ -727,6 +737,7 @@
 		40F65DB21C34331D00846449 /* LocalModel */ = {
 			isa = PBXGroup;
 			children = (
+				4081B5B61C5BB1B90023383E /* DataBase */,
 				40FC3EAE1C5A17A100C528E9 /* Media */,
 				40CFE8951C57B12B0065017C /* Articles */,
 				404D33371C5129A100C4735E /* GeoPoint */,
@@ -854,6 +865,7 @@
 				4073DFD11C56410500D46C8E /* PRDetailsViewController.m in Sources */,
 				407B1C511C46A1A70071A123 /* PRRemoteResults.m in Sources */,
 				404D333E1C5135AE00C4735E /* PRMapViewController.m in Sources */,
+				4081B5B91C5BB55A0023383E /* PRDataModel.xcdatamodeld in Sources */,
 				404D334C1C52843200C4735E /* PRRemoteArray.m in Sources */,
 				40FC3EAD1C5A04D400C528E9 /* PRLocalArticle.m in Sources */,
 				40C161DC1C44E8DA00E1E6F5 /* PRContentViewController.m in Sources */,
@@ -1040,6 +1052,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		4081B5B71C5BB55A0023383E /* PRDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				4081B5B81C5BB55A0023383E /* PRDataModel.xcdatamodel */,
+			);
+			currentVersion = 4081B5B81C5BB55A0023383E /* PRDataModel.xcdatamodel */;
+			path = PRDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 40E6B9B31C297EAA0083A449 /* Project object */;
 }
