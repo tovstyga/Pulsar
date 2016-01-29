@@ -10,6 +10,7 @@
 #import "PRLocalCategory.h"
 #import "PRLocalGeoPoint.h"
 #import "PRLocalNewArticle.h"
+#import "PRLocalArticle.h"
 
 @interface PRDataProvider : NSObject
 
@@ -63,5 +64,7 @@
 - (void)publishNewArticle:(PRLocalNewArticle *)localArticle completion:(void(^)(NSError *error))completion;
 
 - (void)articlesWithCompletion:(void(^)(NSArray *actilles, NSError *error))completion;
+
+- (void)loadMediaForArticle:(PRLocalArticle *)localArticle completion:(void(^)(NSArray<PRLocalMedia *> *mediaArray, NSError *error))completion;
 
 @end

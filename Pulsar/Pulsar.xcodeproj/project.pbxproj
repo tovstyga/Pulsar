@@ -39,6 +39,9 @@
 		4073DFDD1C5643CA00D46C8E /* PRDetailsViewInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFDC1C5643CA00D46C8E /* PRDetailsViewInteractor.m */; };
 		4073DFE01C566C5B00D46C8E /* PRCreationCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4073DFDF1C566C5B00D46C8E /* PRCreationCollectionViewCell.m */; };
 		407B1C511C46A1A70071A123 /* PRRemoteResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 407B1C501C46A1A70071A123 /* PRRemoteResults.m */; };
+		4081B5B11C5B62B30023383E /* PRImagePresenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4081B5AF1C5B62B30023383E /* PRImagePresenter.m */; };
+		4081B5B21C5B62B30023383E /* PRImagePresenter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4081B5B01C5B62B30023383E /* PRImagePresenter.xib */; };
+		4081B5B51C5B93590023383E /* PRDetailsCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4081B5B41C5B93590023383E /* PRDetailsCollectionViewCell.m */; };
 		40BD1F061C2C16F500828FD1 /* PRLockActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BD1F051C2C16F500828FD1 /* PRLockActivity.m */; };
 		40BD1F0A1C2C1FB200828FD1 /* PRLockActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40BD1F091C2C1FB200828FD1 /* PRLockActivity.xib */; };
 		40BD1F101C2C332500828FD1 /* PRRootLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BD1F0F1C2C332500828FD1 /* PRRootLoginViewController.m */; };
@@ -148,6 +151,11 @@
 		4073DFDF1C566C5B00D46C8E /* PRCreationCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRCreationCollectionViewCell.m; sourceTree = "<group>"; };
 		407B1C4F1C46A1A70071A123 /* PRRemoteResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteResults.h; sourceTree = "<group>"; };
 		407B1C501C46A1A70071A123 /* PRRemoteResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteResults.m; sourceTree = "<group>"; };
+		4081B5AE1C5B62B30023383E /* PRImagePresenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRImagePresenter.h; sourceTree = "<group>"; };
+		4081B5AF1C5B62B30023383E /* PRImagePresenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRImagePresenter.m; sourceTree = "<group>"; };
+		4081B5B01C5B62B30023383E /* PRImagePresenter.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PRImagePresenter.xib; sourceTree = "<group>"; };
+		4081B5B31C5B93590023383E /* PRDetailsCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRDetailsCollectionViewCell.h; sourceTree = "<group>"; };
+		4081B5B41C5B93590023383E /* PRDetailsCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRDetailsCollectionViewCell.m; sourceTree = "<group>"; };
 		40BD1EFF1C2C0E8700828FD1 /* RPLoginViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPLoginViewInteractorProtocol.h; sourceTree = "<group>"; };
 		40BD1F001C2C0EAC00828FD1 /* RPRegistrationViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPRegistrationViewInteractorProtocol.h; sourceTree = "<group>"; };
 		40BD1F011C2C0EE100828FD1 /* PRRestoreAccountViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRRestoreAccountViewInteractorProtocol.h; sourceTree = "<group>"; };
@@ -382,6 +390,8 @@
 			children = (
 				4073DFCF1C56410500D46C8E /* PRDetailsViewController.h */,
 				4073DFD01C56410500D46C8E /* PRDetailsViewController.m */,
+				4081B5B31C5B93590023383E /* PRDetailsCollectionViewCell.h */,
+				4081B5B41C5B93590023383E /* PRDetailsCollectionViewCell.m */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -422,6 +432,16 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		4081B5AD1C5B62210023383E /* ImagePresenter */ = {
+			isa = PBXGroup;
+			children = (
+				4081B5AE1C5B62B30023383E /* PRImagePresenter.h */,
+				4081B5AF1C5B62B30023383E /* PRImagePresenter.m */,
+				4081B5B01C5B62B30023383E /* PRImagePresenter.xib */,
+			);
+			path = ImagePresenter;
+			sourceTree = "<group>";
+		};
 		40BD1EFD1C2C0E3A00828FD1 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -449,6 +469,7 @@
 		40BD1F021C2C127500828FD1 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				4081B5AD1C5B62210023383E /* ImagePresenter */,
 				40CFE8871C5687610065017C /* ActionSheetPicker */,
 				40BD1F031C2C143500828FD1 /* LockActivityIndicator */,
 				40F65D971C33C6C900846449 /* PREmailValidator.h */,
@@ -801,6 +822,7 @@
 				40E6B9C91C297EAA0083A449 /* Main.storyboard in Resources */,
 				40CFE88B1C5688D20065017C /* PRActionSheetPickerView.xib in Resources */,
 				40BD1F0A1C2C1FB200828FD1 /* PRLockActivity.xib in Resources */,
+				4081B5B21C5B62B30023383E /* PRImagePresenter.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -849,10 +871,12 @@
 				404D33141C4E901D00C4735E /* PRRemoteQuery.m in Sources */,
 				40E6B9D81C2981610083A449 /* PRRootViewController.m in Sources */,
 				40E6B9C01C297EAA0083A449 /* main.m in Sources */,
+				4081B5B51C5B93590023383E /* PRDetailsCollectionViewCell.m in Sources */,
 				40FF1A081C4393D4005A14BE /* PRScreenLock.m in Sources */,
 				40FC3EB11C5A17BB00C528E9 /* PRLocalMedia.m in Sources */,
 				4073DFC51C5612C400D46C8E /* PRRemotePublishedArticle.m in Sources */,
 				40FC3EAA1C59FACA00C528E9 /* PRRemoteArticle.m in Sources */,
+				4081B5B11C5B62B30023383E /* PRImagePresenter.m in Sources */,
 				4073DFE01C566C5B00D46C8E /* PRCreationCollectionViewCell.m in Sources */,
 				400517331C3A981000FBFE11 /* PRRemoteError.m in Sources */,
 				40E6B9E21C2995DF0083A449 /* PRRestoreAccountViewController.m in Sources */,

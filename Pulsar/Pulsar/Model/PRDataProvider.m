@@ -376,6 +376,19 @@ static NSString * const kMediaClassName = @"Media";
     }];
 }
 
+- (void)loadMediaForArticle:(PRLocalArticle *)localArticle completion:(void(^)(NSArray<PRLocalMedia *> *mediaArray, NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestMediaForArticleWithId:localArticle.objectId success:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion([self localMediaFromResponseData:data], nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(nil, error);
+        }
+    }];
+}
+
 #pragma mark - Internal
 
 - (NSArray *)remoteGeoPointsFromLocal:(NSArray *)localGeoPoints
@@ -421,6 +434,17 @@ static NSString * const kMediaClassName = @"Media";
     NSMutableArray *localResults = [[NSMutableArray alloc] initWithCapacity:[results count]];
     for (PRRemoteArticle *article in results) {
         [localResults addObject:[[PRLocalArticle alloc] initWithRemoteArticle:article]];
+    }
+    return localResults;
+}
+
+- (NSArray *)localMediaFromResponseData:(NSData *)data
+{
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    NSArray *results = [PRRemoteResults resultsWithData:json contentType:[PRRemoteMedia class]];
+    NSMutableArray *localResults = [[NSMutableArray alloc] initWithCapacity:[results count]];
+    for (PRRemoteMedia *rMedia in results) {
+        [localResults addObject:[[PRLocalMedia alloc] initWithRemoteMedia:rMedia]];
     }
     return localResults;
 }

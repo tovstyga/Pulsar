@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PRImagePresenter">
+            <connections>
+                <outlet property="activityIndicator" destination="gff-Zn-RRq" id="1uj-2a-ZcI"/>
+                <outlet property="imageView" destination="2ZV-OO-Nb5" id="7Dd-Sq-lf4"/>
+                <outlet property="shadowView" destination="sqM-N4-Fhi" id="eUc-Kq-k1n"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sqM-N4-Fhi">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2ZV-OO-Nb5">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        </imageView>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="gff-Zn-RRq">
+                            <rect key="frame" x="189" y="349" width="37" height="37"/>
+                        </activityIndicatorView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6a8-SN-G09">
+                            <rect key="frame" x="367" y="8" width="39" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="39" id="J5q-km-ngp"/>
+                                <constraint firstAttribute="height" constant="30" id="o2K-3k-bRo"/>
+                            </constraints>
+                            <state key="normal" title="Close">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="closeAction:" destination="-1" eventType="touchUpInside" id="K6i-LC-lgg"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.43529411759999997" green="0.43529411759999997" blue="0.43529411759999997" alpha="0.74918179900000004" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="6a8-SN-G09" secondAttribute="trailing" constant="8" id="3bL-aN-anK"/>
+                        <constraint firstItem="gff-Zn-RRq" firstAttribute="centerX" secondItem="sqM-N4-Fhi" secondAttribute="centerX" id="Dc5-OS-Uwh"/>
+                        <constraint firstItem="gff-Zn-RRq" firstAttribute="centerY" secondItem="sqM-N4-Fhi" secondAttribute="centerY" id="JDC-eU-Uou"/>
+                        <constraint firstAttribute="trailing" secondItem="2ZV-OO-Nb5" secondAttribute="trailing" id="ai0-W1-Te3"/>
+                        <constraint firstItem="2ZV-OO-Nb5" firstAttribute="top" secondItem="sqM-N4-Fhi" secondAttribute="top" id="cA5-dA-JVV"/>
+                        <constraint firstItem="6a8-SN-G09" firstAttribute="top" secondItem="sqM-N4-Fhi" secondAttribute="top" constant="8" id="d52-vS-Vbb"/>
+                        <constraint firstItem="2ZV-OO-Nb5" firstAttribute="leading" secondItem="sqM-N4-Fhi" secondAttribute="leading" id="eln-Nt-3Uv"/>
+                        <constraint firstAttribute="bottom" secondItem="2ZV-OO-Nb5" secondAttribute="bottom" id="ocn-Eo-h6L"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="sqM-N4-Fhi" secondAttribute="bottom" id="4zi-Nc-VvY"/>
+                <constraint firstItem="sqM-N4-Fhi" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="6Rr-M2-M3W"/>
+                <constraint firstAttribute="trailing" secondItem="sqM-N4-Fhi" secondAttribute="trailing" id="B4X-cw-leE"/>
+                <constraint firstItem="sqM-N4-Fhi" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Kdt-Qo-LyF"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+        </view>
+    </objects>
+</document>

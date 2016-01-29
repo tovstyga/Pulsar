@@ -8,9 +8,11 @@
 
 #import "PRRootViewController.h"
 #import "PRDetailsViewInteractorProtocol.h"
+#import "PRLocalArticle.h"
 
-@interface PRDetailsViewController : PRRootViewController
+@interface PRDetailsViewController : PRRootViewController<UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (strong, nonatomic) id<PRDetailsViewInteractorProtocol> interactor;
+@property (strong, nonatomic) PRLocalArticle *article;
 
 @end

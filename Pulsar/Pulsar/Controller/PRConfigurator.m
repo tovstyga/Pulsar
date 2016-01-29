@@ -85,7 +85,7 @@ static PRConfigurator *sharedInstance;
         [(PRMapViewController *)viewController setInteractor:[self mapInteractorWithDelegate:sourceViewController]];
     } else if ([viewController isMemberOfClass:[PRCreationViewController class]]) {
         [(PRCreationViewController *)viewController setInteractor:[self creatorInteractor]];
-    } else if ([viewController isMemberOfClass:[PRDetailsViewInteractor class]]) {
+    } else if ([viewController isMemberOfClass:[PRDetailsViewController class]]) {
         [(PRDetailsViewController *)viewController setInteractor:[self detailsInteractor]];
     }
 }

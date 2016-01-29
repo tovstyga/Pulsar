@@ -9,6 +9,7 @@
 #import "PRContentViewController.h"
 #import "PRScreenLock.h"
 #import "PRContentViewCell.h"
+#import "PRDetailsViewController.h"
 
 @interface PRContentViewController()<UITabBarDelegate>
 
@@ -34,12 +35,21 @@
     BOOL _isOpenedMenu;
     BOOL _lockOpenMenuInteraction;
     CGFloat _closedMenuDefaultConstraint;
+    NSInteger _selectedItem;
 }
 
 static CGFloat const kSpaceFromMenuToRightBorder = 40;
 static NSString * const kToContentSegueIdentifier = @"content_to_login_segue";
 
 static NSString * const kContentCellIdentifier = @"content_cell_identifier";
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    [super prepareForSegue:segue sender:sender];
+    if ([segue.destinationViewController isKindOfClass:[PRDetailsViewController class]]) {
+        [(PRDetailsViewController *)segue.destinationViewController setArticle:[self.interactor articleForFeed:PRFeedTypeHot atIndex:_selectedItem]];
+    }
+}
 
 #pragma mark - Life
 
@@ -177,6 +187,16 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
 #pragma mark - UITableViewDelegate
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    _selectedItem = indexPath.row;
+    return indexPath;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
 
 #pragma mark - Internal
 

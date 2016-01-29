@@ -34,7 +34,7 @@ static PRRemoteQuery *sharedInstance;
 
 - (NSDictionary *)categoriesQueryForUser:(PRRemotePointer *)pointer
 {
-    return @{@"_method":@"GET", @"where":@{@"users": [pointer toJSONCompatable]}};
+    return [self fetchQueryWithParam:@{@"users": [pointer toJSONCompatable]}];
 }
 
 - (NSDictionary *)addRelationField:(NSString *)fieldName objects:(NSArray *)pointers
@@ -52,7 +52,18 @@ static PRRemoteQuery *sharedInstance;
     return @{@"requests" : [self convertObjects:batchRequestObjects]};
 }
 
+- (NSDictionary *)mediaForArticle:(PRRemotePointer *)pointer
+{
+    return [self fetchQueryWithParam:@{@"article":[pointer toJSONCompatable]}];
+}
+
 #pragma mark - Internal
+
+- (NSDictionary *)fetchQueryWithParam:(NSDictionary *)body
+{
+    return @{@"_method" : @"GET", @"where" : body};
+}
+
 
 - (NSArray *)convertObjects:(NSArray *)objects
 {

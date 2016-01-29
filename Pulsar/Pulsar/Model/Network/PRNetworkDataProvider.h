@@ -57,4 +57,6 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
 
 - (void)requestArticlesWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
 
+- (void)requestMediaForArticleWithId:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
 @end

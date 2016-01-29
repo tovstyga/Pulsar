@@ -49,7 +49,8 @@ typedef NS_ENUM(NSUInteger, PRRequestType) {
     PRRequestTypePublishArticle,
     PRRequestTypeNewMedia,
     PRRequestTypeLoadData,
-    PRRequestTypeArticle
+    PRRequestTypeArticle,
+    PRRequestTypeLoadMedia
 };
 
 //constants
@@ -450,6 +451,20 @@ static PRNetworkDataProvider *sharedInstance;
     }];
 }
 
+- (void)requestMediaForArticleWithId:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    NSMutableURLRequest *request = [self requestForType:PRRequestTypeLoadMedia];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:[self queryMediaForArticle:articleId] options:NSJSONWritingPrettyPrinted error:nil];
+    [request setHTTPBody:data];
+    [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error && failure) {
+            failure(error);
+        } else {
+            if (success) success(data, response);
+        }
+    }];
+}
+
 #pragma mark - Internal
 
 - (void)performRequest:(NSURLRequest *)request completion:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completion
@@ -562,6 +577,14 @@ static PRNetworkDataProvider *sharedInstance;
             [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
             [request setHTTPMethod:kHTTPMethodGET];
             return request;
+        case PRRequestTypeLoadMedia:
+        {
+            request.URL = [_baseURL URLByAppendingPathComponent:@"classes/Media"];
+            [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
+            [request setValue:kHeaderContentTypeKey forHTTPHeaderField:kContentTypeApplicationJSON];
+            [request setHTTPMethod:kHTTPMethodPOST];
+            return request;
+        }
         default:
             return nil;
     }
@@ -644,6 +667,12 @@ static PRNetworkDataProvider *sharedInstance;
     }
     
     return [[PRRemoteQuery sharedInstance] batchQueryWithObjects:batchObjects];
+}
+
+- (NSDictionary *)queryMediaForArticle:(NSString *)identifier
+{
+    PRRemotePointer *pointer = [[PRRemotePointer alloc] initWithClass:@"Article" remoteObjectId:identifier];
+    return [[PRRemoteQuery sharedInstance] mediaForArticle:pointer];
 }
 
 @end

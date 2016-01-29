@@ -22,4 +22,6 @@
 
 - (NSDictionary *)batchQueryWithObjects:(NSArray *)batchRequestObjects;
 
+- (NSDictionary *)mediaForArticle:(PRRemotePointer *)pointer;
+
 @end
