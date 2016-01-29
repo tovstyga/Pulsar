@@ -86,7 +86,9 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
 
 - (IBAction)clickOnImage:(UITapGestureRecognizer *)sender
 {
-    [self showImage];
+    if (self.article.image.imageUrl) {
+        [self showImage];
+    }
 }
 
 - (IBAction)upRationgAction:(UIButton *)sender
@@ -127,7 +129,7 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
 
 - (void)loadImageWithCompletion:(void(^)(UIImage *image, NSString *errorMessage))completion
 {
-    if (_selectedImageIndex > 0) {
+    if (_selectedImageIndex >= 0) {
         [self.interactor imageForItemAtIndex:_selectedImageIndex completion:^(UIImage *image, NSString *errorMessage) {
             completion(image, errorMessage);
         }];
