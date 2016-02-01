@@ -21,29 +21,4 @@
     return self;
 }
 
-//- (UIImage *)image
-//{
-//    if (!_image) {
-//        __block UIImage *template;
-//        _image = template;
-//        [[PRDataProvider sharedInstance] loadDataFromUrl:_imageUrl completion:^(NSData *data, NSError *error) {
-//            template = [UIImage imageWithData:data];
-//        }];
-//    }
-//    return _image;
-//}
-//
-//- (UIImage *)thumbnail
-//{
-//    if (!_thumbnail) {
-//        __block UIImage *template;
-//        _thumbnail = template;
-//        [[PRDataProvider sharedInstance] loadDataFromUrl:_thumbnailUrl completion:^(NSData *data, NSError *error) {
-//            template = [UIImage imageWithData:data];
-//        }];
-//    }
-//    return _thumbnail;
-//}
-
-
 @end

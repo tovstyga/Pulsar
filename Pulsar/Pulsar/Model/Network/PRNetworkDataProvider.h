@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "PRJsonCompatable.h"
+#import "PRLocalArticle.h"
 
 typedef void(^PRNetworkSuccessBlock)(NSData *data, NSURLResponse *response);
 typedef void(^PRNetworkFailureBlock)(NSError *error);
@@ -59,5 +60,22 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
 
 - (void)requestMediaForArticleWithId:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
 
+- (void)requestHotArticlesWithCategories:(NSArray *)categories lastRequestDate:(NSDate *)date success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestNewArticlesWithCategories:(NSArray *)categories lastRequestDate:(NSDate *)date success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestTopArticlesWithCategories:(NSArray *)categories lastRequestDate:(NSDate *)date success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestAllMyArticlesWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestFavoriteArticlesWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestAddArticleToFavorite:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestRemoveArticleFromFavorite:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestLikeArticle:(PRLocalArticle *)article success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+
+- (void)requestDislikeArticle:(PRLocalArticle *)article success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
 
 @end

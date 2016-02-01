@@ -24,4 +24,12 @@
 
 - (NSDictionary *)mediaForArticle:(PRRemotePointer *)pointer;
 
+- (NSDictionary *)articlesForUser:(PRRemotePointer *)pointer;
+
+- (NSDictionary *)fetchFavoritesForUser:(PRRemotePointer *)pointer;
+
+- (NSDictionary *)incrementField:(NSString *)fieldName;
+
+- (NSDictionary *)decrementField:(NSString *)fieldName;
+
 @end

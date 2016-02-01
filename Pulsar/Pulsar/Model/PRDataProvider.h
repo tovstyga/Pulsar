@@ -63,8 +63,20 @@
 
 - (void)publishNewArticle:(PRLocalNewArticle *)localArticle completion:(void(^)(NSError *error))completion;
 
-- (void)articlesWithCompletion:(void(^)(NSArray *actilles, NSError *error))completion;
+- (void)articlesWithCompletion:(void(^)(NSArray *actilles, NSError *error))completion; ///template
 
 - (void)loadMediaForArticle:(PRLocalArticle *)localArticle completion:(void(^)(NSArray<PRLocalMedia *> *mediaArray, NSError *error))completion;
+
+- (void)allMyArticles:(void(^)(NSArray *articles, NSError *error))completion;
+
+- (void)favoriteArticles:(void(^)(NSArray *articles, NSError *error))completion;
+
+- (void)addArticleToFavorite:(PRLocalArticle *)article success:(void(^)(NSError *error))completion;
+
+- (void)remoteArticleFromFavorite:(PRLocalArticle *)article success:(void(^)(NSError *error))completion;
+
+- (void)likeArticle:(PRLocalArticle *)article success:(void(^)(NSError *error))completion;
+
+- (void)dislikeArticle:(PRLocalArticle *)article success:(void(^)(NSError *error))completion;
 
 @end

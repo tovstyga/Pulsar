@@ -57,13 +57,37 @@ static PRRemoteQuery *sharedInstance;
     return [self fetchQueryWithParam:@{@"article":[pointer toJSONCompatable]}];
 }
 
+- (NSDictionary *)articlesForUser:(PRRemotePointer *)pointer
+{
+    return [self fetchQueryWithParam:@{@"author" : [pointer toJSONCompatable]}];
+}
+
+- (NSDictionary *)fetchFavoritesForUser:(PRRemotePointer *)pointer
+{
+    return [self fetchQueryWithParam:@{@"favorite" : [pointer toJSONCompatable]}];
+}
+
+- (NSDictionary *)incrementField:(NSString *)fieldName
+{
+    return [self changeValueFrom:fieldName on:1];
+}
+
+- (NSDictionary *)decrementField:(NSString *)fieldName
+{
+    return [self changeValueFrom:fieldName on:-1];
+}
+
 #pragma mark - Internal
+
+- (NSDictionary *)changeValueFrom:(NSString *)fieldName on:(int)value
+{
+    return @{fieldName : @{@"__op":@"Increment",@"amount" : @(value)}};
+}
 
 - (NSDictionary *)fetchQueryWithParam:(NSDictionary *)body
 {
     return @{@"_method" : @"GET", @"where" : body};
 }
-
 
 - (NSArray *)convertObjects:(NSArray *)objects
 {

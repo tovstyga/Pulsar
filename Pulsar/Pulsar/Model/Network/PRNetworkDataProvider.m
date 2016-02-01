@@ -50,7 +50,9 @@ typedef NS_ENUM(NSUInteger, PRRequestType) {
     PRRequestTypeNewMedia,
     PRRequestTypeLoadData,
     PRRequestTypeArticle,
-    PRRequestTypeLoadMedia
+    PRRequestTypeLoadMedia,
+    PRRequestTypeArticlesForUser,
+    PRRequestTypeFavoriteAction
 };
 
 //constants
@@ -428,44 +430,171 @@ static PRNetworkDataProvider *sharedInstance;
 
 - (void)requestArticlesWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
 {
-    NSMutableURLRequest *request = [self requestForType:PRRequestTypeArticle params:@{kPathParamIncludeKey : kArticleIncludeFields}];
-    [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (error && failure) {
-            failure(error);
-        } else {
-            if (success) success(data, response);
-        }
-    }];
+     if ([self isNetworkAvailable:failure]) {
+         NSMutableURLRequest *request = [self requestForType:PRRequestTypeArticle params:@{kPathParamIncludeKey : kArticleIncludeFields}];
+         [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+             if (error && failure) {
+                 failure(error);
+             } else {
+                 if (success) success(data, response);
+             }
+         }];
+     }
 }
 
 - (void)loadDataFromURL:(NSURL *)url success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
 {
-    NSMutableURLRequest *request = [self requestForType:PRRequestTypeLoadData];
-    request.URL = url;
-    [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (error && failure) {
-            failure(error);
-        } else {
-            if (success) success(data, response);
-        }
-    }];
+    if ([self isNetworkAvailable:failure]) {
+        NSMutableURLRequest *request = [self requestForType:PRRequestTypeLoadData];
+        request.URL = url;
+        [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
 }
 
 - (void)requestMediaForArticleWithId:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
 {
-    NSMutableURLRequest *request = [self requestForType:PRRequestTypeLoadMedia];
-    NSData *data = [NSJSONSerialization dataWithJSONObject:[self queryMediaForArticle:articleId] options:NSJSONWritingPrettyPrinted error:nil];
-    [request setHTTPBody:data];
-    [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (error && failure) {
-            failure(error);
-        } else {
-            if (success) success(data, response);
-        }
-    }];
+    if ([self isNetworkAvailable:failure]) {
+        NSMutableURLRequest *request = [self requestForType:PRRequestTypeLoadMedia];
+        NSData *data = [NSJSONSerialization dataWithJSONObject:[self queryMediaForArticle:articleId] options:NSJSONWritingPrettyPrinted error:nil];
+        [request setHTTPBody:data];
+        [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
+}
+
+- (void)requestHotArticlesWithCategories:(NSArray *)categories
+                         lastRequestDate:(NSDate *)date
+                                 success:(PRNetworkSuccessBlock)success
+                                 failure:(PRNetworkFailureBlock)failure
+{
+
+}
+
+- (void)requestNewArticlesWithCategories:(NSArray *)categories
+                         lastRequestDate:(NSDate *)date
+                                 success:(PRNetworkSuccessBlock)success
+                                 failure:(PRNetworkFailureBlock)failure
+{
+
+}
+
+- (void)requestTopArticlesWithCategories:(NSArray *)categories
+                         lastRequestDate:(NSDate *)date
+                                 success:(PRNetworkSuccessBlock)success
+                                 failure:(PRNetworkFailureBlock)failure
+{
+
+}
+
+- (void)requestAllMyArticlesWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    if ([self isNetworkAvailable:failure]) {
+        [self performRequest:[self requestForType:PRRequestTypeArticlesForUser] completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
+}
+
+- (void)requestFavoriteArticlesWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    if ([self isNetworkAvailable:failure]) {
+        NSMutableURLRequest *request = [self requestForType:PRRequestTypeFavoriteAction];
+        [request setHTTPMethod:kHTTPMethodPOST];
+        NSData *body = [NSJSONSerialization dataWithJSONObject:[self queryFetchFavorites] options:NSJSONWritingPrettyPrinted error:nil];
+        [request setHTTPBody:body];
+        [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
+}
+
+- (void)requestAddArticleToFavorite:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    if ([self isNetworkAvailable:failure]) {
+        [self performRequest:[self favoriteActionRequestWith:[self queryAddToFavorite] articleId:articleId] completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
+}
+
+- (void)requestRemoveArticleFromFavorite:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    if ([self isNetworkAvailable:failure]) {
+        [self performRequest:[self favoriteActionRequestWith:[self queryremoveFormFavorite] articleId:articleId] completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
+}
+
+- (void)requestLikeArticle:(PRLocalArticle *)article success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    if ([self isNetworkAvailable:failure]) {
+        NSMutableURLRequest *request = [self requestForType:PRRequestTypeBatch];
+        NSData *body = [NSJSONSerialization dataWithJSONObject:[self queryLikeArticle:article] options:NSJSONWritingPrettyPrinted error:nil];
+        [request setHTTPBody:body];
+        [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
+}
+
+- (void)requestDislikeArticle:(PRLocalArticle *)article success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+{
+    if ([self isNetworkAvailable:failure]) {
+        NSMutableURLRequest *request = [self requestForType:PRRequestTypeBatch];
+        NSData *body = [NSJSONSerialization dataWithJSONObject:[self queryDislikeArticle:article] options:NSJSONWritingPrettyPrinted error:nil];
+        [request setHTTPBody:body];
+        [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
 }
 
 #pragma mark - Internal
+
+- (NSMutableURLRequest *)favoriteActionRequestWith:(NSDictionary *)body articleId:(NSString *)articleId
+{
+    NSMutableURLRequest *request = [self requestForType:PRRequestTypeFavoriteAction];
+    request.URL = [request.URL URLByAppendingPathComponent:articleId];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:body options:NSJSONWritingPrettyPrinted error:nil];
+    [request setHTTPBody:data];
+    return request;
+}
 
 - (void)performRequest:(NSURLRequest *)request completion:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completion
 {
@@ -585,6 +714,24 @@ static PRNetworkDataProvider *sharedInstance;
             [request setHTTPMethod:kHTTPMethodPOST];
             return request;
         }
+        case PRRequestTypeArticlesForUser:
+        {
+            request.URL = [_baseURL URLByAppendingPathComponent:@"classes/Article"];
+            [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
+            [request setHTTPMethod:kHTTPMethodPOST];
+            [request setValue:kHeaderContentTypeKey forHTTPHeaderField:kContentTypeApplicationJSON];
+            NSData *body = [NSJSONSerialization dataWithJSONObject:[self queryArticlesForUser] options:NSJSONWritingPrettyPrinted error:nil];
+            [request setHTTPBody:body];
+            return request;
+        }
+        case PRRequestTypeFavoriteAction:
+        {
+            request.URL = [_baseURL URLByAppendingPathComponent:@"classes/Article"];
+            [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
+            [request setHTTPMethod:kHTTPMethodPUT];
+            [request setValue:kHeaderContentTypeKey forHTTPHeaderField:kContentTypeApplicationJSON];
+            return request;
+        }
         default:
             return nil;
     }
@@ -635,6 +782,26 @@ static PRNetworkDataProvider *sharedInstance;
 
 #pragma mark - Queries
 
+- (NSDictionary *)queryFetchFavorites
+{
+    return [[PRRemoteQuery sharedInstance] fetchFavoritesForUser:[self pointerToCurrentUser]];
+}
+
+- (NSDictionary *)queryAddToFavorite
+{
+    return [[PRRemoteQuery sharedInstance] addRelationField:@"favorite" objects:@[[self pointerToCurrentUser]]];
+}
+
+- (NSDictionary *)queryremoveFormFavorite
+{
+    return [[PRRemoteQuery sharedInstance] removeRelationField:@"favorite" objects:@[[self pointerToCurrentUser]]];
+}
+
+- (NSDictionary *)queryArticlesForUser
+{
+    return [[PRRemoteQuery sharedInstance] articlesForUser:[self pointerToCurrentUser]];
+}
+
 - (NSDictionary *)queryUserCategories
 {
     return [[PRRemoteQuery sharedInstance] categoriesQueryForUser:[self pointerToCurrentUser]];
@@ -665,6 +832,82 @@ static PRNetworkDataProvider *sharedInstance;
         PRRemoteBatchRequestObject *object = [[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:[self queryRemoveUserCaregory]];
         [batchObjects addObject:object];
     }
+    
+    return [[PRRemoteQuery sharedInstance] batchQueryWithObjects:batchObjects];
+}
+
+- (NSDictionary *)queryLikeArticle:(PRLocalArticle *)article
+{
+    NSMutableArray *batchObjects = [NSMutableArray new];
+    NSString *targetObject = [NSString stringWithFormat:@"Article/%@", article.objectId];
+    __block PRRemoteArray *remove = nil;
+    __block BOOL containsThisObject = NO;
+    
+    [article.likes enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isEqualToString:self.currentUser]) {
+            containsThisObject = YES;
+            *stop = YES;
+        }
+    }];
+    
+    if (containsThisObject) {
+        return nil;
+    }
+    
+    [article.disLikes enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isEqualToString:self.currentUser]) {
+            remove = [[PRRemoteArray alloc] initWithField:@"dislikes" action:PRRemoteArrayActionRemove objects:@[self.currentUser]];
+            *stop = YES;
+        }
+    }];
+    
+    if (!remove) {
+         PRRemoteArray *add = [[PRRemoteArray alloc] initWithField:@"likes" action:PRRemoteArrayActionAddUnique objects:@[self.currentUser]];
+        [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:[add toJSONCompatable]]];
+    } else {
+        [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:[remove toJSONCompatable]]];
+    }
+    
+    NSDictionary *incrementQuery = [[PRRemoteQuery sharedInstance] incrementField:@"rating"];
+    [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:incrementQuery]];
+    
+    return [[PRRemoteQuery sharedInstance] batchQueryWithObjects:batchObjects];
+}
+
+- (NSDictionary *)queryDislikeArticle:(PRLocalArticle *)article
+{
+    NSMutableArray *batchObjects = [NSMutableArray new];
+    NSString *targetObject = [NSString stringWithFormat:@"Article/%@", article.objectId];
+    __block PRRemoteArray *remove = nil;
+    __block BOOL containsThisObject = NO;
+    
+    [article.disLikes enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isEqualToString:self.currentUser]) {
+            containsThisObject = YES;
+            *stop = YES;
+        }
+    }];
+    
+    if (containsThisObject) {
+        return nil;
+    }
+    
+    [article.likes enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isEqualToString:self.currentUser]) {
+            remove = [[PRRemoteArray alloc] initWithField:@"likes" action:PRRemoteArrayActionRemove objects:@[self.currentUser]];
+            *stop = YES;
+        }
+    }];
+    
+    if (!remove) {
+        PRRemoteArray *add = [[PRRemoteArray alloc] initWithField:@"dislikes" action:PRRemoteArrayActionAddUnique objects:@[self.currentUser]];
+        [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:[add toJSONCompatable]]];
+    } else {
+        [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:[remove toJSONCompatable]]];
+    }
+    
+    NSDictionary *decrementQuery = [[PRRemoteQuery sharedInstance] decrementField:@"rating"];
+    [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:decrementQuery]];
     
     return [[PRRemoteQuery sharedInstance] batchQueryWithObjects:batchObjects];
 }

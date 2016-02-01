@@ -43,6 +43,7 @@
 		4081B5B21C5B62B30023383E /* PRImagePresenter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4081B5B01C5B62B30023383E /* PRImagePresenter.xib */; };
 		4081B5B51C5B93590023383E /* PRDetailsCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4081B5B41C5B93590023383E /* PRDetailsCollectionViewCell.m */; };
 		4081B5B91C5BB55A0023383E /* PRDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4081B5B71C5BB55A0023383E /* PRDataModel.xcdatamodeld */; };
+		4081B5E21C5BC89D0023383E /* PRLocalDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4081B5E11C5BC89D0023383E /* PRLocalDataStore.m */; };
 		40BD1F061C2C16F500828FD1 /* PRLockActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BD1F051C2C16F500828FD1 /* PRLockActivity.m */; };
 		40BD1F0A1C2C1FB200828FD1 /* PRLockActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40BD1F091C2C1FB200828FD1 /* PRLockActivity.xib */; };
 		40BD1F101C2C332500828FD1 /* PRRootLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BD1F0F1C2C332500828FD1 /* PRRootLoginViewController.m */; };
@@ -56,6 +57,16 @@
 		40CFE8981C57B1D00065017C /* PRLocalNewArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 40CFE8971C57B1D00065017C /* PRLocalNewArticle.m */; };
 		40CFE89B1C57B9930065017C /* PRRemoteUploadFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 40CFE89A1C57B9930065017C /* PRRemoteUploadFileResponse.m */; };
 		40CFE89E1C57CE280065017C /* PRUploadMediaOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 40CFE89D1C57CE280065017C /* PRUploadMediaOperation.m */; };
+		40E1CBB71C5F4989002EFF72 /* InterestCategory+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBA41C5F4989002EFF72 /* InterestCategory+CoreDataProperties.m */; };
+		40E1CBB81C5F4989002EFF72 /* InterestCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBA61C5F4989002EFF72 /* InterestCategory.m */; };
+		40E1CBB91C5F4989002EFF72 /* User+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBA81C5F4989002EFF72 /* User+CoreDataProperties.m */; };
+		40E1CBBA1C5F4989002EFF72 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBAA1C5F4989002EFF72 /* User.m */; };
+		40E1CBBB1C5F4989002EFF72 /* Article+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBAC1C5F4989002EFF72 /* Article+CoreDataProperties.m */; };
+		40E1CBBC1C5F4989002EFF72 /* Article.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBAE1C5F4989002EFF72 /* Article.m */; };
+		40E1CBBD1C5F4989002EFF72 /* GeoPoint+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBB01C5F4989002EFF72 /* GeoPoint+CoreDataProperties.m */; };
+		40E1CBBE1C5F4989002EFF72 /* GeoPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBB21C5F4989002EFF72 /* GeoPoint.m */; };
+		40E1CBC51C5F4D4C002EFF72 /* Media+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBC21C5F4D4C002EFF72 /* Media+CoreDataProperties.m */; };
+		40E1CBC61C5F4D4C002EFF72 /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBC41C5F4D4C002EFF72 /* Media.m */; };
 		40E6B9C01C297EAA0083A449 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9BF1C297EAA0083A449 /* main.m */; };
 		40E6B9C31C297EAA0083A449 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9C21C297EAA0083A449 /* AppDelegate.m */; };
 		40E6B9C91C297EAA0083A449 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40E6B9C71C297EAA0083A449 /* Main.storyboard */; };
@@ -158,6 +169,8 @@
 		4081B5B31C5B93590023383E /* PRDetailsCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRDetailsCollectionViewCell.h; sourceTree = "<group>"; };
 		4081B5B41C5B93590023383E /* PRDetailsCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRDetailsCollectionViewCell.m; sourceTree = "<group>"; };
 		4081B5B81C5BB55A0023383E /* PRDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PRDataModel.xcdatamodel; sourceTree = "<group>"; };
+		4081B5E01C5BC89D0023383E /* PRLocalDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRLocalDataStore.h; sourceTree = "<group>"; };
+		4081B5E11C5BC89D0023383E /* PRLocalDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRLocalDataStore.m; sourceTree = "<group>"; };
 		40BD1EFF1C2C0E8700828FD1 /* RPLoginViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPLoginViewInteractorProtocol.h; sourceTree = "<group>"; };
 		40BD1F001C2C0EAC00828FD1 /* RPRegistrationViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPRegistrationViewInteractorProtocol.h; sourceTree = "<group>"; };
 		40BD1F011C2C0EE100828FD1 /* PRRestoreAccountViewInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRRestoreAccountViewInteractorProtocol.h; sourceTree = "<group>"; };
@@ -188,6 +201,26 @@
 		40CFE89A1C57B9930065017C /* PRRemoteUploadFileResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemoteUploadFileResponse.m; sourceTree = "<group>"; };
 		40CFE89C1C57CE280065017C /* PRUploadMediaOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRUploadMediaOperation.h; sourceTree = "<group>"; };
 		40CFE89D1C57CE280065017C /* PRUploadMediaOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRUploadMediaOperation.m; sourceTree = "<group>"; };
+		40E1CBA31C5F4989002EFF72 /* InterestCategory+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "InterestCategory+CoreDataProperties.h"; path = "../DataBase/InterestCategory+CoreDataProperties.h"; sourceTree = "<group>"; };
+		40E1CBA41C5F4989002EFF72 /* InterestCategory+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "InterestCategory+CoreDataProperties.m"; path = "../DataBase/InterestCategory+CoreDataProperties.m"; sourceTree = "<group>"; };
+		40E1CBA51C5F4989002EFF72 /* InterestCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InterestCategory.h; path = ../DataBase/InterestCategory.h; sourceTree = "<group>"; };
+		40E1CBA61C5F4989002EFF72 /* InterestCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InterestCategory.m; path = ../DataBase/InterestCategory.m; sourceTree = "<group>"; };
+		40E1CBA71C5F4989002EFF72 /* User+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "User+CoreDataProperties.h"; path = "../DataBase/User+CoreDataProperties.h"; sourceTree = "<group>"; };
+		40E1CBA81C5F4989002EFF72 /* User+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "User+CoreDataProperties.m"; path = "../DataBase/User+CoreDataProperties.m"; sourceTree = "<group>"; };
+		40E1CBA91C5F4989002EFF72 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = ../DataBase/User.h; sourceTree = "<group>"; };
+		40E1CBAA1C5F4989002EFF72 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = ../DataBase/User.m; sourceTree = "<group>"; };
+		40E1CBAB1C5F4989002EFF72 /* Article+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Article+CoreDataProperties.h"; path = "../DataBase/Article+CoreDataProperties.h"; sourceTree = "<group>"; };
+		40E1CBAC1C5F4989002EFF72 /* Article+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Article+CoreDataProperties.m"; path = "../DataBase/Article+CoreDataProperties.m"; sourceTree = "<group>"; };
+		40E1CBAD1C5F4989002EFF72 /* Article.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Article.h; path = ../DataBase/Article.h; sourceTree = "<group>"; };
+		40E1CBAE1C5F4989002EFF72 /* Article.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Article.m; path = ../DataBase/Article.m; sourceTree = "<group>"; };
+		40E1CBAF1C5F4989002EFF72 /* GeoPoint+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GeoPoint+CoreDataProperties.h"; path = "../DataBase/GeoPoint+CoreDataProperties.h"; sourceTree = "<group>"; };
+		40E1CBB01C5F4989002EFF72 /* GeoPoint+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GeoPoint+CoreDataProperties.m"; path = "../DataBase/GeoPoint+CoreDataProperties.m"; sourceTree = "<group>"; };
+		40E1CBB11C5F4989002EFF72 /* GeoPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeoPoint.h; path = ../DataBase/GeoPoint.h; sourceTree = "<group>"; };
+		40E1CBB21C5F4989002EFF72 /* GeoPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeoPoint.m; path = ../DataBase/GeoPoint.m; sourceTree = "<group>"; };
+		40E1CBC11C5F4D4C002EFF72 /* Media+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Media+CoreDataProperties.h"; path = "../DataBase/Media+CoreDataProperties.h"; sourceTree = "<group>"; };
+		40E1CBC21C5F4D4C002EFF72 /* Media+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Media+CoreDataProperties.m"; path = "../DataBase/Media+CoreDataProperties.m"; sourceTree = "<group>"; };
+		40E1CBC31C5F4D4C002EFF72 /* Media.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Media.h; path = ../DataBase/Media.h; sourceTree = "<group>"; };
+		40E1CBC41C5F4D4C002EFF72 /* Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Media.m; path = ../DataBase/Media.m; sourceTree = "<group>"; };
 		40E6B9BB1C297EAA0083A449 /* Pulsar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pulsar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E6B9BF1C297EAA0083A449 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		40E6B9C11C297EAA0083A449 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -278,6 +311,10 @@
 		404D33191C4FABC200C4735E /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				40E1CBA31C5F4989002EFF72 /* InterestCategory+CoreDataProperties.h */,
+				40E1CBA41C5F4989002EFF72 /* InterestCategory+CoreDataProperties.m */,
+				40E1CBA51C5F4989002EFF72 /* InterestCategory.h */,
+				40E1CBA61C5F4989002EFF72 /* InterestCategory.m */,
 				404D331A1C4FAC0200C4735E /* PRLocalCategory.h */,
 				404D331B1C4FAC0200C4735E /* PRLocalCategory.m */,
 			);
@@ -326,6 +363,10 @@
 		404D33371C5129A100C4735E /* GeoPoint */ = {
 			isa = PBXGroup;
 			children = (
+				40E1CBAF1C5F4989002EFF72 /* GeoPoint+CoreDataProperties.h */,
+				40E1CBB01C5F4989002EFF72 /* GeoPoint+CoreDataProperties.m */,
+				40E1CBB11C5F4989002EFF72 /* GeoPoint.h */,
+				40E1CBB21C5F4989002EFF72 /* GeoPoint.m */,
 				404D33381C5129E800C4735E /* PRLocalGeoPoint.h */,
 				404D33391C5129E800C4735E /* PRLocalGeoPoint.m */,
 			);
@@ -448,6 +489,8 @@
 			isa = PBXGroup;
 			children = (
 				4081B5B71C5BB55A0023383E /* PRDataModel.xcdatamodeld */,
+				4081B5E01C5BC89D0023383E /* PRLocalDataStore.h */,
+				4081B5E11C5BC89D0023383E /* PRLocalDataStore.m */,
 			);
 			path = DataBase;
 			sourceTree = "<group>";
@@ -572,12 +615,27 @@
 		40CFE8951C57B12B0065017C /* Articles */ = {
 			isa = PBXGroup;
 			children = (
+				40E1CBAB1C5F4989002EFF72 /* Article+CoreDataProperties.h */,
+				40E1CBAC1C5F4989002EFF72 /* Article+CoreDataProperties.m */,
+				40E1CBAD1C5F4989002EFF72 /* Article.h */,
+				40E1CBAE1C5F4989002EFF72 /* Article.m */,
 				40CFE8961C57B1D00065017C /* PRLocalNewArticle.h */,
 				40CFE8971C57B1D00065017C /* PRLocalNewArticle.m */,
 				40FC3EAB1C5A04D400C528E9 /* PRLocalArticle.h */,
 				40FC3EAC1C5A04D400C528E9 /* PRLocalArticle.m */,
 			);
 			path = Articles;
+			sourceTree = "<group>";
+		};
+		40E1CB661C5F46F5002EFF72 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				40E1CBA71C5F4989002EFF72 /* User+CoreDataProperties.h */,
+				40E1CBA81C5F4989002EFF72 /* User+CoreDataProperties.m */,
+				40E1CBA91C5F4989002EFF72 /* User.h */,
+				40E1CBAA1C5F4989002EFF72 /* User.m */,
+			);
+			path = User;
 			sourceTree = "<group>";
 		};
 		40E6B9B21C297EAA0083A449 = {
@@ -737,6 +795,7 @@
 		40F65DB21C34331D00846449 /* LocalModel */ = {
 			isa = PBXGroup;
 			children = (
+				40E1CB661C5F46F5002EFF72 /* User */,
 				4081B5B61C5BB1B90023383E /* DataBase */,
 				40FC3EAE1C5A17A100C528E9 /* Media */,
 				40CFE8951C57B12B0065017C /* Articles */,
@@ -760,6 +819,10 @@
 		40FC3EAE1C5A17A100C528E9 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				40E1CBC11C5F4D4C002EFF72 /* Media+CoreDataProperties.h */,
+				40E1CBC21C5F4D4C002EFF72 /* Media+CoreDataProperties.m */,
+				40E1CBC31C5F4D4C002EFF72 /* Media.h */,
+				40E1CBC41C5F4D4C002EFF72 /* Media.m */,
 				40FC3EAF1C5A17BB00C528E9 /* PRLocalMedia.h */,
 				40FC3EB01C5A17BB00C528E9 /* PRLocalMedia.m */,
 			);
@@ -844,6 +907,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40E1CBB91C5F4989002EFF72 /* User+CoreDataProperties.m in Sources */,
 				404D33211C4FB74E00C4735E /* PRMenuViewController.m in Sources */,
 				40F65DA91C33FB0400846449 /* PRNetworkDataProvider.m in Sources */,
 				40FC3EB71C5A495D00C528E9 /* PRContentViewCell.m in Sources */,
@@ -853,11 +917,13 @@
 				400517381C3ABFCB00FBFE11 /* PRRemoteLoginResponse.m in Sources */,
 				404D33181C4F806400C4735E /* PRRemoteBatchRequestObject.m in Sources */,
 				40FC3EB41C5A186F00C528E9 /* PRRemoteFile.m in Sources */,
+				40E1CBBE1C5F4989002EFF72 /* GeoPoint.m in Sources */,
 				40E6B9DF1C2995760083A449 /* PRLoginViewController.m in Sources */,
 				40CFE88E1C5688F70065017C /* PRActionSheetPickerView.m in Sources */,
 				404D331C1C4FAC0200C4735E /* PRLocalCategory.m in Sources */,
 				404D334F1C539EF500C4735E /* PRLocationManager.m in Sources */,
 				40F65D9F1C33D6B200846449 /* PRLoginViewInteractor.m in Sources */,
+				40E1CBC51C5F4D4C002EFF72 /* Media+CoreDataProperties.m in Sources */,
 				40F65D9C1C33CE0700846449 /* PRConfigurator.m in Sources */,
 				40C161E21C451D3600E1E6F5 /* PRContentViewInteractor.m in Sources */,
 				404D33421C51361400C4735E /* PRMapViewInteractor.m in Sources */,
@@ -873,13 +939,18 @@
 				40E6B9C31C297EAA0083A449 /* AppDelegate.m in Sources */,
 				404D33321C50C8E100C4735E /* PRMenuLocationCell.m in Sources */,
 				40BD1F061C2C16F500828FD1 /* PRLockActivity.m in Sources */,
+				40E1CBBB1C5F4989002EFF72 /* Article+CoreDataProperties.m in Sources */,
 				40CFE8911C5763110065017C /* PRPickerViewPresenter.m in Sources */,
 				40CFE89B1C57B9930065017C /* PRRemoteUploadFileResponse.m in Sources */,
+				40E1CBB81C5F4989002EFF72 /* InterestCategory.m in Sources */,
+				40E1CBBC1C5F4989002EFF72 /* Article.m in Sources */,
 				40CFE8981C57B1D00065017C /* PRLocalNewArticle.m in Sources */,
 				404D33481C5222C900C4735E /* PRMapAnnotation.m in Sources */,
 				404D33361C51266600C4735E /* PRRemoteGeoPoint.m in Sources */,
 				400517461C3C171B00FBFE11 /* PRErrorDescriptor.m in Sources */,
+				40E1CBBA1C5F4989002EFF72 /* User.m in Sources */,
 				4073DFC91C56135500D46C8E /* PRRemoteMedia.m in Sources */,
+				40E1CBC61C5F4D4C002EFF72 /* Media.m in Sources */,
 				404D33141C4E901D00C4735E /* PRRemoteQuery.m in Sources */,
 				40E6B9D81C2981610083A449 /* PRRootViewController.m in Sources */,
 				40E6B9C01C297EAA0083A449 /* main.m in Sources */,
@@ -889,6 +960,8 @@
 				4073DFC51C5612C400D46C8E /* PRRemotePublishedArticle.m in Sources */,
 				40FC3EAA1C59FACA00C528E9 /* PRRemoteArticle.m in Sources */,
 				4081B5B11C5B62B30023383E /* PRImagePresenter.m in Sources */,
+				40E1CBBD1C5F4989002EFF72 /* GeoPoint+CoreDataProperties.m in Sources */,
+				40E1CBB71C5F4989002EFF72 /* InterestCategory+CoreDataProperties.m in Sources */,
 				4073DFE01C566C5B00D46C8E /* PRCreationCollectionViewCell.m in Sources */,
 				400517331C3A981000FBFE11 /* PRRemoteError.m in Sources */,
 				40E6B9E21C2995DF0083A449 /* PRRestoreAccountViewController.m in Sources */,
@@ -909,6 +982,7 @@
 				400517431C3BE70200FBFE11 /* PRLaunchScreenViewController.m in Sources */,
 				40C161E61C45293200E1E6F5 /* PRRemoteCategory.m in Sources */,
 				400517401C3BAD8000FBFE11 /* PRTokenValidationResponse.m in Sources */,
+				4081B5E21C5BC89D0023383E /* PRLocalDataStore.m in Sources */,
 				40F65DB61C3434E000846449 /* PRRemoteRegistrationRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

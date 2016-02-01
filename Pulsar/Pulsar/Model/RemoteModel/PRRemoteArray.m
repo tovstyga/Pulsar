@@ -33,7 +33,11 @@
 {
     NSMutableArray *objects = [NSMutableArray new];
     for (id<PRJsonCompatable> object in _objects) {
-        [objects addObject:[object toJSONCompatable]];
+        if ([object conformsToProtocol:@protocol(PRJsonCompatable)]) {
+            [objects addObject:[object toJSONCompatable]];
+        } else {
+            [objects addObject:object];
+        }
     }
     return @{_fieldName : @{@"__op" : _action, @"objects" : objects}};
 }

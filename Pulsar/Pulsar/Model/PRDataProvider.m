@@ -22,6 +22,8 @@
 #import "PRUploadMediaOperation.h"
 #import "PRLocalArticle.h"
 
+#import "PRLocalDataStore.h"
+
 @interface PRDataProvider()
 
 @property (strong, nonatomic) NSString *networkSessionKey;
@@ -385,6 +387,84 @@ static NSString * const kMediaClassName = @"Media";
     } failure:^(NSError *error) {
         if (completion) {
             completion(nil, error);
+        }
+    }];
+}
+
+- (void)allMyArticles:(void(^)(NSArray *articles, NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestAllMyArticlesWithSuccess:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion([self localArticlesFromResponseData:data], nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void)favoriteArticles:(void(^)(NSArray *articles, NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestFavoriteArticlesWithSuccess:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion([self localArticlesFromResponseData:data], nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void)addArticleToFavorite:(PRLocalArticle *)article success:(void(^)(NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestAddArticleToFavorite:article.objectId success:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion(nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(error);
+        }
+    }];
+}
+
+- (void)remoteArticleFromFavorite:(PRLocalArticle *)article success:(void(^)(NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestRemoveArticleFromFavorite:article.objectId success:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion(nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(error);
+        }
+    }];
+}
+
+- (void)likeArticle:(PRLocalArticle *)article success:(void(^)(NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestLikeArticle:article success:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion(nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(error);
+        }
+    }];
+}
+
+- (void)dislikeArticle:(PRLocalArticle *)article success:(void(^)(NSError *error))completion
+{
+    [[PRNetworkDataProvider sharedInstance] requestDislikeArticle:article success:^(NSData *data, NSURLResponse *response) {
+        if (completion) {
+            completion(nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(error);
         }
     }];
 }
