@@ -11,8 +11,11 @@
 #import "PRLocalGeoPoint.h"
 #import "PRLocalNewArticle.h"
 #import "PRLocalArticle.h"
+#import "PRArticleCollection.h"
 
 @interface PRDataProvider : NSObject
+
+@property (strong, nonatomic) NSArray *templateSelectedCategories;
 
 + (instancetype)sharedInstance;
 
@@ -63,8 +66,6 @@
 
 - (void)publishNewArticle:(PRLocalNewArticle *)localArticle completion:(void(^)(NSError *error))completion;
 
-- (void)articlesWithCompletion:(void(^)(NSArray *actilles, NSError *error))completion; ///template
-
 - (void)loadMediaForArticle:(PRLocalArticle *)localArticle completion:(void(^)(NSArray<PRLocalMedia *> *mediaArray, NSError *error))completion;
 
 - (void)allMyArticles:(void(^)(NSArray *articles, NSError *error))completion;
@@ -78,5 +79,17 @@
 - (void)likeArticle:(PRLocalArticle *)article success:(void(^)(NSError *error))completion;
 
 - (void)dislikeArticle:(PRLocalArticle *)article success:(void(^)(NSError *error))completion;
+
+//articles part request
+
+- (void)refreshHotArticlesWithCompletion:(void(^)(NSArray *articles, NSError *error))completion;
+
+- (void)loadNextHotArticlesWithCompletion:(void(^)(NSArray *articles, NSError *error))completion;
+
+- (void)refreshNewArticlesWithCompletion:(void(^)(NSArray *articles, NSError *error))completion;
+
+- (void)loadNextNewArticlesWithCompletion:(void(^)(NSArray *articles, NSError *error))completion;
+
+- (void)refreshTopArticlesWithCompletion:(void(^)(PRArticleCollection *articles, NSError *error))completion;
 
 @end

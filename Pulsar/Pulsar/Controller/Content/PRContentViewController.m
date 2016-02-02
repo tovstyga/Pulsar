@@ -15,6 +15,7 @@
 
 @property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *menuTabBarButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
 @property (weak, nonatomic) IBOutlet UITabBar *tabBar;
 
 @property (weak, nonatomic) IBOutlet UITabBarItem *tabItemHot;
@@ -29,13 +30,18 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *categoriesMenuConstraint;
 @property (weak, nonatomic) IBOutlet UITableView *contentTableView;
 
+@property (strong, nonatomic) UIRefreshControl *refreshControll;
+
 @end
 
 @implementation PRContentViewController{
     BOOL _isOpenedMenu;
     BOOL _lockOpenMenuInteraction;
+
     CGFloat _closedMenuDefaultConstraint;
-    NSInteger _selectedItem;
+    NSIndexPath *_selectedItem;
+    
+    BOOL _loadingInProcess;
 }
 
 static CGFloat const kSpaceFromMenuToRightBorder = 40;
@@ -47,7 +53,7 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 {
     [super prepareForSegue:segue sender:sender];
     if ([segue.destinationViewController isKindOfClass:[PRDetailsViewController class]]) {
-        [(PRDetailsViewController *)segue.destinationViewController setArticle:[self.interactor articleForFeed:PRFeedTypeHot atIndex:_selectedItem]];
+        [(PRDetailsViewController *)segue.destinationViewController setArticle:[self.interactor articleAtIndex:_selectedItem.row inSection:_selectedItem.section]];
     }
 }
 
@@ -59,6 +65,11 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     
     [self.tabBar setDelegate:self];
     [self.tabBar setSelectedItem:self.tabItemTop];
+    [self.interactor setActiveFeed:PRFeedTypeTop];
+    
+    self.refreshControll = [[UIRefreshControl alloc] init];
+    [self.refreshControll addTarget:self action:@selector(refreshing) forControlEvents:UIControlEventValueChanged];
+    [self.contentTableView addSubview:self.refreshControll];
     
     _closedMenuDefaultConstraint = self.view.frame.size.width;
     _isOpenedMenu = NO;
@@ -67,6 +78,8 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     if (_isOpenedMenu) {
         [self toggleMenu];
     }
+    
+    [self refresh:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -81,6 +94,11 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
 #pragma mark - Events
 
+- (void)refreshing
+{
+    [self refresh:nil];
+}
+
 - (IBAction)toggleFilters:(UIBarButtonItem *)sender
 {
     [self toggleMenu];
@@ -88,10 +106,19 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
 - (IBAction)refresh:(UIBarButtonItem *)sender
 {
+    _loadingInProcess = YES;
+    [self showRefreshControll:YES];
+    [self.contentTableView scrollsToTop];
+    [self.refreshButton setEnabled:NO];
+    self.contentTableView.userInteractionEnabled = NO;
     [self.interactor reloadDataWithCompletion:^(BOOL success, NSString *errorMessage) {
         if (success) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.contentTableView reloadData];
+                [self showRefreshControll:NO];
+                self.contentTableView.userInteractionEnabled = YES;
+                self.refreshButton.enabled = YES;
+                _loadingInProcess = NO;
             });
         }
     }];
@@ -146,6 +173,11 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     } else if (item == self.tabItemCreated) {
         self.interactor.activeFeed = PRFeedTypeCreated;
     }
+    if ([self isDataAvailable]) {
+        [self.contentTableView reloadData];
+    } else {
+        [self refresh:nil];
+    }
 }
 
 #pragma mark - MenuInteractorDelegate
@@ -159,20 +191,30 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
 - (void)didUpdateUserSettings
 {
-    [self.interactor reloadDataWithCompletion:^(BOOL success, NSString *errorMessage) {
-        [[PRScreenLock sharedInstance] unlockAnimated:YES];
+//    [self.interactor reloadDataWithCompletion:^(BOOL success, NSString *errorMessage)
         dispatch_async(dispatch_get_main_queue(), ^{
+            [[PRScreenLock sharedInstance] unlockAnimated:YES];
             _lockOpenMenuInteraction = NO;
             self.menuTabBarButton.enabled = YES;
         });
-    }];
+//    }];
 }
 
 #pragma mark - UITableViewDataSource
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [self.interactor titleForHeaderInSection:section];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [self.interactor numberOfSections];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.interactor numberOfItemsInFeed:PRFeedTypeTop];
+    return [self.interactor numberOfItemsInSection:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -181,7 +223,7 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     if (!cell) {
         cell = [[PRContentViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kContentCellIdentifier];
     }
-    [(PRContentViewCell *)cell setArticle:[self.interactor articleForFeed:PRFeedTypeTop atIndex:indexPath.row]];
+    [(PRContentViewCell *)cell setArticle:[self.interactor articleAtIndex:indexPath.row inSection:indexPath.section]];
     return cell;
 }
 
@@ -189,7 +231,7 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    _selectedItem = indexPath.row;
+    _selectedItem = indexPath;
     return indexPath;
 }
 
@@ -198,7 +240,45 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)aScrollView {
+    CGPoint offset = aScrollView.contentOffset;
+    CGRect bounds = aScrollView.bounds;
+    CGSize size = aScrollView.contentSize;
+    UIEdgeInsets inset = aScrollView.contentInset;
+    float y = offset.y + bounds.size.height - inset.bottom;
+    float h = size.height;
+    
+    float reload_distance = -1000;
+    if ((y > h + reload_distance) && (!_loadingInProcess) && [self.interactor canLoadMore] && [self isDataAvailable]) {
+        _loadingInProcess = YES;
+        [self.interactor loadNewDataWithCompletion:^(BOOL success, NSString *errorMessage) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _loadingInProcess = NO;
+                if (success) {
+                    [self.contentTableView reloadData];
+                }
+            });
+        }];
+    }
+}
+
 #pragma mark - Internal
+
+- (BOOL)isDataAvailable
+{
+    return [self.interactor isDataAvailable];
+}
+
+- (void)showRefreshControll:(BOOL)show
+{
+    if (show) {
+        [self.refreshControll beginRefreshing];
+        [self.contentTableView setContentOffset:CGPointMake(0, -self.refreshControll.frame.size.height) animated:YES];
+    } else {
+        [self.refreshControll endRefreshing];
+        [self.contentTableView setContentOffset:CGPointMake(0, 0) animated:YES];
+    }
+}
 
 - (void)toggleMenu
 {

@@ -67,6 +67,7 @@
 		40E1CBBE1C5F4989002EFF72 /* GeoPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBB21C5F4989002EFF72 /* GeoPoint.m */; };
 		40E1CBC51C5F4D4C002EFF72 /* Media+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBC21C5F4D4C002EFF72 /* Media+CoreDataProperties.m */; };
 		40E1CBC61C5F4D4C002EFF72 /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBC41C5F4D4C002EFF72 /* Media.m */; };
+		40E233531C60DECF00DC605A /* PRArticleCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E233521C60DECF00DC605A /* PRArticleCollection.m */; };
 		40E6B9C01C297EAA0083A449 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9BF1C297EAA0083A449 /* main.m */; };
 		40E6B9C31C297EAA0083A449 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9C21C297EAA0083A449 /* AppDelegate.m */; };
 		40E6B9C91C297EAA0083A449 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40E6B9C71C297EAA0083A449 /* Main.storyboard */; };
@@ -221,6 +222,8 @@
 		40E1CBC21C5F4D4C002EFF72 /* Media+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Media+CoreDataProperties.m"; path = "../DataBase/Media+CoreDataProperties.m"; sourceTree = "<group>"; };
 		40E1CBC31C5F4D4C002EFF72 /* Media.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Media.h; path = ../DataBase/Media.h; sourceTree = "<group>"; };
 		40E1CBC41C5F4D4C002EFF72 /* Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Media.m; path = ../DataBase/Media.m; sourceTree = "<group>"; };
+		40E233511C60DECF00DC605A /* PRArticleCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRArticleCollection.h; sourceTree = "<group>"; };
+		40E233521C60DECF00DC605A /* PRArticleCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRArticleCollection.m; sourceTree = "<group>"; };
 		40E6B9BB1C297EAA0083A449 /* Pulsar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pulsar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E6B9BF1C297EAA0083A449 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		40E6B9C11C297EAA0083A449 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -623,6 +626,8 @@
 				40CFE8971C57B1D00065017C /* PRLocalNewArticle.m */,
 				40FC3EAB1C5A04D400C528E9 /* PRLocalArticle.h */,
 				40FC3EAC1C5A04D400C528E9 /* PRLocalArticle.m */,
+				40E233511C60DECF00DC605A /* PRArticleCollection.h */,
+				40E233521C60DECF00DC605A /* PRArticleCollection.m */,
 			);
 			path = Articles;
 			sourceTree = "<group>";
@@ -929,6 +934,7 @@
 				404D33421C51361400C4735E /* PRMapViewInteractor.m in Sources */,
 				40CFE89E1C57CE280065017C /* PRUploadMediaOperation.m in Sources */,
 				4073DFD11C56410500D46C8E /* PRDetailsViewController.m in Sources */,
+				40E233531C60DECF00DC605A /* PRArticleCollection.m in Sources */,
 				407B1C511C46A1A70071A123 /* PRRemoteResults.m in Sources */,
 				404D333E1C5135AE00C4735E /* PRMapViewController.m in Sources */,
 				4081B5B91C5BB55A0023383E /* PRDataModel.xcdatamodeld in Sources */,

@@ -24,10 +24,18 @@ typedef NS_ENUM(NSUInteger, PRFeedType) {
 
 - (void)reloadDataWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion;
 
-- (void)loadNewDataForFeed:(PRFeedType)feedType WithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion;
+- (void)loadNewDataWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion;
 
-- (NSInteger)numberOfItemsInFeed:(PRFeedType)type;
+- (NSInteger)numberOfSections;
 
-- (PRLocalArticle *)articleForFeed:(PRFeedType)type atIndex:(NSInteger)index;
+- (NSInteger)numberOfItemsInSection:(NSInteger)section;
+
+- (PRLocalArticle *)articleAtIndex:(NSInteger)index inSection:(NSInteger)section;
+
+- (NSString *)titleForHeaderInSection:(NSInteger)section;
+
+- (BOOL)isDataAvailable;
+
+- (BOOL)canLoadMore;
 
 @end

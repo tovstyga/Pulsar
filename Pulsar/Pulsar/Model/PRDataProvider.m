@@ -21,8 +21,15 @@
 #import "PRRemotePointer.h"
 #import "PRUploadMediaOperation.h"
 #import "PRLocalArticle.h"
+#import "PRConstants.h"
 
 #import "PRLocalDataStore.h"
+
+#define HOUR 60*60
+#define DAY HOUR*24
+#define WEEK DAY*7
+#define MONTH DAY*30
+#define YEAR DAY * 365
 
 @interface PRDataProvider()
 
@@ -33,11 +40,19 @@
 
 @end
 
-@implementation PRDataProvider
+@implementation PRDataProvider{
+    NSDate *_newArticleRequestTime;
+    NSInteger _minRatingArticle;
+    
+    int _newArticlesCount;
+    int _hotArticleCount;
+}
 
 @synthesize networkSessionKey = _networkSessionKey;
 
 static PRDataProvider *sharedInstance;
+
+static int const kFetchLimith = 10;
 
 static NSString * const kObjectIdentifierKey = @"objectId";
 static NSString * const kUserClassName = @"_User";
@@ -61,6 +76,9 @@ static NSString * const kMediaClassName = @"Media";
             self.downloadQueue = [[NSOperationQueue alloc] init];
             self.downloadQueue.maxConcurrentOperationCount = 1;
             self.downloadQueue.name = @"download data queue";
+            
+            _minRatingArticle = NSIntegerMin;
+            _newArticleRequestTime = [NSDate date];
         }
         return self;
     }
@@ -345,19 +363,6 @@ static NSString * const kMediaClassName = @"Media";
     }
 }
 
-- (void)articlesWithCompletion:(void(^)(NSArray *actilles, NSError *error))completion
-{
-    [[PRNetworkDataProvider sharedInstance] requestArticlesWithSuccess:^(NSData *data, NSURLResponse *response) {
-        if (completion) {
-            completion([self localArticlesFromResponseData:data], nil);
-        }
-    } failure:^(NSError *error) {
-        if (completion) {
-            completion(nil, error);
-        }
-    }];
-}
-
 - (void)loadDataFromUrl:(NSURL *)url completion:(void (^)(NSData *, NSError *))completion
 {
     [self.downloadQueue addOperationWithBlock:^{
@@ -467,6 +472,135 @@ static NSString * const kMediaClassName = @"Media";
             completion(error);
         }
     }];
+}
+
+- (void)refreshHotArticlesWithCompletion:(void(^)(NSArray *articles, NSError *error))completion
+{
+    [self loadHotArticlesForced:YES completion:completion];
+}
+
+- (void)loadNextHotArticlesWithCompletion:(void(^)(NSArray *articles, NSError *error))completion
+{
+    [self loadHotArticlesForced:NO completion:completion];
+}
+
+- (void)loadHotArticlesForced:(BOOL)forced completion:(void(^)(NSArray *articles, NSError *error))completion
+{
+    if (forced) {
+        _hotArticleCount = 0;
+    }
+    //нужно мержить результаты выборки с прошлыми результатами или фирмировтаь исключения при запросе
+    [[PRNetworkDataProvider sharedInstance] requestHotArticlesWithCategories:self.templateSelectedCategories minRating:NSIntegerMax from:_hotArticleCount step:kFetchLimith locations:self.templateGeoPoints success:^(NSData *data, NSURLResponse *response) {
+        NSArray *articles = [self localArticlesFromResponseData:data];
+        _hotArticleCount +=[articles count];
+        _minRatingArticle = [(PRLocalArticle *)[articles lastObject] rating];
+        if (completion) {
+            completion(articles ,nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void)refreshNewArticlesWithCompletion:(void(^)(NSArray *articles, NSError *error))completion
+{
+    [self loadNewArticlesForced:YES completion:completion];
+}
+
+- (void)loadNextNewArticlesWithCompletion:(void(^)(NSArray *articles, NSError *error))completion
+{
+    [self loadNewArticlesForced:NO completion:completion];
+}
+
+- (void)loadNewArticlesForced:(BOOL)forced completion:(void(^)(NSArray *articles, NSError *error))completion
+{
+    if (forced) {
+        _newArticleRequestTime = [NSDate date];
+        _newArticlesCount = 0;
+    }
+    [[PRNetworkDataProvider sharedInstance] requestNewArticlesWithCategories:self.templateSelectedCategories lastDate:_newArticleRequestTime form:_newArticlesCount step:kFetchLimith locations:self.templateGeoPoints success:^(NSData *data, NSURLResponse *response) {
+        NSArray *articles = [self localArticlesFromResponseData:data];
+        _newArticlesCount += [articles count];
+        if (completion) {
+            completion(articles ,nil);
+        }
+    } failure:^(NSError *error) {
+        if (completion) {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void)refreshTopArticlesWithCompletion:(void(^)(PRArticleCollection *articles, NSError *error))completion
+{
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSInteger gmtCorrection = [[NSTimeZone localTimeZone] secondsFromGMT];
+        NSDate *now = [NSDate date];
+        NSArray *categoriest = self.templateSelectedCategories;
+        NSArray *geoPoints = self.templateGeoPoints;
+        __block PRArticleCollection *articleCollection = [[PRArticleCollection alloc] init];
+        dispatch_group_t fetchGroup = dispatch_group_create();
+        dispatch_group_enter(fetchGroup);
+        [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategories:categoriest beforeDate:[now dateByAddingTimeInterval:-HOUR -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+            [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchHour];
+            
+            [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategories:categoriest beforeDate:[now dateByAddingTimeInterval:-DAY -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+                [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchDay];
+                
+                [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategories:categoriest beforeDate:[now dateByAddingTimeInterval:-WEEK -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+                    [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchWeek];
+                    
+                    [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategories:categoriest beforeDate:[now dateByAddingTimeInterval:-MONTH -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+                        [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchMonth];
+                        
+                        [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategories:categoriest beforeDate:[now dateByAddingTimeInterval:-YEAR -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+                            
+                            [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchYear];
+                            if (completion) {
+                                completion(articleCollection, nil);
+                            }
+                            dispatch_group_leave(fetchGroup);
+                            
+                        } failure:^(NSError *error) {
+                            if (completion) {
+                                completion(nil, error);
+                            }
+                            dispatch_group_leave(fetchGroup);
+                        }];
+                        
+                    } failure:^(NSError *error) {
+                        if (completion) {
+                            completion(nil, error);
+                        }
+                        dispatch_group_leave(fetchGroup);
+                    }];
+                    
+                } failure:^(NSError *error) {
+                    if (completion) {
+                        completion(nil, error);
+                    }
+                    dispatch_group_leave(fetchGroup);
+                }];
+                
+            } failure:^(NSError *error) {
+                if (completion) {
+                    completion(nil, error);
+                }
+                dispatch_group_leave(fetchGroup);
+            }];
+            
+        } failure:^(NSError *error) {
+            if (completion) {
+                completion(nil, error);
+            }
+            dispatch_group_leave(fetchGroup);
+        }];
+        
+        dispatch_group_wait(fetchGroup, DISPATCH_TIME_FOREVER);
+    });
 }
 
 #pragma mark - Internal

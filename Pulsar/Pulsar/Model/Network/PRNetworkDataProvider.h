@@ -56,15 +56,29 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
 
 - (void)requestNewMedia:(id<PRJsonCompatable>)media success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
 
-- (void)requestArticlesWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
-
 - (void)requestMediaForArticleWithId:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
 
-- (void)requestHotArticlesWithCategories:(NSArray *)categories lastRequestDate:(NSDate *)date success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+- (void)requestHotArticlesWithCategories:(NSArray *)categories
+                               minRating:(NSInteger)minRating
+                                    from:(int)lastIndex
+                                    step:(int)step
+                               locations:(NSArray *)locations
+                                 success:(PRNetworkSuccessBlock)success
+                                 failure:(PRNetworkFailureBlock)failure;
 
-- (void)requestNewArticlesWithCategories:(NSArray *)categories lastRequestDate:(NSDate *)date success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+- (void)requestNewArticlesWithCategories:(NSArray *)categories
+                                lastDate:(NSDate *)date
+                                    form:(int)lastIndex
+                                    step:(int)step
+                               locations:(NSArray *)locations
+                                 success:(PRNetworkSuccessBlock)success
+                                 failure:(PRNetworkFailureBlock)failure;
 
-- (void)requestTopArticlesWithCategories:(NSArray *)categories lastRequestDate:(NSDate *)date success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+- (void)requestTopArticlesWithCategories:(NSArray *)categories
+                              beforeDate:(NSDate *)date
+                               locations:(NSArray *)locations
+                                 success:(PRNetworkSuccessBlock)success
+                                 failure:(PRNetworkFailureBlock)failure;
 
 - (void)requestAllMyArticlesWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
 

@@ -333,6 +333,7 @@
                         <outlet property="contentTableView" destination="8iQ-Co-4u7" id="3v8-RE-oXc"/>
                         <outlet property="menuTabBarButton" destination="sVw-97-6GF" id="xaC-R2-a6O"/>
                         <outlet property="navigationBar" destination="6Kx-zb-67Q" id="Iee-GM-rGk"/>
+                        <outlet property="refreshButton" destination="O99-a0-j7w" id="Qlp-X6-H6j"/>
                         <outlet property="tabBar" destination="x6l-uK-PnR" id="bc3-oJ-Qpy"/>
                         <outlet property="tabBarConstraint" destination="VHl-Lg-tHJ" id="aZR-ko-bEE"/>
                         <outlet property="tabItemCreated" destination="cFG-tM-a46" id="7NC-dU-ggn"/>

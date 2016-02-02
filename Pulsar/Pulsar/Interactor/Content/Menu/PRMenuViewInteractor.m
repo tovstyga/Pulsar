@@ -106,8 +106,13 @@
         NSMutableArray *categoriesForRemove = [NSMutableArray new];
         NSMutableArray *categoriesForAdd = [NSMutableArray new];
         
+        NSMutableArray *templateCategoriesForDataProvider = [NSMutableArray new];
+        
         for (int i = 0; i < [_categories count]; i++) {
             BOOL newCategorySelected = [(PRLocalCategory *)_categories[i] isSelected];
+            if (newCategorySelected) {
+                [templateCategoriesForDataProvider addObject:_categories[i]];
+            }
             if ([_defaultState[i] boolValue] != newCategorySelected) {
                 if ([_defaultState[i] boolValue] == YES && newCategorySelected == NO) {
                     [categoriesForRemove addObject:_categories[i]];
@@ -117,6 +122,8 @@
             }
         }
     
+        [PRDataProvider sharedInstance].templateSelectedCategories = templateCategoriesForDataProvider;
+        
         __block NSError *executionError;
         
         if ([locationsForRemove count]) {

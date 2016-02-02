@@ -52,7 +52,8 @@ typedef NS_ENUM(NSUInteger, PRRequestType) {
     PRRequestTypeArticle,
     PRRequestTypeLoadMedia,
     PRRequestTypeArticlesForUser,
-    PRRequestTypeFavoriteAction
+    PRRequestTypeFavoriteAction,
+    PRRequestTypeArticleWithQuery
 };
 
 //constants
@@ -81,6 +82,9 @@ static NSString * const kHeaderContentTypeKey = @"Content-Type";
 static NSString * const kPathParamUsernameKay = @"username";
 static NSString * const kPathParamPasswordKey = @"password";
 static NSString * const kPathParamIncludeKey = @"include";
+static NSString * const kPathParamOrder = @"order";
+static NSString * const kPathParamLimit = @"limit";
+static NSString * const kPathParamSkip = @"skip";
 
 //content types
 
@@ -94,6 +98,9 @@ static NSString * const kParseRestApiKey = @"NePEmzWEYQJ1jfAGOruWhLqyahlNrdLzWsp
 static NSString * const kParseRevocableSession = @"1";
 
 static NSString * const kArticleIncludeFields = @"author,image,tag";
+static NSString * const kNewOrder = @"-createdAt";
+static NSString * const kHotOrder = @"-rating";
+static NSString * const kTopOrder = @"-rating";
 
 static PRNetworkDataProvider *sharedInstance;
 
@@ -428,20 +435,6 @@ static PRNetworkDataProvider *sharedInstance;
 
 #pragma mark - Articles
 
-- (void)requestArticlesWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
-{
-     if ([self isNetworkAvailable:failure]) {
-         NSMutableURLRequest *request = [self requestForType:PRRequestTypeArticle params:@{kPathParamIncludeKey : kArticleIncludeFields}];
-         [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
-             if (error && failure) {
-                 failure(error);
-             } else {
-                 if (success) success(data, response);
-             }
-         }];
-     }
-}
-
 - (void)loadDataFromURL:(NSURL *)url success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
 {
     if ([self isNetworkAvailable:failure]) {
@@ -474,27 +467,65 @@ static PRNetworkDataProvider *sharedInstance;
 }
 
 - (void)requestHotArticlesWithCategories:(NSArray *)categories
-                         lastRequestDate:(NSDate *)date
+                               minRating:(NSInteger)minRating
+                                    from:(int)lastIndex
+                                    step:(int)step
+                               locations:(NSArray *)locations
                                  success:(PRNetworkSuccessBlock)success
                                  failure:(PRNetworkFailureBlock)failure
 {
+    if ([self isNetworkAvailable:failure]) {
+        NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:[self queryHotArticlesWithCategories:categories rating:minRating sortDescriptor:kHotOrder]];
+        if (step) {
+            if (lastIndex >= 0) {
+                [params setObject:@(lastIndex) forKey:kPathParamSkip];
+            }
+            [params setObject:@(step) forKey:kPathParamLimit];
+        }
+        
+        NSMutableURLRequest *request = [self requestForType:PRRequestTypeArticleWithQuery];
+        NSData *body = [NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil];
+        [request setHTTPBody:body];
+        [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
 
 }
 
 - (void)requestNewArticlesWithCategories:(NSArray *)categories
-                         lastRequestDate:(NSDate *)date
+                                lastDate:(NSDate *)date
+                                    form:(int)lastIndex
+                                    step:(int)step
+                               locations:(NSArray *)locations
                                  success:(PRNetworkSuccessBlock)success
                                  failure:(PRNetworkFailureBlock)failure
 {
-
+    [self requestArticlesWithCategories:categories lastDate:date from:lastIndex step:step sortDescriptor:kNewOrder success:success failure:failure];
 }
 
 - (void)requestTopArticlesWithCategories:(NSArray *)categories
-                         lastRequestDate:(NSDate *)date
+                              beforeDate:(NSDate *)date
+                               locations:(NSArray *)locations
                                  success:(PRNetworkSuccessBlock)success
                                  failure:(PRNetworkFailureBlock)failure
 {
-
+    if ([self isNetworkAvailable:failure]) {
+        NSMutableURLRequest *request = [self requestForType:PRRequestTypeArticleWithQuery];
+        NSData *body = [NSJSONSerialization dataWithJSONObject:[self queryTopArticlesWithCategories:categories beforeDate:date sortDescriptor:kTopOrder] options:NSJSONWritingPrettyPrinted error:nil];
+        [request setHTTPBody:body];
+        [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
 }
 
 - (void)requestAllMyArticlesWithSuccess:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
@@ -586,6 +617,38 @@ static PRNetworkDataProvider *sharedInstance;
 }
 
 #pragma mark - Internal
+
+- (void)requestArticlesWithCategories:(NSArray *)categories
+                             lastDate:(NSDate *)date
+                                 from:(int)lastIndex
+                                 step:(int)step
+                       sortDescriptor:(NSString *)sortDescriptor
+                              success:(PRNetworkSuccessBlock)success
+                              failure:(PRNetworkFailureBlock)failure
+{
+    if ([self isNetworkAvailable:failure]) {
+        NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:[self queryNewArticlesWithCategories:categories date:date sortDescriptor:sortDescriptor]];
+        [params setObject:kArticleIncludeFields forKey:kPathParamIncludeKey];
+        if (step) {
+            if (lastIndex >= 0) {
+                [params setObject:@(lastIndex) forKey:kPathParamSkip];
+            }
+            [params setObject:@(step) forKey:kPathParamLimit];
+        }
+        
+        NSMutableURLRequest *request = [self requestForType:PRRequestTypeArticleWithQuery];
+        NSData *body = [NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil];
+        [request setHTTPBody:body];
+        [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error && failure) {
+                failure(error);
+            } else {
+                if (success) success(data, response);
+            }
+        }];
+    }
+    
+}
 
 - (NSMutableURLRequest *)favoriteActionRequestWith:(NSDictionary *)body articleId:(NSString *)articleId
 {
@@ -732,6 +795,12 @@ static PRNetworkDataProvider *sharedInstance;
             [request setValue:kHeaderContentTypeKey forHTTPHeaderField:kContentTypeApplicationJSON];
             return request;
         }
+        case PRRequestTypeArticleWithQuery:
+            request.URL = [_baseURL URLByAppendingPathComponent:@"classes/Article"];
+            [request setValue:_sessionToken forHTTPHeaderField:kHeaderParseSessionTokenKey];
+            [request setHTTPMethod:kHTTPMethodPUT];
+            [request setValue:kHeaderContentTypeKey forHTTPHeaderField:kContentTypeApplicationJSON];
+            return request;
         default:
             return nil;
     }
@@ -781,6 +850,42 @@ static PRNetworkDataProvider *sharedInstance;
 }
 
 #pragma mark - Queries
+
+- (NSDictionary *)queryTopArticlesWithCategories:(NSArray *)filterCategories beforeDate:(NSDate *)date sortDescriptor:(NSString *)sort
+{
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    [formatter setDateFormat:kParseDateFormat];
+    return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"createdAt" : @{@"$gte" : [formatter stringFromDate:date], @"$lte" : [formatter stringFromDate:[NSDate date]]}}};
+}
+
+- (NSDictionary *)queryHotArticlesWithCategories:(NSArray *)filterCategories rating:(NSInteger)rating sortDescriptor:(NSString *)sort
+{
+    if (rating) {
+        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"rating" : @{@"$lte" : @(rating)}}};
+    } else {
+        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}}};
+    }
+}
+
+- (NSDictionary *)queryNewArticlesWithCategories:(NSArray *)filterCategories date:(NSDate *)date sortDescriptor:(NSString *)sort
+{
+    if (date) {
+        NSDateFormatter *formatter = [NSDateFormatter new];
+        [formatter setDateFormat:kParseDateFormat];
+        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"createdAt" : @{@"$lte" : [formatter stringFromDate:date]}}};
+    } else {
+        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}}};
+    }
+}
+
+- (NSArray *)categoriesToPointers:(NSArray *)categories
+{
+    NSMutableArray *categoryPointers = [NSMutableArray new];
+    for (id cat in categories) {
+        [categoryPointers addObject:[[[PRRemotePointer alloc] initWithClass:@"Tag" remoteObjectId:[cat performSelector:@selector(identifier)]] toJSONCompatable]];
+    }
+    return categoryPointers;
+}
 
 - (NSDictionary *)queryFetchFavorites
 {
