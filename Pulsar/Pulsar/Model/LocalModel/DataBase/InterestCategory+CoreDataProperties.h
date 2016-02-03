@@ -1,8 +1,8 @@
 //
-//  Category+CoreDataProperties.h
+//  InterestCategory+CoreDataProperties.h
 //  Pulsar
 //
-//  Created by fantom on 01.02.16.
+//  Created by fantom on 03.02.16.
 //  Copyright © 2016 TAB. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSString *remoteIdentifier;
+@property (nullable, nonatomic, retain) NSNumber *selected;
 
 @end
 

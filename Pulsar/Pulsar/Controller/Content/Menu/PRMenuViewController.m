@@ -10,6 +10,7 @@
 #import "PRMenuCategoryCell.h"
 #import "PRMenuLocationCell.h"
 #import "PRLocalCategory.h"
+#import "InterestCategory.h"
 
 @interface PRMenuViewController()
 
@@ -121,7 +122,7 @@ static NSString * const kAddLocationLabel = @"Add new location";
             [self performSegueWithIdentifier:kToMapSegueIdentifier sender:self];
         }
     } else {
-        [[self.interactor categoryForIndex:[indexPath row]] setSelected:YES];
+        [[self.interactor categoryForIndex:[indexPath row]] setSelected:@(YES)];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
@@ -131,7 +132,7 @@ static NSString * const kAddLocationLabel = @"Add new location";
     if (indexPath.section) {
     
     } else {
-        [[self.interactor categoryForIndex:[indexPath row]] setSelected:NO];
+        [[self.interactor categoryForIndex:[indexPath row]] setSelected:@(NO)];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
@@ -177,8 +178,8 @@ static NSString * const kAddLocationLabel = @"Add new location";
         if (!categoryCell) {
             categoryCell = [[PRMenuCategoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCategoryCellIdentifier];
         }
-        PRLocalCategory *category = [self.interactor categoryForIndex:[indexPath row]];
-        if (category.selected) {
+        InterestCategory *category = [self.interactor categoryForIndex:[indexPath row]];
+        if ([category.selected boolValue]) {
             [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
         }
         categoryCell.category = category;

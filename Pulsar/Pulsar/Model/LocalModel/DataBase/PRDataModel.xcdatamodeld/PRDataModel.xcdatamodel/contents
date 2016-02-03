@@ -20,9 +20,10 @@
         <attribute name="longitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="InterestCategory" representedClassName="Category" syncable="YES">
+    <entity name="InterestCategory" representedClassName="InterestCategory" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteIdentifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="selected" optional="YES" attributeType="Boolean" syncable="YES"/>
     </entity>
     <entity name="Media" representedClassName="Media" syncable="YES">
         <attribute name="contentType" optional="YES" attributeType="String" syncable="YES"/>
@@ -43,9 +44,9 @@
     </entity>
     <elements>
         <element name="Article" positionX="-497" positionY="149" width="128" height="238"/>
-        <element name="InterestCategory" positionX="-146" positionY="9" width="128" height="73"/>
         <element name="GeoPoint" positionX="-783" positionY="0" width="128" height="90"/>
         <element name="Media" positionX="-180" positionY="171" width="128" height="133"/>
-        <element name="User" positionX="-497" positionY="-157" width="128" height="148"/>
+        <element name="User" positionX="-506" positionY="-126" width="128" height="148"/>
+        <element name="InterestCategory" positionX="-200" positionY="-30" width="128" height="88"/>
     </elements>
 </model>

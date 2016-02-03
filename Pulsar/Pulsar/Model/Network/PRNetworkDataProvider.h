@@ -58,7 +58,7 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
 
 - (void)requestMediaForArticleWithId:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
 
-- (void)requestHotArticlesWithCategories:(NSArray *)categories
+- (void)requestHotArticlesWithCategoriesIds:(NSArray *)categoriesIds
                                minRating:(NSInteger)minRating
                                     from:(int)lastIndex
                                     step:(int)step
@@ -66,7 +66,7 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
                                  success:(PRNetworkSuccessBlock)success
                                  failure:(PRNetworkFailureBlock)failure;
 
-- (void)requestNewArticlesWithCategories:(NSArray *)categories
+- (void)requestNewArticlesWithCategoriesIds:(NSArray *)categoriesIds
                                 lastDate:(NSDate *)date
                                     form:(int)lastIndex
                                     step:(int)step
@@ -74,7 +74,7 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
                                  success:(PRNetworkSuccessBlock)success
                                  failure:(PRNetworkFailureBlock)failure;
 
-- (void)requestTopArticlesWithCategories:(NSArray *)categories
+- (void)requestTopArticlesWithCategoriesIds:(NSArray *)categoriesIds
                               beforeDate:(NSDate *)date
                                locations:(NSArray *)locations
                                  success:(PRNetworkSuccessBlock)success

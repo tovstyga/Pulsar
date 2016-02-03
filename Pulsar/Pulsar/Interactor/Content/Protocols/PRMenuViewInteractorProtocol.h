@@ -6,7 +6,7 @@
 //  Copyright © 2016 TAB. All rights reserved.
 //
 
-#import "PRLocalCategory.h"
+#import "InterestCategory.h"
 #import "PRLocalGeoPoint.h"
 
 @protocol PRMenuViewInteractorProtocol <NSObject>
@@ -19,7 +19,7 @@
 
 - (NSUInteger)availableCategories;
 
-- (PRLocalCategory *)categoryForIndex:(NSInteger)index;
+- (InterestCategory *)categoryForIndex:(NSInteger)index;
 
 - (NSUInteger)availableLocations;
 

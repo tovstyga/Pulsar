@@ -294,14 +294,15 @@
 - (void)changeDataAvailable
 {
     if (self.activeFeed == PRFeedTypeTop) {
+        _isDataAvailable = NO;
         for (int i = 0; i < [self numberOfSections]; i++) {
             if ([self numberOfItemsInSection:i]) {
                 _isDataAvailable = YES;
             }
         }
-        _isDataAvailable = NO;
+    } else {
+        _isDataAvailable = [self numberOfItemsInSection:0];
     }
-    _isDataAvailable = [self numberOfItemsInSection:0];
 }
 
 - (BOOL)canLoadMore

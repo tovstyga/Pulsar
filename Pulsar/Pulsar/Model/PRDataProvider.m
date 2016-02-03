@@ -51,7 +51,7 @@
 
 @synthesize networkSessionKey = _networkSessionKey;
 @synthesize currentUser = _currentUser;
-@dynamic userIdentifier;
+@synthesize allCategories = _allCategories;
 
 static PRDataProvider *sharedInstance;
 
@@ -102,11 +102,6 @@ static NSString * const kCoreArticleTable = @"Article";
     return sharedInstance;
 }
 
-- (NSString *)userIdentifier
-{
-    return [[PRNetworkDataProvider sharedInstance] currentUser];
-}
-
 #pragma mark - accessors
 
 - (User *)currentUser
@@ -148,10 +143,12 @@ static NSString * const kCoreArticleTable = @"Article";
         id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         PRRemoteLoginResponse *sessionInfo = [[PRRemoteLoginResponse alloc] initWithJSON:json];
         self.networkSessionKey = sessionInfo.sessionToken;
-        [self createIfNeedsUserWithId:sessionInfo.objectId email:sessionInfo.email name:sessionInfo.userName];
-        if (completion) {
-            completion(nil);
-        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self createIfNeedsUserWithId:sessionInfo.objectId email:sessionInfo.email name:sessionInfo.userName];
+            if (completion) {
+                completion(nil);
+            }
+        });
     } failure:^(NSError *error) {
         if (completion) {
             completion(error);
@@ -190,12 +187,14 @@ static NSString * const kCoreArticleTable = @"Article";
 - (void)resumeSession:(void (^)(BOOL))completion
 {
     [[PRNetworkDataProvider sharedInstance] validateSessionToken:self.networkSessionKey success:^(NSData *data, NSURLResponse *response) {
-        id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        PRTokenValidationResponse *validationResponse = [[PRTokenValidationResponse alloc] initWithJSON:json];
-        [self createIfNeedsUserWithId:validationResponse.objectId email:validationResponse.email name:validationResponse.userName];
-        if (completion) {
-            completion(YES);
-        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            PRTokenValidationResponse *validationResponse = [[PRTokenValidationResponse alloc] initWithJSON:json];
+            [self createIfNeedsUserWithId:validationResponse.objectId email:validationResponse.email name:validationResponse.userName];
+            if (completion) {
+                completion(YES);
+            }
+        });
     } failure:^(NSError *error) {
         if (error.code != 999) {
            self.networkSessionKey = nil;
@@ -216,7 +215,7 @@ static NSString * const kCoreArticleTable = @"Article";
         }
     } failure:^(NSError *error) {
         if (completion) {
-            completion(nil, error);
+            completion([self localCategoriesFromResponseData:nil], error);
         }
     }];
 }
@@ -225,20 +224,21 @@ static NSString * const kCoreArticleTable = @"Article";
 {
     [[PRNetworkDataProvider sharedInstance] requestCategoriesForCurrentUserWithSuccess:^(NSData *data, NSURLResponse *response) {
         if (completion) {
-            completion([self localCategoriesFromResponseData:data], nil);
+            completion([self localUserCategoriesFromResponseData:data], nil);
         }
     } failure:^(NSError *error) {
-        completion(nil, error);
+        completion([self localUserCategoriesFromResponseData:nil], error);
     }];
 }
 
 - (void)addCategoryForCurrentUser:(PRLocalCategory *)category completion:(void(^)(NSError *error))completion
 {
-    [self addCategoriesForCurrentUser:@[category.identifier] completion:completion];
+    [self addCategoriesForCurrentUser:@[category] completion:completion];
 }
 
 - (void)addCategoriesForCurrentUser:(NSArray *)categories completion:(void(^)(NSError *error))completion
 {
+    [self addUserCategories:categories remove:nil];
     [[PRNetworkDataProvider sharedInstance] requestAddCategoriesWithIdsForCurrentUser:[self categoriesIdsFrom:categories] success:^(NSData *data, NSURLResponse *response) {
         if (completion) {
             completion(nil);
@@ -252,11 +252,12 @@ static NSString * const kCoreArticleTable = @"Article";
 
 - (void)removeCategoryForCurrentUser:(PRLocalCategory *)category completion:(void(^)(NSError *error))completion
 {
-    [self removeCategoriesForCurrentUser:@[category.identifier] completion:completion];
+    [self removeCategoriesForCurrentUser:@[category] completion:completion];
 }
 
 - (void)removeCategoriesForCurrentUser:(NSArray *)categories completion:(void(^)(NSError *error))completion
 {
+    [self addUserCategories:nil remove:categories];
     [[PRNetworkDataProvider sharedInstance] requestRemoveCategoriesWithIdsForCurrentUser:[self categoriesIdsFrom:categories] success:^(NSData *data, NSURLResponse *response) {
         if (completion) {
             completion(nil);
@@ -270,6 +271,7 @@ static NSString * const kCoreArticleTable = @"Article";
 
 - (void)userCategoryAdd:(NSArray *)addCategories remove:(NSArray *)removeCategories completion:(void(^)(NSError *error))completion
 {
+    [self addUserCategories:addCategories remove:removeCategories];
     [[PRNetworkDataProvider sharedInstance] requestUpdateUserCategoriesForAdd:[self categoriesIdsFrom:addCategories] remove:[self categoriesIdsFrom:removeCategories] success:^(NSData *data, NSURLResponse *response) {
         if (completion) {
             completion(nil);
@@ -280,6 +282,8 @@ static NSString * const kCoreArticleTable = @"Article";
         }
     }];
 }
+
+#pragma mark - GeoPoint
 
 - (void)addGeoPoint:(PRLocalGeoPoint *)geoPoint completion:(void(^)(NSError *error))completion
 {
@@ -521,7 +525,7 @@ static NSString * const kCoreArticleTable = @"Article";
         _hotArticleCount = 0;
     }
     //нужно мержить результаты выборки с прошлыми результатами или фирмировтаь исключения при запросе
-    [[PRNetworkDataProvider sharedInstance] requestHotArticlesWithCategories:self.templateSelectedCategories minRating:NSIntegerMax from:_hotArticleCount step:kFetchLimith locations:self.templateGeoPoints success:^(NSData *data, NSURLResponse *response) {
+    [[PRNetworkDataProvider sharedInstance] requestHotArticlesWithCategoriesIds:[self categoriesIdsFrom:[self.currentUser.interests allObjects]] minRating:NSIntegerMax from:_hotArticleCount step:kFetchLimith locations:self.templateGeoPoints success:^(NSData *data, NSURLResponse *response) {
         NSArray *articles = [self localArticlesFromResponseData:data];
         _hotArticleCount +=[articles count];
         _minRatingArticle = [(PRLocalArticle *)[articles lastObject] rating];
@@ -551,7 +555,7 @@ static NSString * const kCoreArticleTable = @"Article";
         _newArticleRequestTime = [NSDate date];
         _newArticlesCount = 0;
     }
-    [[PRNetworkDataProvider sharedInstance] requestNewArticlesWithCategories:self.templateSelectedCategories lastDate:_newArticleRequestTime form:_newArticlesCount step:kFetchLimith locations:self.templateGeoPoints success:^(NSData *data, NSURLResponse *response) {
+    [[PRNetworkDataProvider sharedInstance] requestNewArticlesWithCategoriesIds:[self categoriesIdsFrom:[self.currentUser.interests allObjects]] lastDate:_newArticleRequestTime form:_newArticlesCount step:kFetchLimith locations:self.templateGeoPoints success:^(NSData *data, NSURLResponse *response) {
         NSArray *articles = [self localArticlesFromResponseData:data];
         _newArticlesCount += [articles count];
         if (completion) {
@@ -566,28 +570,27 @@ static NSString * const kCoreArticleTable = @"Article";
 
 - (void)refreshTopArticlesWithCompletion:(void(^)(PRArticleCollection *articles, NSError *error))completion
 {
-    
+    NSArray *categoriest = [self categoriesIdsFrom:[self.currentUser.interests allObjects]];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSInteger gmtCorrection = [[NSTimeZone localTimeZone] secondsFromGMT];
         NSDate *now = [NSDate date];
-        NSArray *categoriest = self.templateSelectedCategories;
         NSArray *geoPoints = self.templateGeoPoints;
         __block PRArticleCollection *articleCollection = [[PRArticleCollection alloc] init];
         dispatch_group_t fetchGroup = dispatch_group_create();
         dispatch_group_enter(fetchGroup);
-        [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategories:categoriest beforeDate:[now dateByAddingTimeInterval:-HOUR -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+        [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-HOUR -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
             [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchHour];
             
-            [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategories:categoriest beforeDate:[now dateByAddingTimeInterval:-DAY -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+            [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-DAY -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
                 [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchDay];
                 
-                [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategories:categoriest beforeDate:[now dateByAddingTimeInterval:-WEEK -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+                [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-WEEK -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
                     [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchWeek];
                     
-                    [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategories:categoriest beforeDate:[now dateByAddingTimeInterval:-MONTH -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+                    [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-MONTH -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
                         [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchMonth];
                         
-                        [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategories:categoriest beforeDate:[now dateByAddingTimeInterval:-YEAR -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+                        [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-YEAR -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
                             
                             [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchYear];
                             if (completion) {
@@ -663,13 +666,33 @@ static NSString * const kCoreArticleTable = @"Article";
 
 - (NSArray *)localCategoriesFromResponseData:(NSData *)data
 {
-    id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    NSArray *results = [PRRemoteResults resultsWithData:json contentType:[PRRemoteCategory class]];
-    NSMutableArray *localResults = [[NSMutableArray alloc] initWithCapacity:[results count]];
-    for (PRRemoteCategory *category in results) {
-        [localResults addObject:[[PRLocalCategory alloc] initWithRemoteCategory:category]];
+    NSArray *results = nil;
+    if (data) {
+        id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        results = [PRRemoteResults resultsWithData:json contentType:[PRRemoteCategory class]];
+        [self updateCategories:results];
     }
+    __block NSArray *localResults = nil;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        localResults = [self allLocalCategoriesForMain];
+    });
+    _allCategories = localResults;
     return localResults;
+}
+
+- (NSArray *)localUserCategoriesFromResponseData:(NSData *)data
+{
+    NSArray *results = nil;
+    if (data) {
+        id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        results = [PRRemoteResults resultsWithData:json contentType:[PRRemoteCategory class]];
+        [self updateUserCategories:results];
+    }
+    __block NSSet *interests = nil;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        interests = self.currentUser.interests;
+    });
+    return [interests allObjects];
 }
 
 - (NSArray *)localArticlesFromResponseData:(NSData *)data
@@ -697,8 +720,8 @@ static NSString * const kCoreArticleTable = @"Article";
 - (NSArray *)categoriesIdsFrom:(NSArray *)categories
 {
     NSMutableArray *ids = [[NSMutableArray alloc] initWithCapacity:[categories count]];
-    for (PRLocalCategory *category in categories) {
-        [ids addObject:category.identifier];
+    for (InterestCategory *category in categories) {
+        [ids addObject:category.remoteIdentifier];
     }
     return ids;
 }
@@ -721,6 +744,21 @@ static NSString * const kCoreArticleTable = @"Article";
 
 #pragma mark - Core Data
 
+- (void)preloading
+{
+    dispatch_group_t loadingGroup = dispatch_group_create();
+    //update categories
+    dispatch_group_enter(loadingGroup);
+    [[PRDataProvider sharedInstance] allCategories:^(NSArray *categories, NSError *error) {
+        [[PRDataProvider sharedInstance] categoriesForCurrentUser:^(NSArray *categories, NSError *error) {
+            dispatch_group_leave(loadingGroup);
+        }];
+
+    }];
+    
+    dispatch_group_wait(loadingGroup, DISPATCH_TIME_FOREVER);
+}
+
 - (BOOL)createIfNeedsUserWithId:(NSString *)identifier email:(NSString *)email name:(NSString *)name
 {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreUserTable];
@@ -728,17 +766,18 @@ static NSString * const kCoreArticleTable = @"Article";
     NSError *error = nil;
     NSArray *result = [[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:&error];
     if ([result count]) {
+        [self preloading];
         return YES;
     }
-    if (error) {
-        return NO;
-    } else {
-        User *user = [NSEntityDescription insertNewObjectForEntityForName:kCoreUserTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
-        user.remoteIdentifier = identifier;
-        user.email = email;
-        user.userName = name;
-        [[PRLocalDataStore sharedInstance] saveBackgroundContext];
-    }
+    
+    User *user = [NSEntityDescription insertNewObjectForEntityForName:kCoreUserTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
+    user.remoteIdentifier = identifier;
+    user.email = email;
+    user.userName = name;
+    [[PRLocalDataStore sharedInstance] saveBackgroundContext];
+    
+    [self preloading];
+    
     return YES;
 }
 
@@ -752,6 +791,107 @@ static NSString * const kCoreArticleTable = @"Article";
         return [result firstObject];
     }
     return nil;
+}
+
+- (void)updateCategories:(NSArray<PRRemoteCategory *> *)categories
+{
+    NSManagedObjectContext *workContext = [[PRLocalDataStore sharedInstance] backgroundContext];
+    
+    NSMutableArray *categoriesForAdd = [[NSMutableArray alloc] initWithArray:categories];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreInterestCategoryTable];
+    NSError *error;
+    NSArray *fetchResult = [[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:&error];
+    NSMutableArray *categoriesForRemove = [[NSMutableArray alloc] initWithArray:fetchResult];
+    for (InterestCategory *iCategory in fetchResult) {
+        for (PRRemoteCategory *category in categories) {
+            if ([iCategory.remoteIdentifier isEqualToString:category.objectId]) {
+                [categoriesForRemove removeObject:iCategory];
+                [categoriesForAdd removeObject:category];
+            }
+        }
+    }
+    
+    for (PRRemoteCategory *category in categoriesForAdd) {
+        InterestCategory *newCategory = [NSEntityDescription insertNewObjectForEntityForName:kCoreInterestCategoryTable inManagedObjectContext:workContext];
+        newCategory.remoteIdentifier = category.objectId;
+        newCategory.name = category.name;
+    }
+    
+    for (InterestCategory *category in categoriesForRemove) {
+        [workContext deleteObject:category];
+    }
+    
+    [[PRLocalDataStore sharedInstance] saveBackgroundContext];
+    
+}
+
+- (NSArray<InterestCategory *> *)allLocalCategoriesForMain
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreInterestCategoryTable];
+    NSError *error;
+    return [[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:&error];
+}
+
+- (void)updateUserCategories:(NSArray<PRRemoteCategory *> *)categories
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreUserTable];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", [PRNetworkDataProvider sharedInstance].currentUser]];
+    NSError *error;
+    User *user = [[[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:&error] firstObject];
+    
+    NSMutableArray *categoryForRemove = nil;
+    if ([user.interests count]) {
+        categoryForRemove = [[NSMutableArray alloc] initWithArray:[user.interests allObjects]];
+    }
+    
+    NSMutableArray *categoriesForAdd = [[NSMutableArray alloc] initWithArray:categories];
+    for (InterestCategory *iCategory in user.interests) {
+        for (PRRemoteCategory *category in categories) {
+            if ([iCategory.remoteIdentifier isEqualToString:category.objectId]) {
+                [categoriesForAdd removeObject:category];
+                [categoryForRemove removeObject:iCategory];
+            }
+        }
+    }
+    
+    if ([categoryForRemove count]) {
+         NSSet *remove = [[NSSet alloc] initWithArray:categoryForRemove];
+        [user removeInterests:remove];
+    }
+    
+    if ([categoriesForAdd count]) {
+        NSMutableArray *ids = [[NSMutableArray alloc] initWithCapacity:[categoriesForAdd count]];
+        for (PRRemoteCategory *category in categoriesForAdd) {
+            [ids addObject:category.objectId];
+        }
+        NSFetchRequest *localCategoriesRequest = [NSFetchRequest fetchRequestWithEntityName:kCoreInterestCategoryTable];
+        [localCategoriesRequest setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier IN %@", ids]];
+        NSArray *add = [[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:localCategoriesRequest error:nil];
+        NSSet *forAdd = [[NSSet alloc] initWithArray:add];
+        [user addInterests:forAdd];
+    }
+    
+    [[PRLocalDataStore sharedInstance] saveBackgroundContext];
+}
+
+- (void)addUserCategories:(NSArray<InterestCategory *> *)addCategories remove:(NSArray<InterestCategory *> *)removeCategories
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreUserTable];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", [PRNetworkDataProvider sharedInstance].currentUser]];
+    NSError *error;
+    User *user = [[[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:&error] firstObject];
+    
+    if (removeCategories) {
+        NSSet *remove = [[NSSet alloc] initWithArray:removeCategories];
+        [user removeInterests:remove];
+    }
+    
+    if (addCategories) {
+        NSSet *add = [[NSSet alloc] initWithArray:addCategories];
+        [user addInterests:add];
+    }
+    
+    [[PRLocalDataStore sharedInstance] saveMainContextAndWait:NO];
 }
 
 @end

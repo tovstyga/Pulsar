@@ -16,14 +16,15 @@
 //core data
 
 #import "User+CoreDataProperties.h"
+#import "InterestCategory+CoreDataProperties.h"
+#import "GeoPoint+CoreDataProperties.h"
+#import "Article+CoreDataProperties.h"
+#import "Media+CoreDataProperties.h"
 
 @interface PRDataProvider : NSObject
 
 @property (strong, nonatomic, readonly) User *currentUser;
-
-@property (strong, nonatomic) NSArray *templateSelectedCategories;
-
-@property (strong, nonatomic) NSString *userIdentifier;
+@property (strong, nonatomic, readonly) NSArray<InterestCategory *> *allCategories;
 
 + (instancetype)sharedInstance;
 

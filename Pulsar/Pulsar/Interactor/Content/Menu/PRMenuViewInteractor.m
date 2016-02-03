@@ -11,6 +11,8 @@
 #import "PRErrorDescriptor.h"
 #import "PRLocalCategory.h"
 
+#import "InterestCategory.h"
+
 @implementation PRMenuViewInteractor{
     NSArray *_categories;
     NSArray *_defaultState;
@@ -109,7 +111,7 @@
         NSMutableArray *templateCategoriesForDataProvider = [NSMutableArray new];
         
         for (int i = 0; i < [_categories count]; i++) {
-            BOOL newCategorySelected = [(PRLocalCategory *)_categories[i] isSelected];
+            BOOL newCategorySelected = [[(InterestCategory *)_categories[i] selected] boolValue];
             if (newCategorySelected) {
                 [templateCategoriesForDataProvider addObject:_categories[i]];
             }
@@ -121,8 +123,6 @@
                 }
             }
         }
-    
-        [PRDataProvider sharedInstance].templateSelectedCategories = templateCategoriesForDataProvider;
         
         __block NSError *executionError;
         
@@ -185,7 +185,7 @@
     return [_categories count];
 }
 
-- (PRLocalCategory *)categoryForIndex:(NSInteger)index
+- (InterestCategory *)categoryForIndex:(NSInteger)index
 {
     if (index >= 0 && index < [_categories count]) {
         return _categories[index];
@@ -220,17 +220,17 @@
 {
     _categories = [allCategories copy];
     NSMutableArray *states = [NSMutableArray new];
-    for (PRLocalCategory *userCategory in userCategories) {
-        [_categories enumerateObjectsUsingBlock:^(PRLocalCategory *categoty, NSUInteger idx, BOOL *stop) {
-            if ([userCategory.identifier isEqualToString:categoty.identifier]) {
-                categoty.selected = YES;
+    for (InterestCategory *userCategory in userCategories) {
+        [_categories enumerateObjectsUsingBlock:^(InterestCategory *categoty, NSUInteger idx, BOOL *stop) {
+            if ([userCategory.remoteIdentifier isEqualToString:categoty.remoteIdentifier]) {
+                [categoty setSelected:@(YES)];
                 *stop = YES;
             }
         }];
     }
     
-    [_categories enumerateObjectsUsingBlock:^(PRLocalCategory *categoty, NSUInteger idx, BOOL *stop) {
-        [states addObject:@(categoty.selected)];
+    [_categories enumerateObjectsUsingBlock:^(InterestCategory *categoty, NSUInteger idx, BOOL *stop) {
+        [states addObject:@([categoty.selected boolValue])];
     }];
     _defaultState = states;
 }

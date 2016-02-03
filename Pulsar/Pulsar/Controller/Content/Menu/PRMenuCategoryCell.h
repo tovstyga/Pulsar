@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PRLocalCategory.h"
+#import "InterestCategory.h"
 
 @interface PRMenuCategoryCell : UITableViewCell
 
-@property (strong, nonatomic) PRLocalCategory *category;
+@property (strong, nonatomic) InterestCategory *category;
 
 @end

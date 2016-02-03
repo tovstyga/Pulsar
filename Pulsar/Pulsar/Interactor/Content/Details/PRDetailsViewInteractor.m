@@ -110,7 +110,7 @@
 - (BOOL)canLikeArticle:(PRLocalArticle *)article
 {
     for (NSString *identifier in article.likes) {
-        if ([identifier isEqualToString:[PRDataProvider sharedInstance].userIdentifier]) {
+        if ([identifier isEqualToString:[PRDataProvider sharedInstance].currentUser.remoteIdentifier]) {
             return YES;
         }
     }
@@ -120,7 +120,7 @@
 - (BOOL)canDislikeArticle:(PRLocalArticle *)article
 {
     for (NSString *identifier in article.disLikes) {
-        if ([identifier isEqualToString:[PRDataProvider sharedInstance].userIdentifier]) {
+        if ([identifier isEqualToString:[PRDataProvider sharedInstance].currentUser.remoteIdentifier]) {
             return YES;
         }
     }

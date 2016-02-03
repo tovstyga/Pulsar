@@ -24,17 +24,17 @@
     return self;
 }
 
-- (void)setCategory:(PRLocalCategory *)category
+- (void)setCategory:(InterestCategory *)category
 {
     _category = category;
-    self.textLabel.text = category.title;
-    [super setSelected:category.selected];
+    self.textLabel.text = category.name;
+    [super setSelected:[category.selected boolValue]];
     [self updateAccessory];
 }
 
 - (void)updateAccessory
 {
-    self.accessoryType = self.category.selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    self.accessoryType = [self.category.selected boolValue] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 }
 
 @end

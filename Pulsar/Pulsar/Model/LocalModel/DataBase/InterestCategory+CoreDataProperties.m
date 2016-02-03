@@ -1,8 +1,8 @@
 //
-//  Category+CoreDataProperties.m
+//  InterestCategory+CoreDataProperties.m
 //  Pulsar
 //
-//  Created by fantom on 01.02.16.
+//  Created by fantom on 03.02.16.
 //  Copyright © 2016 TAB. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -15,5 +15,6 @@
 
 @dynamic name;
 @dynamic remoteIdentifier;
+@dynamic selected;
 
 @end

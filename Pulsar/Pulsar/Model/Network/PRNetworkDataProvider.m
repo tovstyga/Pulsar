@@ -465,7 +465,7 @@ static PRNetworkDataProvider *sharedInstance;
     }
 }
 
-- (void)requestHotArticlesWithCategories:(NSArray *)categories
+- (void)requestHotArticlesWithCategoriesIds:(NSArray *)categoriesIds
                                minRating:(NSInteger)minRating
                                     from:(int)lastIndex
                                     step:(int)step
@@ -474,7 +474,7 @@ static PRNetworkDataProvider *sharedInstance;
                                  failure:(PRNetworkFailureBlock)failure
 {
     if ([self isNetworkAvailable:failure]) {
-        NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:[self queryHotArticlesWithCategories:categories rating:minRating sortDescriptor:kHotOrder]];
+        NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:[self queryHotArticlesWithCategories:categoriesIds rating:minRating sortDescriptor:kHotOrder]];
         if (step) {
             if (lastIndex >= 0) {
                 [params setObject:@(lastIndex) forKey:kPathParamSkip];
@@ -496,7 +496,7 @@ static PRNetworkDataProvider *sharedInstance;
 
 }
 
-- (void)requestNewArticlesWithCategories:(NSArray *)categories
+- (void)requestNewArticlesWithCategoriesIds:(NSArray *)categoriesIds
                                 lastDate:(NSDate *)date
                                     form:(int)lastIndex
                                     step:(int)step
@@ -504,10 +504,10 @@ static PRNetworkDataProvider *sharedInstance;
                                  success:(PRNetworkSuccessBlock)success
                                  failure:(PRNetworkFailureBlock)failure
 {
-    [self requestArticlesWithCategories:categories lastDate:date from:lastIndex step:step sortDescriptor:kNewOrder success:success failure:failure];
+    [self requestArticlesWithCategories:categoriesIds lastDate:date from:lastIndex step:step sortDescriptor:kNewOrder success:success failure:failure];
 }
 
-- (void)requestTopArticlesWithCategories:(NSArray *)categories
+- (void)requestTopArticlesWithCategoriesIds:(NSArray *)categoriesIds
                               beforeDate:(NSDate *)date
                                locations:(NSArray *)locations
                                  success:(PRNetworkSuccessBlock)success
@@ -515,7 +515,7 @@ static PRNetworkDataProvider *sharedInstance;
 {
     if ([self isNetworkAvailable:failure]) {
         NSMutableURLRequest *request = [self requestForType:PRRequestTypeArticleWithQuery];
-        NSData *body = [NSJSONSerialization dataWithJSONObject:[self queryTopArticlesWithCategories:categories beforeDate:date sortDescriptor:kTopOrder] options:NSJSONWritingPrettyPrinted error:nil];
+        NSData *body = [NSJSONSerialization dataWithJSONObject:[self queryTopArticlesWithCategories:categoriesIds beforeDate:date sortDescriptor:kTopOrder] options:NSJSONWritingPrettyPrinted error:nil];
         [request setHTTPBody:body];
         [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
             if (error && failure) {
@@ -880,8 +880,8 @@ static PRNetworkDataProvider *sharedInstance;
 - (NSArray *)categoriesToPointers:(NSArray *)categories
 {
     NSMutableArray *categoryPointers = [NSMutableArray new];
-    for (id cat in categories) {
-        [categoryPointers addObject:[[[PRRemotePointer alloc] initWithClass:@"Tag" remoteObjectId:[cat performSelector:@selector(identifier)]] toJSONCompatable]];
+    for (NSString *catId in categories) {
+        [categoryPointers addObject:[[[PRRemotePointer alloc] initWithClass:@"Tag" remoteObjectId:catId] toJSONCompatable]];
     }
     return categoryPointers;
 }

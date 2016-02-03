@@ -1,8 +1,8 @@
 //
-//  Category.m
+//  InterestCategory.m
 //  Pulsar
 //
-//  Created by fantom on 01.02.16.
+//  Created by fantom on 03.02.16.
 //  Copyright © 2016 TAB. All rights reserved.
 //
 
