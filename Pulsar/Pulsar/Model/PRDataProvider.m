@@ -35,7 +35,6 @@
 @interface PRDataProvider()
 
 @property (strong, nonatomic) NSString *networkSessionKey;
-@property (copy, nonatomic) NSArray *templateGeoPoints;
 @property (strong, atomic) NSOperationQueue *uploadQueue;
 @property (strong, atomic) NSOperationQueue *downloadQueue;
 
@@ -231,7 +230,7 @@ static NSString * const kCoreArticleTable = @"Article";
     }];
 }
 
-- (void)addCategoryForCurrentUser:(PRLocalCategory *)category completion:(void(^)(NSError *error))completion
+- (void)addCategoryForCurrentUser:(InterestCategory *)category completion:(void(^)(NSError *error))completion
 {
     [self addCategoriesForCurrentUser:@[category] completion:completion];
 }
@@ -250,7 +249,7 @@ static NSString * const kCoreArticleTable = @"Article";
     }];
 }
 
-- (void)removeCategoryForCurrentUser:(PRLocalCategory *)category completion:(void(^)(NSError *error))completion
+- (void)removeCategoryForCurrentUser:(InterestCategory *)category completion:(void(^)(NSError *error))completion
 {
     [self removeCategoriesForCurrentUser:@[category] completion:completion];
 }
@@ -325,21 +324,18 @@ static NSString * const kCoreArticleTable = @"Article";
 
 - (void)allGeopoints:(void(^)(NSArray *geopoints, NSError *error))completion
 {
-    if (self.templateGeoPoints && completion) {
-        completion(self.templateGeoPoints, nil);
-        return;
-    }
-    
     [[PRNetworkDataProvider sharedInstance] requesGeoPointsWithSuccess:^(NSData *data, NSURLResponse *response) {
         if (completion) {
             completion([self localGeoPointsFromResponseData:data], nil);
         }
     } failure:^(NSError *error) {
         if (completion) {
-            completion(nil, error);
+            completion([self localGeoPointsFromResponseData:nil], error);
         }
     }];
 }
+
+#pragma mark - Articles
 
 - (void)publishNewArticle:(PRLocalNewArticle *)localArticle completion:(void(^)(NSError *error))completion
 {
@@ -348,7 +344,7 @@ static NSString * const kCoreArticleTable = @"Article";
     remoteArticle.annotation = localArticle.annotation;
     remoteArticle.text = localArticle.text;
     remoteArticle.author = [[PRRemotePointer alloc] initWithClass:kUserClassName remoteObjectId:[PRNetworkDataProvider sharedInstance].currentUser];
-    remoteArticle.category = [[PRRemotePointer alloc] initWithClass:kCategoryClassName remoteObjectId:localArticle.category.identifier];
+    remoteArticle.category = [[PRRemotePointer alloc] initWithClass:kCategoryClassName remoteObjectId:localArticle.category.remoteIdentifier];
     remoteArticle.location = [[PRRemoteGeoPoint alloc] initWithLocalGeoPoint:localArticle.location];
     void(^publishBlock)(PRRemotePointer *image) = ^(PRRemotePointer *image){
         if (image) {
@@ -525,7 +521,7 @@ static NSString * const kCoreArticleTable = @"Article";
         _hotArticleCount = 0;
     }
     //нужно мержить результаты выборки с прошлыми результатами или фирмировтаь исключения при запросе
-    [[PRNetworkDataProvider sharedInstance] requestHotArticlesWithCategoriesIds:[self categoriesIdsFrom:[self.currentUser.interests allObjects]] minRating:NSIntegerMax from:_hotArticleCount step:kFetchLimith locations:self.templateGeoPoints success:^(NSData *data, NSURLResponse *response) {
+    [[PRNetworkDataProvider sharedInstance] requestHotArticlesWithCategoriesIds:[self categoriesIdsFrom:[self.currentUser.interests allObjects]] minRating:NSIntegerMax from:_hotArticleCount step:kFetchLimith locations:[self.currentUser.locations allObjects] success:^(NSData *data, NSURLResponse *response) {
         NSArray *articles = [self localArticlesFromResponseData:data];
         _hotArticleCount +=[articles count];
         _minRatingArticle = [(PRLocalArticle *)[articles lastObject] rating];
@@ -555,7 +551,7 @@ static NSString * const kCoreArticleTable = @"Article";
         _newArticleRequestTime = [NSDate date];
         _newArticlesCount = 0;
     }
-    [[PRNetworkDataProvider sharedInstance] requestNewArticlesWithCategoriesIds:[self categoriesIdsFrom:[self.currentUser.interests allObjects]] lastDate:_newArticleRequestTime form:_newArticlesCount step:kFetchLimith locations:self.templateGeoPoints success:^(NSData *data, NSURLResponse *response) {
+    [[PRNetworkDataProvider sharedInstance] requestNewArticlesWithCategoriesIds:[self categoriesIdsFrom:[self.currentUser.interests allObjects]] lastDate:_newArticleRequestTime form:_newArticlesCount step:kFetchLimith locations:[self.currentUser.locations allObjects] success:^(NSData *data, NSURLResponse *response) {
         NSArray *articles = [self localArticlesFromResponseData:data];
         _newArticlesCount += [articles count];
         if (completion) {
@@ -574,7 +570,7 @@ static NSString * const kCoreArticleTable = @"Article";
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSInteger gmtCorrection = [[NSTimeZone localTimeZone] secondsFromGMT];
         NSDate *now = [NSDate date];
-        NSArray *geoPoints = self.templateGeoPoints;
+        NSArray *geoPoints = [self.currentUser.locations allObjects];
         __block PRArticleCollection *articleCollection = [[PRArticleCollection alloc] init];
         dispatch_group_t fetchGroup = dispatch_group_create();
         dispatch_group_enter(fetchGroup);
@@ -650,17 +646,27 @@ static NSString * const kCoreArticleTable = @"Article";
 
 - (NSArray *)localGeoPointsFromResponseData:(NSData *)data
 {
-    id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    NSArray *source = [(NSDictionary *)json objectForKey:@"locations"];
-    NSMutableArray *remoteGeoPoints = [NSMutableArray new];
-    for (id object in source) {
-        [remoteGeoPoints addObject:[[PRRemoteGeoPoint alloc] initWithJSON:object]];
+    if (data) {
+        id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        NSArray *source = [(NSDictionary *)json objectForKey:@"locations"];
+        NSMutableArray *remoteGeoPoints = [NSMutableArray new];
+        for (id object in source) {
+            [remoteGeoPoints addObject:[[PRRemoteGeoPoint alloc] initWithJSON:object]];
+        }
+    
+        [self updateUserGeoPoints:remoteGeoPoints];
     }
-    NSMutableArray *localResults = [[NSMutableArray alloc] initWithCapacity:remoteGeoPoints.count];
-    for (PRRemoteGeoPoint *point in remoteGeoPoints) {
-        [localResults addObject:[[PRLocalGeoPoint alloc] initWithRemoteGeoPoint:point]];
+    
+    __block NSSet *results = nil;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        results = self.currentUser.locations;
+    });
+    
+    NSMutableArray *localResults = [[NSMutableArray alloc] initWithCapacity:[results count]];
+    for (GeoPoint *geoPoint in results) {
+        PRLocalGeoPoint *lPoint = [[PRLocalGeoPoint alloc] initWithLatitude:[geoPoint.latitude floatValue] longitude:[geoPoint.longitude floatValue] title:geoPoint.title];
+        [localResults addObject:lPoint];
     }
-    self.templateGeoPoints = localResults;
     return localResults;
 }
 
@@ -753,7 +759,12 @@ static NSString * const kCoreArticleTable = @"Article";
         [[PRDataProvider sharedInstance] categoriesForCurrentUser:^(NSArray *categories, NSError *error) {
             dispatch_group_leave(loadingGroup);
         }];
-
+    }];
+    
+    //update geopoints
+    dispatch_group_enter(loadingGroup);
+    [[PRDataProvider sharedInstance] allGeopoints:^(NSArray *geopoints, NSError *error) {
+        dispatch_group_leave(loadingGroup);
     }];
     
     dispatch_group_wait(loadingGroup, DISPATCH_TIME_FOREVER);
@@ -892,6 +903,50 @@ static NSString * const kCoreArticleTable = @"Article";
     }
     
     [[PRLocalDataStore sharedInstance] saveMainContextAndWait:NO];
+}
+
+- (void)updateUserGeoPoints:(NSArray<PRRemoteGeoPoint *> *)newPoints
+{
+    NSManagedObjectContext *workContext = [[PRLocalDataStore sharedInstance] backgroundContext];
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreUserTable];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", [PRNetworkDataProvider sharedInstance].currentUser]];
+    NSError *error;
+    User *user = [[workContext executeFetchRequest:request error:&error] firstObject];
+    
+    NSMutableArray *pointsForRemove = nil;
+    if ([user.locations count]) {
+        pointsForRemove = [[NSMutableArray alloc] initWithArray:[user.locations allObjects]];
+    }
+    
+    NSMutableArray *pointsForAdd = [[NSMutableArray alloc] initWithArray:newPoints];
+    for (GeoPoint *geoPoint in user.locations) {
+        for (PRRemoteGeoPoint *rPoint in newPoints) {
+            if ([geoPoint.title isEqualToString:rPoint.title]) {
+                [pointsForAdd removeObject:rPoint];
+                [pointsForRemove removeObject:geoPoint];
+            }
+        }
+    }
+    
+    if ([pointsForRemove count]) {
+        NSSet *remove = [[NSSet alloc] initWithArray:pointsForRemove];
+        [user removeLocations:remove];
+    }
+    
+    if ([pointsForAdd count]) {
+        NSMutableSet *newGeoPoints = [NSMutableSet new];
+        for (PRRemoteGeoPoint *geoPoint in pointsForAdd) {
+            GeoPoint *point = [NSEntityDescription insertNewObjectForEntityForName:kCoreGeoPointTable inManagedObjectContext:workContext];
+            point.title = geoPoint.title;
+            point.longitude = @(geoPoint.longitude);
+            point.latitude = @(geoPoint.latitude);
+            [newGeoPoints addObject:point];
+        }
+        [user addLocations:newGeoPoints];
+    }
+    
+    [[PRLocalDataStore sharedInstance] saveBackgroundContext];
 }
 
 @end

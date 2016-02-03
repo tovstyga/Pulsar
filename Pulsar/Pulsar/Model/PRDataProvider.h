@@ -49,11 +49,11 @@
 
 - (void)categoriesForCurrentUser:(void(^)(NSArray *categories, NSError *error))completion;
 
-- (void)addCategoryForCurrentUser:(PRLocalCategory *)category completion:(void(^)(NSError *error))completion;
+- (void)addCategoryForCurrentUser:(InterestCategory *)category completion:(void(^)(NSError *error))completion;
 
 - (void)addCategoriesForCurrentUser:(NSArray *)categories completion:(void(^)(NSError *error))completion;
 
-- (void)removeCategoryForCurrentUser:(PRLocalCategory *)category completion:(void(^)(NSError *error))completion;
+- (void)removeCategoryForCurrentUser:(InterestCategory *)category completion:(void(^)(NSError *error))completion;
 
 - (void)removeCategoriesForCurrentUser:(NSArray *)categories completion:(void(^)(NSError *error))completion;
 

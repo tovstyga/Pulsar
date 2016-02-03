@@ -30,8 +30,8 @@
     article.title = title;
     article.annotation = annotation;
     article.text = text;
-    [_categories enumerateObjectsUsingBlock:^(PRLocalCategory *_category, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([_category.title isEqualToString:category]) {
+    [_categories enumerateObjectsUsingBlock:^(InterestCategory *_category, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([_category.name isEqualToString:category]) {
             article.category = _categories[idx];
             *stop = YES;
         }
@@ -73,8 +73,8 @@
 - (NSArray<NSString *> *)allAvailableCategoriesNames
 {
     NSMutableArray *descriptions = [NSMutableArray new];
-    [_categories enumerateObjectsUsingBlock:^(PRLocalCategory *category, NSUInteger idx, BOOL *stop) {
-        [descriptions addObject:category.title];
+    [_categories enumerateObjectsUsingBlock:^(InterestCategory *category, NSUInteger idx, BOOL *stop) {
+        [descriptions addObject:category.name];
     }];
     return descriptions;
 }
