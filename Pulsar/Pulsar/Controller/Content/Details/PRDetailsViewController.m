@@ -43,10 +43,7 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
     [super viewDidLoad];
     [self showMediaCollection:NO animated:NO];
     _selectedImageIndex = -1;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
+    
     if (self.article.image.thumbnail) {
         self.imageView.image = self.article.image.thumbnail;
     } else {
@@ -59,11 +56,15 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
             }
         }];
     }
+    
     self.articleTitle.text = self.article.title;
     self.annotation.text = self.article.annotation;
     self.category.text = self.article.category.title;
     self.rating.text = [NSString stringWithFormat:@"%ld", (long)self.article.rating];
     self.mainText.text = self.article.text;
+    
+    self.upButton.enabled = [self.interactor canLikeArticle:self.article];
+    self.downButton.enabled = [self.interactor canDislikeArticle:self.article];
     
     [self.interactor loadMediaContentForArticle:self.article completion:^(NSString *errorMessage) {
         if (!errorMessage) {
@@ -75,6 +76,11 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
             });
         }
     }];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
 }
 
 #pragma mark - Actions
@@ -93,7 +99,7 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
 
 - (IBAction)upRationgAction:(UIButton *)sender
 {
-
+    
 }
 
 - (IBAction)downRatingAction:(UIButton *)sender

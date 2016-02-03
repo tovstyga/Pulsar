@@ -12,6 +12,7 @@
 #import "PRRemoteResetPasswordRequest.h"
 #import "PRRemoteLoginResponse.h"
 #import "PRRemoteRegistrationResponse.h"
+#import "PRTokenValidationResponse.h"
 
 #import "PRRemoteResults.h"
 #import "PRRemoteCategory.h"
@@ -49,6 +50,8 @@
 }
 
 @synthesize networkSessionKey = _networkSessionKey;
+@synthesize currentUser = _currentUser;
+@dynamic userIdentifier;
 
 static PRDataProvider *sharedInstance;
 
@@ -59,6 +62,12 @@ static NSString * const kUserClassName = @"_User";
 static NSString * const kArticleClassName = @"Article";
 static NSString * const kCategoryClassName = @"Tag";
 static NSString * const kMediaClassName = @"Media";
+
+static NSString * const kCoreUserTable = @"User";
+static NSString * const kCoreGeoPointTable = @"GeoPoint";
+static NSString * const kCoreInterestCategoryTable = @"InterestCategory";
+static NSString * const kCoreMediaTable = @"Media";
+static NSString * const kCoreArticleTable = @"Article";
 
 - (instancetype)init
 {
@@ -93,6 +102,23 @@ static NSString * const kMediaClassName = @"Media";
     return sharedInstance;
 }
 
+- (NSString *)userIdentifier
+{
+    return [[PRNetworkDataProvider sharedInstance] currentUser];
+}
+
+#pragma mark - accessors
+
+- (User *)currentUser
+{
+    if (_currentUser) {
+        return _currentUser;
+    } else {
+        _currentUser = [self loadUser];
+        return _currentUser;
+    }
+}
+
 #pragma mark - session and autorization
 
 - (void)registrateUser:(NSString *)userName
@@ -105,6 +131,7 @@ static NSString * const kMediaClassName = @"Media";
         id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         PRRemoteRegistrationResponse *sessionInfo = [[PRRemoteRegistrationResponse alloc] initWithJSON:json];
         self.networkSessionKey = sessionInfo.sessionToken;
+        [self resumeSession:nil]; //for loading user data
         if (completion) {
             completion(nil);
         }
@@ -121,6 +148,7 @@ static NSString * const kMediaClassName = @"Media";
         id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         PRRemoteLoginResponse *sessionInfo = [[PRRemoteLoginResponse alloc] initWithJSON:json];
         self.networkSessionKey = sessionInfo.sessionToken;
+        [self createIfNeedsUserWithId:sessionInfo.objectId email:sessionInfo.email name:sessionInfo.userName];
         if (completion) {
             completion(nil);
         }
@@ -162,6 +190,9 @@ static NSString * const kMediaClassName = @"Media";
 - (void)resumeSession:(void (^)(BOOL))completion
 {
     [[PRNetworkDataProvider sharedInstance] validateSessionToken:self.networkSessionKey success:^(NSData *data, NSURLResponse *response) {
+        id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        PRTokenValidationResponse *validationResponse = [[PRTokenValidationResponse alloc] initWithJSON:json];
+        [self createIfNeedsUserWithId:validationResponse.objectId email:validationResponse.email name:validationResponse.userName];
         if (completion) {
             completion(YES);
         }
@@ -686,6 +717,41 @@ static NSString * const kMediaClassName = @"Media";
         _networkSessionKey = [[NSUserDefaults standardUserDefaults] objectForKey:@"network_session_key"];
     }
     return _networkSessionKey;
+}
+
+#pragma mark - Core Data
+
+- (BOOL)createIfNeedsUserWithId:(NSString *)identifier email:(NSString *)email name:(NSString *)name
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreUserTable];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", identifier]];
+    NSError *error = nil;
+    NSArray *result = [[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:&error];
+    if ([result count]) {
+        return YES;
+    }
+    if (error) {
+        return NO;
+    } else {
+        User *user = [NSEntityDescription insertNewObjectForEntityForName:kCoreUserTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
+        user.remoteIdentifier = identifier;
+        user.email = email;
+        user.userName = name;
+        [[PRLocalDataStore sharedInstance] saveBackgroundContext];
+    }
+    return YES;
+}
+
+- (User *)loadUser
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreUserTable];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", [PRNetworkDataProvider sharedInstance].currentUser]];
+    NSError *error = nil;
+    NSArray *result = [[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:&error];
+    if (!error) {
+        return [result firstObject];
+    }
+    return nil;
 }
 
 @end

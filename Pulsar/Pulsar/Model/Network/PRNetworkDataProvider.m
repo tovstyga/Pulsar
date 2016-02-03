@@ -148,7 +148,6 @@ static PRNetworkDataProvider *sharedInstance;
                 PRRemoteRegistrationResponse *sessionInfo = [[PRRemoteRegistrationResponse alloc] initWithJSON:json];
                 _sessionToken = sessionInfo.sessionToken;
                 if (success) success(data, response);
-                [self validateSessionToken:_sessionToken success:nil failure:nil];//for get user identifier;
             }
         }];
     }

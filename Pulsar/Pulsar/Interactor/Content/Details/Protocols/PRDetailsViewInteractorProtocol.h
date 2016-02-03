@@ -20,4 +20,12 @@
 
 - (void)imageForItemAtIndex:(NSInteger)index completion:(void(^)(UIImage *image, NSString *errorMessage))completion;
 
+- (BOOL)canLikeArticle:(PRLocalArticle *)article;
+
+- (BOOL)canDislikeArticle:(PRLocalArticle *)article;
+
+- (void)likeArticle:(PRLocalArticle *)article completion:(void(^)(NSString *errorMessage))completion;
+
+- (void)dislikeArticle:(PRLocalArticle *)article completion:(void(^)(NSString *errorMessage))completion;
+
 @end

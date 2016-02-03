@@ -15,7 +15,7 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
 
 @interface PRNetworkDataProvider : NSObject
 
-@property (strong, nonatomic, readonly) NSString *currentUser;
+@property (strong, atomic, readonly) NSString *currentUser;
 
 + (instancetype)sharedInstance;
 

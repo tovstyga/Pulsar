@@ -13,9 +13,17 @@
 #import "PRLocalArticle.h"
 #import "PRArticleCollection.h"
 
+//core data
+
+#import "User+CoreDataProperties.h"
+
 @interface PRDataProvider : NSObject
 
+@property (strong, nonatomic, readonly) User *currentUser;
+
 @property (strong, nonatomic) NSArray *templateSelectedCategories;
+
+@property (strong, nonatomic) NSString *userIdentifier;
 
 + (instancetype)sharedInstance;
 

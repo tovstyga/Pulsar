@@ -107,4 +107,50 @@
     }
 }
 
+- (BOOL)canLikeArticle:(PRLocalArticle *)article
+{
+    for (NSString *identifier in article.likes) {
+        if ([identifier isEqualToString:[PRDataProvider sharedInstance].userIdentifier]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)canDislikeArticle:(PRLocalArticle *)article
+{
+    for (NSString *identifier in article.disLikes) {
+        if ([identifier isEqualToString:[PRDataProvider sharedInstance].userIdentifier]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (void)likeArticle:(PRLocalArticle *)article completion:(void(^)(NSString *errorMessage))completion
+{
+    [[PRDataProvider sharedInstance] likeArticle:article success:^(NSError *error) {
+        if (completion) {
+            if (error) {
+                completion([PRErrorDescriptor descriptionForError:error]);
+            } else {
+                completion(nil);
+            }
+        }
+    }];
+}
+
+- (void)dislikeArticle:(PRLocalArticle *)article completion:(void(^)(NSString *errorMessage))completion
+{
+    [[PRDataProvider sharedInstance] dislikeArticle:article success:^(NSError *error) {
+        if (completion) {
+            if (error) {
+                completion([PRErrorDescriptor descriptionForError:error]);
+            } else {
+                completion(nil);
+            }
+        }
+    }];
+}
+
 @end
