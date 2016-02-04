@@ -64,8 +64,8 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
     self.rating.text = [NSString stringWithFormat:@"%ld", (long)[self.article.rating integerValue]];
     self.mainText.text = self.article.text;
     
-    self.upButton.enabled = self.article.canLike;
-    self.downButton.enabled = self.article.canDislike;
+    self.upButton.enabled = [self.article.canLike boolValue];
+    self.downButton.enabled = [self.article.canDislike boolValue];
     
     [self.interactor loadMediaContentForArticle:self.article completion:^(NSString *errorMessage) {
         if (!errorMessage) {

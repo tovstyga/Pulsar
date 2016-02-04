@@ -69,10 +69,13 @@
             }];
         }
     }
+    self.sharingFavorite.enabled = YES;
     self.cellTitle.text = article.title;
     self.cellText.text = article.annotation;
     self.cellCategory.text = article.category.name;
     self.ratingLabel.text = [NSString stringWithFormat:@"%ld", (long)[article.rating integerValue]];
+    self.upButton.enabled = [article.canLike boolValue];
+    self.downButton.enabled = [article.canDislike boolValue];
 }
 
 #pragma mark - Actions
@@ -95,18 +98,20 @@
 
 - (IBAction)saveAsFavorite:(UIButton *)sender
 {
-
+    self.sharingFavorite.enabled = NO;
+    [[PRDataProvider sharedInstance] addArticleToFavorite:self.article success:nil];
 }
 
 - (IBAction)upRating:(UIButton *)sender
 {
-
+    
 }
 
 - (IBAction)downRating:(UIButton *)sender
 {
 
 }
+
 
 #pragma mark - Internal
 
