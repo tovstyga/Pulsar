@@ -223,7 +223,7 @@
     }
 }
 
-- (PRLocalArticle *)articleAtIndex:(NSInteger)index inSection:(NSInteger)section
+- (Article *)articleAtIndex:(NSInteger)index inSection:(NSInteger)section
 {
     NSArray *template = nil;
     switch (self.activeFeed) {

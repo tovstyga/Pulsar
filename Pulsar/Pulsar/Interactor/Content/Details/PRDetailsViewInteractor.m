@@ -14,42 +14,52 @@
     NSArray *_media;
 }
 
-- (void)loadImageFromUrl:(NSURL *)url completion:(void(^)(UIImage *image, NSString *errorMessage))completion;
+- (void)loadThumbnailForMedia:(Media *)media completion:(void(^)(UIImage *image, NSString *errorMessage))completion;
 {
-    [[PRDataProvider sharedInstance] loadDataFromUrl:url completion:^(NSData *data, NSError *error) {
+    [[PRDataProvider sharedInstance] loadThumbnailForMedia:media completion:^(UIImage *image, NSError *error) {
         if (error) {
             if (completion) {
                 completion(nil, [PRErrorDescriptor descriptionForError:error]);
             }
         } else {
             if (completion) {
-                completion([UIImage imageWithData:data], nil);
+                completion(image, nil);
             }
         }
     }];
 }
 
-- (void)loadMediaContentForArticle:(PRLocalArticle *)article completion:(void(^)(NSString *errorMessage))completion
+- (void)loadImageForMedia:(Media *)media completion:(void(^)(UIImage *image, NSString *errorMessage))completion
 {
-    [[PRDataProvider sharedInstance] loadMediaForArticle:article completion:^(NSArray<PRLocalMedia *> *mediaArray, NSError *error) {
+    [[PRDataProvider sharedInstance] loadContentForMedia:media completion:^(UIImage *image, NSError *error) {
+        if (error) {
+            if (completion) {
+                completion(nil, [PRErrorDescriptor descriptionForError:error]);
+            }
+        } else {
+            if (completion) {
+                completion(image, nil);
+            }
+        }
+    }];
+}
+
+- (void)loadMediaContentForArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion
+{
+    [[PRDataProvider sharedInstance] loadMediaForArticle:article completion:^(NSArray<Media *> *mediaArray, NSError *error) {
         if (error) {
             if (completion) {
                 completion([PRErrorDescriptor descriptionForError:error]);
             }
         } else {
             _media = mediaArray;
-            
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 dispatch_group_t loadThumbnailsGorup = dispatch_group_create();
-                for (int i = 0; i < [_media count]; i++) {
-                    __block PRLocalMedia *localMedia = _media[i];
-                    if (!localMedia.thumbnail && localMedia.thumbnailUrl) {
+                for (Media *media in mediaArray) {
+                    if (media.thumbnailURL) {
                         dispatch_group_enter(loadThumbnailsGorup);
-                        [[PRDataProvider sharedInstance] loadDataFromUrl:localMedia.thumbnailUrl completion:^(NSData *data, NSError *error) {
-                            if (!error) {
-                                localMedia.thumbnail = [UIImage imageWithData:data];
-                            }
-                            dispatch_group_leave(loadThumbnailsGorup);
+                        [[PRDataProvider sharedInstance] loadThumbnailForMedia:media completion:^(UIImage *image, NSError *error) {
+                             dispatch_group_leave(loadThumbnailsGorup);
                         }];
                     }
                 }
@@ -72,7 +82,7 @@
 - (UIImage *)thumbnailForItemAtIndex:(NSInteger)index
 {
     if (index >= 0 && index < [_media count]) {
-        return [(PRLocalMedia *)_media[index] thumbnail];
+        return [UIImage imageWithData:[(Media *)_media[index] thumbnail]];
     }
     return nil;
 }
@@ -80,16 +90,15 @@
 - (void)imageForItemAtIndex:(NSInteger)index completion:(void(^)(UIImage *image, NSString *errorMessage))completion;
 {
     if (index >= 0 && index < [_media count]) {
-        if ([(PRLocalMedia *)_media[index] image]) {
+        if ([(Media *)_media[index] image]) {
             if (completion) {
-                completion([(PRLocalMedia *)_media[index] image], nil);
+                completion([UIImage imageWithData:[(Media *)_media[index] image]], nil);
             }
-        } else if ([(PRLocalMedia *)_media[index] imageUrl]) {
-            [[PRDataProvider sharedInstance] loadDataFromUrl:[(PRLocalMedia *)_media[index] imageUrl] completion:^(NSData *data, NSError *error) {
+        } else if ([(Media *)_media[index] mediaURL]) {
+            [[PRDataProvider sharedInstance] loadContentForMedia:_media[index] completion:^(UIImage *image, NSError *error) {
                 if (!error) {
                     if (completion) {
-                        ((PRLocalMedia *)_media[index]).image = [UIImage imageWithData:data];
-                        completion(((PRLocalMedia *)_media[index]).image, nil);
+                        completion(image, nil);
                     }
                 } else {
                     if (completion) {
@@ -107,27 +116,7 @@
     }
 }
 
-- (BOOL)canLikeArticle:(PRLocalArticle *)article
-{
-    for (NSString *identifier in article.likes) {
-        if ([identifier isEqualToString:[PRDataProvider sharedInstance].currentUser.remoteIdentifier]) {
-            return YES;
-        }
-    }
-    return NO;
-}
-
-- (BOOL)canDislikeArticle:(PRLocalArticle *)article
-{
-    for (NSString *identifier in article.disLikes) {
-        if ([identifier isEqualToString:[PRDataProvider sharedInstance].currentUser.remoteIdentifier]) {
-            return YES;
-        }
-    }
-    return NO;
-}
-
-- (void)likeArticle:(PRLocalArticle *)article completion:(void(^)(NSString *errorMessage))completion
+- (void)likeArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion
 {
     [[PRDataProvider sharedInstance] likeArticle:article success:^(NSError *error) {
         if (completion) {
@@ -140,7 +129,7 @@
     }];
 }
 
-- (void)dislikeArticle:(PRLocalArticle *)article completion:(void(^)(NSString *errorMessage))completion
+- (void)dislikeArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion
 {
     [[PRDataProvider sharedInstance] dislikeArticle:article success:^(NSError *error) {
         if (completion) {

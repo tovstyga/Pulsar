@@ -9,6 +9,8 @@
 #import "PRDetailsViewController.h"
 #import "PRImagePresenter.h"
 #import "PRDetailsCollectionViewCell.h"
+#import "Media.h"
+#import "InterestCategory.h"
 
 @interface PRDetailsViewController() <PRImagePresenterDataSource>
 
@@ -45,11 +47,10 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
     _selectedImageIndex = -1;
     
     if (self.article.image.thumbnail) {
-        self.imageView.image = self.article.image.thumbnail;
+        self.imageView.image = [UIImage imageWithData:self.article.image.thumbnail];
     } else {
-        [self.interactor loadImageFromUrl:self.article.image.thumbnailUrl completion:^(UIImage *image, NSString *errorMessage) {
+        [self.interactor loadThumbnailForMedia:self.article.image completion:^(UIImage *image, NSString *errorMessage) {
             if (!errorMessage) {
-                self.article.image.thumbnail = image;
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.imageView.image = image;
                 });
@@ -59,12 +60,12 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
     
     self.articleTitle.text = self.article.title;
     self.annotation.text = self.article.annotation;
-    self.category.text = self.article.category.title;
-    self.rating.text = [NSString stringWithFormat:@"%ld", (long)self.article.rating];
+    self.category.text = self.article.category.name;
+    self.rating.text = [NSString stringWithFormat:@"%ld", (long)[self.article.rating integerValue]];
     self.mainText.text = self.article.text;
     
-    self.upButton.enabled = [self.interactor canLikeArticle:self.article];
-    self.downButton.enabled = [self.interactor canDislikeArticle:self.article];
+    self.upButton.enabled = self.article.canLike;
+    self.downButton.enabled = self.article.canDislike;
     
     [self.interactor loadMediaContentForArticle:self.article completion:^(NSString *errorMessage) {
         if (!errorMessage) {
@@ -92,7 +93,7 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
 
 - (IBAction)clickOnImage:(UITapGestureRecognizer *)sender
 {
-    if (self.article.image.imageUrl) {
+    if (self.article.image.mediaURL) {
         [self showImage];
     }
 }
@@ -141,10 +142,9 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
         }];
     } else {
         if (self.article.image.image) {
-            completion(self.article.image.image, nil);
+            completion([UIImage imageWithData:self.article.image.image], nil);
         } else {
-            [self.interactor loadImageFromUrl:self.article.image.imageUrl completion:^(UIImage *image, NSString *errorMessage) {
-                self.article.image.image = image;
+            [self.interactor loadImageForMedia:self.article.image completion:^(UIImage *image, NSString *errorMessage) {
                 completion(image, errorMessage);
             }];
         }

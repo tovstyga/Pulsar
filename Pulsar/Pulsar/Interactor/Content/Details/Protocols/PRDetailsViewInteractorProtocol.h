@@ -6,13 +6,17 @@
 //  Copyright © 2016 TAB. All rights reserved.
 //
 
-#import "PRLocalArticle.h"
+#import "Article.h"
+#import "Media.h"
+#import <UIKit/UIKit.h>
 
 @protocol PRDetailsViewInteractorProtocol <NSObject>
 
-- (void)loadImageFromUrl:(NSURL *)url completion:(void(^)(UIImage *image, NSString *errorMessage))completion;
+- (void)loadThumbnailForMedia:(Media *)media completion:(void(^)(UIImage *image, NSString *errorMessage))completion;
 
-- (void)loadMediaContentForArticle:(PRLocalArticle *)article completion:(void(^)(NSString *errorMessage))completion;
+- (void)loadImageForMedia:(Media *)media completion:(void(^)(UIImage *image, NSString *errorMessage))completion;
+
+- (void)loadMediaContentForArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion;
 
 - (NSInteger)mediaContentCount;
 
@@ -20,12 +24,8 @@
 
 - (void)imageForItemAtIndex:(NSInteger)index completion:(void(^)(UIImage *image, NSString *errorMessage))completion;
 
-- (BOOL)canLikeArticle:(PRLocalArticle *)article;
+- (void)likeArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion;
 
-- (BOOL)canDislikeArticle:(PRLocalArticle *)article;
-
-- (void)likeArticle:(PRLocalArticle *)article completion:(void(^)(NSString *errorMessage))completion;
-
-- (void)dislikeArticle:(PRLocalArticle *)article completion:(void(^)(NSString *errorMessage))completion;
+- (void)dislikeArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion;
 
 @end

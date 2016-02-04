@@ -21,7 +21,6 @@
 #import "PRRemotePublishedArticle.h"
 #import "PRRemotePointer.h"
 #import "PRUploadMediaOperation.h"
-#import "PRLocalArticle.h"
 #import "PRConstants.h"
 
 #import "PRLocalDataStore.h"
@@ -394,7 +393,38 @@ static NSString * const kCoreArticleTable = @"Article";
     }
 }
 
-- (void)loadDataFromUrl:(NSURL *)url completion:(void (^)(NSData *, NSError *))completion
+- (void)loadThumbnailForMedia:(Media *)media completion:(void(^)(UIImage *image, NSError *error))completion
+{
+    [self loadDataFromUrl:[NSURL URLWithString:media.thumbnailURL] completion:^(NSData *data, NSError *error) {
+        if (!error) {
+            Media *bgMedia = [self madiaForBGWithId:media.remoteIdentifier];
+            bgMedia.thumbnail = data;
+            [[PRLocalDataStore sharedInstance] saveBackgroundContext];
+            if (completion) {
+                completion([UIImage imageWithData:data], nil);
+            }
+        } else if (completion) {
+            completion(nil, error);
+        }
+    }];
+}
+- (void)loadContentForMedia:(Media *)media completion:(void(^)(UIImage *image, NSError *error))completion
+{
+    [self loadDataFromUrl:[NSURL URLWithString:media.mediaURL] completion:^(NSData *data, NSError *error) {
+        if (!error) {
+            Media *bgMedia = [self madiaForBGWithId:media.remoteIdentifier];
+            bgMedia.image = data;
+            [[PRLocalDataStore sharedInstance] saveBackgroundContext];
+            if (completion) {
+                completion([UIImage imageWithData:data], nil);
+            }
+        } else if (completion) {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void)loadDataFromUrl:(NSURL *)url completion:(void (^)(NSData *data, NSError *error))completion
 {
     [self.downloadQueue addOperationWithBlock:^{
         dispatch_group_t downloadGroup = dispatch_group_create();
@@ -414,11 +444,11 @@ static NSString * const kCoreArticleTable = @"Article";
     }];
 }
 
-- (void)loadMediaForArticle:(PRLocalArticle *)localArticle completion:(void(^)(NSArray<PRLocalMedia *> *mediaArray, NSError *error))completion
+- (void)loadMediaForArticle:(Article *)localArticle completion:(void(^)(NSArray<Media *> *mediaArray, NSError *error))completion
 {
-    [[PRNetworkDataProvider sharedInstance] requestMediaForArticleWithId:localArticle.objectId success:^(NSData *data, NSURLResponse *response) {
+    [[PRNetworkDataProvider sharedInstance] requestMediaForArticleWithId:localArticle.remoteIdentifier success:^(NSData *data, NSURLResponse *response) {
         if (completion) {
-            completion([self localMediaFromResponseData:data forArticleWithId:localArticle.objectId], nil);
+            completion([self localMediaFromResponseData:data forArticleWithId:localArticle.remoteIdentifier], nil);
         }
     } failure:^(NSError *error) {
         if (completion) {
@@ -431,7 +461,10 @@ static NSString * const kCoreArticleTable = @"Article";
 {
     [[PRNetworkDataProvider sharedInstance] requestAllMyArticlesWithSuccess:^(NSData *data, NSURLResponse *response) {
         if (completion) {
-            completion([self localArticlesFromResponseData:data], nil);
+            NSArray *result = [[self localArticlesFromResponseData:data] sortedArrayUsingComparator:^NSComparisonResult(Article *obj1, Article *obj2) {
+                return [obj2.createdDate compare:obj1.createdDate];
+            }];
+            completion(result, nil);
         }
     } failure:^(NSError *error) {
         if (completion) {
@@ -444,7 +477,10 @@ static NSString * const kCoreArticleTable = @"Article";
 {
     [[PRNetworkDataProvider sharedInstance] requestFavoriteArticlesWithSuccess:^(NSData *data, NSURLResponse *response) {
         if (completion) {
-            completion([self localArticlesFromResponseData:data], nil);
+            NSArray *result = [[self localArticlesFromResponseData:data] sortedArrayUsingComparator:^NSComparisonResult(Article *obj1, Article *obj2) {
+                return [obj2.createdDate compare:obj1.createdDate];
+            }];
+            completion(result, nil);
         }
     } failure:^(NSError *error) {
         if (completion) {
@@ -453,9 +489,9 @@ static NSString * const kCoreArticleTable = @"Article";
     }];
 }
 
-- (void)addArticleToFavorite:(PRLocalArticle *)article success:(void(^)(NSError *error))completion
+- (void)addArticleToFavorite:(Article *)article success:(void(^)(NSError *error))completion
 {
-    [[PRNetworkDataProvider sharedInstance] requestAddArticleToFavorite:article.objectId success:^(NSData *data, NSURLResponse *response) {
+    [[PRNetworkDataProvider sharedInstance] requestAddArticleToFavorite:article.remoteIdentifier success:^(NSData *data, NSURLResponse *response) {
         if (completion) {
             completion(nil);
         }
@@ -466,9 +502,9 @@ static NSString * const kCoreArticleTable = @"Article";
     }];
 }
 
-- (void)remoteArticleFromFavorite:(PRLocalArticle *)article success:(void(^)(NSError *error))completion
+- (void)remoteArticleFromFavorite:(Article *)article success:(void(^)(NSError *error))completion
 {
-    [[PRNetworkDataProvider sharedInstance] requestRemoveArticleFromFavorite:article.objectId success:^(NSData *data, NSURLResponse *response) {
+    [[PRNetworkDataProvider sharedInstance] requestRemoveArticleFromFavorite:article.remoteIdentifier success:^(NSData *data, NSURLResponse *response) {
         if (completion) {
             completion(nil);
         }
@@ -479,7 +515,7 @@ static NSString * const kCoreArticleTable = @"Article";
     }];
 }
 
-- (void)likeArticle:(PRLocalArticle *)article success:(void(^)(NSError *error))completion
+- (void)likeArticle:(Article *)article success:(void(^)(NSError *error))completion
 {
     [[PRNetworkDataProvider sharedInstance] requestLikeArticle:article success:^(NSData *data, NSURLResponse *response) {
         if (completion) {
@@ -492,7 +528,7 @@ static NSString * const kCoreArticleTable = @"Article";
     }];
 }
 
-- (void)dislikeArticle:(PRLocalArticle *)article success:(void(^)(NSError *error))completion
+- (void)dislikeArticle:(Article *)article success:(void(^)(NSError *error))completion
 {
     [[PRNetworkDataProvider sharedInstance] requestDislikeArticle:article success:^(NSData *data, NSURLResponse *response) {
         if (completion) {
@@ -524,7 +560,7 @@ static NSString * const kCoreArticleTable = @"Article";
     [[PRNetworkDataProvider sharedInstance] requestHotArticlesWithCategoriesIds:[self categoriesIdsFrom:[self.currentUser.interests allObjects]] minRating:NSIntegerMax from:_hotArticleCount step:kFetchLimith locations:[self.currentUser.locations allObjects] success:^(NSData *data, NSURLResponse *response) {
         NSArray *articles = [self localArticlesFromResponseData:data];
         _hotArticleCount +=[articles count];
-        _minRatingArticle = [(PRLocalArticle *)[articles lastObject] rating];
+        _minRatingArticle = [[(Article *)[articles lastObject] rating] integerValue];
         if (completion) {
             completion(articles ,nil);
         }
@@ -552,7 +588,9 @@ static NSString * const kCoreArticleTable = @"Article";
         _newArticlesCount = 0;
     }
     [[PRNetworkDataProvider sharedInstance] requestNewArticlesWithCategoriesIds:[self categoriesIdsFrom:[self.currentUser.interests allObjects]] lastDate:_newArticleRequestTime form:_newArticlesCount step:kFetchLimith locations:[self.currentUser.locations allObjects] success:^(NSData *data, NSURLResponse *response) {
-        NSArray *articles = [self localArticlesFromResponseData:data];
+        NSArray *articles = [[self localArticlesFromResponseData:data] sortedArrayUsingComparator:^NSComparisonResult(Article *obj1, Article *obj2) {
+            return [obj2.createdDate compare:obj1.createdDate];
+        }];
         _newArticlesCount += [articles count];
         if (completion) {
             completion(articles ,nil);
@@ -705,24 +743,32 @@ static NSString * const kCoreArticleTable = @"Article";
 {
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     NSArray *results = [PRRemoteResults resultsWithData:json contentType:[PRRemoteArticle class]];
-    NSMutableArray *localResults = [[NSMutableArray alloc] initWithCapacity:[results count]];
+    [self updateArticles:results];
+    
+    NSMutableSet *ids = [NSMutableSet new];
     for (PRRemoteArticle *article in results) {
-        [localResults addObject:[[PRLocalArticle alloc] initWithRemoteArticle:article]];
+        [ids addObject:article.objectId];
     }
-    return localResults;
+    
+    __block NSArray *articles = nil;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        articles = [[self localArticlesWithIds:ids] sortedArrayUsingComparator:^NSComparisonResult(Article *obj1, Article *obj2) {
+            return [obj2.rating compare:obj1.rating];
+        }];
+    });
+    
+    return articles;
 }
 
 - (NSArray *)localMediaFromResponseData:(NSData *)data forArticleWithId:(NSString *)articleId
 {
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     NSArray *results = [PRRemoteResults resultsWithData:json contentType:[PRRemoteMedia class]];
-    NSMutableArray *localResults = [[NSMutableArray alloc] initWithCapacity:[results count]];
-    for (PRRemoteMedia *rMedia in results) {
-        [localResults addObject:[[PRLocalMedia alloc] initWithRemoteMedia:rMedia]];
-    }
-    
-    
-    
+    [self updateMediaForArticleWithId:articleId newMedia:results];
+    __block NSArray *localResults = nil;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        localResults = [self localMediaForArticleWithId:articleId];
+    });
     return localResults;
 }
 
@@ -1015,7 +1061,7 @@ static NSString * const kCoreArticleTable = @"Article";
         localArticle.category = category;
     }
     
-    if (![localArticle.location.title isEqualToString:remoteArticle.location.title]) {
+    if (remoteArticle.location.title && ![localArticle.location.title isEqualToString:remoteArticle.location.title]) {
         GeoPoint *geoPoint = [NSEntityDescription insertNewObjectForEntityForName:kCoreGeoPointTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
         geoPoint.title = remoteArticle.location.title;
         geoPoint.longitude = @(remoteArticle.location.longitude);
@@ -1029,6 +1075,7 @@ static NSString * const kCoreArticleTable = @"Article";
         media.contentType = remoteArticle.image.contentType;
         media.thumbnailURL = [remoteArticle.image.thumbnailFile.url absoluteString];
         media.mediaURL = [remoteArticle.image.mediaFile.url absoluteString];
+        localArticle.image = media;
     }
 }
 
@@ -1064,6 +1111,28 @@ static NSString * const kCoreArticleTable = @"Article";
     }
     
     [[PRLocalDataStore sharedInstance] saveBackgroundContext];
+}
+
+- (NSArray<Article *> *)localArticlesWithIds:(NSSet<NSString *> *)ids
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreArticleTable];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier IN %@", ids]];
+    return [[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:nil];
+}
+
+- (NSArray<Media *> *)localMediaForArticleWithId:(NSString *)articleId
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kArticleClassName];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", articleId]];
+    Article *article = [[[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:nil] firstObject];
+    return [article.media allObjects];
+}
+
+- (Media *)madiaForBGWithId:(NSString *)identifier
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreMediaTable];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", identifier]];
+    return [[[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:nil] firstObject];
 }
 
 @end

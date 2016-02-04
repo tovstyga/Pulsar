@@ -6,7 +6,7 @@
 //  Copyright © 2016 TAB. All rights reserved.
 //
 
-#import "PRLocalArticle.h"
+#import "Article.h"
 
 typedef NS_ENUM(NSUInteger, PRFeedType) {
     PRFeedTypeNew,
@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, PRFeedType) {
 
 - (NSInteger)numberOfItemsInSection:(NSInteger)section;
 
-- (PRLocalArticle *)articleAtIndex:(NSInteger)index inSection:(NSInteger)section;
+- (Article *)articleAtIndex:(NSInteger)index inSection:(NSInteger)section;
 
 - (NSString *)titleForHeaderInSection:(NSInteger)section;
 

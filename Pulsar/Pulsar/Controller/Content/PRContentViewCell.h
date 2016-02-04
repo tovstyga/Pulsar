@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PRLocalArticle.h"
+#import "Article.h"
 
 @interface PRContentViewCell : UITableViewCell
 
-@property (strong, nonatomic) PRLocalArticle *article;
+@property (strong, nonatomic) Article *article;
 
 @end

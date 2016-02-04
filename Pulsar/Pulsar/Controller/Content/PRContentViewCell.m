@@ -48,22 +48,21 @@
 
 #pragma mark - Accessors
 
-- (void)setArticle:(PRLocalArticle *)article
+- (void)setArticle:(Article *)article
 {
     _article = article;
     if (article.image.thumbnail) {
-        [self.cellImage setImage:article.image.thumbnail];
+        [self.cellImage setImage:[UIImage imageWithData:article.image.thumbnail]];
     } else {
         [self.cellImage setImage:[UIImage imageNamed:@"Pulse-icon"]];
-        if (article.image.thumbnailUrl) {
+        if (article.image.thumbnailURL) {
             __weak typeof(self) wSelf = self;
-            [[PRDataProvider sharedInstance] loadDataFromUrl:article.image.thumbnailUrl completion:^(NSData *data, NSError *error) {
+            [[PRDataProvider sharedInstance] loadThumbnailForMedia:article.image completion:^(UIImage *image, NSError *error) {
                 if (!error) {
-                    article.image.thumbnail = [UIImage imageWithData:data];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         __strong typeof(wSelf) sSelf = wSelf;
                         if (sSelf) {
-                            [sSelf.cellImage setImage:article.image.thumbnail];
+                            [sSelf.cellImage setImage:image];
                         }
                     });
                 }
@@ -72,8 +71,8 @@
     }
     self.cellTitle.text = article.title;
     self.cellText.text = article.annotation;
-    self.cellCategory.text = article.category.title;
-    self.ratingLabel.text = [NSString stringWithFormat:@"%ld", (long)article.rating];
+    self.cellCategory.text = article.category.name;
+    self.ratingLabel.text = [NSString stringWithFormat:@"%ld", (long)[article.rating integerValue]];
 }
 
 #pragma mark - Actions

@@ -7,10 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PRLocalCategory.h"
-#import "PRLocalGeoPoint.h"
 #import "PRLocalNewArticle.h"
-#import "PRLocalArticle.h"
 #import "PRArticleCollection.h"
 
 //core data
@@ -41,7 +38,9 @@
 
 - (void)resumeSession:(void(^)(BOOL success))completion;
 
-- (void)loadDataFromUrl:(NSURL *)url completion:(void(^)(NSData *data, NSError *error))completion;
+- (void)loadThumbnailForMedia:(Media *)media completion:(void(^)(UIImage *image, NSError *error))completion;
+
+- (void)loadContentForMedia:(Media *)media completion:(void(^)(UIImage *image, NSError *error))completion;
 
 //categories
 
@@ -75,19 +74,19 @@
 
 - (void)publishNewArticle:(PRLocalNewArticle *)localArticle completion:(void(^)(NSError *error))completion;
 
-- (void)loadMediaForArticle:(PRLocalArticle *)localArticle completion:(void(^)(NSArray<PRLocalMedia *> *mediaArray, NSError *error))completion;
+- (void)loadMediaForArticle:(Article *)localArticle completion:(void(^)(NSArray<Media *> *mediaArray, NSError *error))completion;
 
 - (void)allMyArticles:(void(^)(NSArray *articles, NSError *error))completion;
 
 - (void)favoriteArticles:(void(^)(NSArray *articles, NSError *error))completion;
 
-- (void)addArticleToFavorite:(PRLocalArticle *)article success:(void(^)(NSError *error))completion;
+- (void)addArticleToFavorite:(Article *)article success:(void(^)(NSError *error))completion;
 
-- (void)remoteArticleFromFavorite:(PRLocalArticle *)article success:(void(^)(NSError *error))completion;
+- (void)remoteArticleFromFavorite:(Article *)article success:(void(^)(NSError *error))completion;
 
-- (void)likeArticle:(PRLocalArticle *)article success:(void(^)(NSError *error))completion;
+- (void)likeArticle:(Article *)article success:(void(^)(NSError *error))completion;
 
-- (void)dislikeArticle:(PRLocalArticle *)article success:(void(^)(NSError *error))completion;
+- (void)dislikeArticle:(Article *)article success:(void(^)(NSError *error))completion;
 
 //articles part request
 
