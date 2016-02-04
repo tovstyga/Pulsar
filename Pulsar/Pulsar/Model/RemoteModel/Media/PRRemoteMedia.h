@@ -20,6 +20,7 @@ typedef NS_ENUM(NSUInteger, PRRemoteMediaType) {
 
 @property (strong, nonatomic) PRRemotePointer *articlePointer;
 
+@property (strong, nonatomic, readonly) NSString *objectId;
 @property (strong, nonatomic, readonly) NSString *contentType;
 @property (strong, nonatomic, readonly) PRRemoteFile *mediaFile;
 @property (strong, nonatomic, readonly) PRRemoteFile *thumbnailFile;

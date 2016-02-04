@@ -28,6 +28,7 @@
     self = [super init];
     if (self && [jsonCompatableOblect isKindOfClass:[NSDictionary class]]) {
         NSDictionary *source = (NSDictionary *)jsonCompatableOblect;
+        _objectId = [source objectForKey:@"objectId"];
         _contentType = [source objectForKey:@"contentType"];
         _thumbnailFile = [[PRRemoteFile alloc] initWithJSON:[source objectForKey:@"thumbnail"]];
         _mediaFile = [[PRRemoteFile alloc] initWithJSON:[source objectForKey:@"content"]];

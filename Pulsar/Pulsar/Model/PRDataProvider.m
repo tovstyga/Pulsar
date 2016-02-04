@@ -418,7 +418,7 @@ static NSString * const kCoreArticleTable = @"Article";
 {
     [[PRNetworkDataProvider sharedInstance] requestMediaForArticleWithId:localArticle.objectId success:^(NSData *data, NSURLResponse *response) {
         if (completion) {
-            completion([self localMediaFromResponseData:data], nil);
+            completion([self localMediaFromResponseData:data forArticleWithId:localArticle.objectId], nil);
         }
     } failure:^(NSError *error) {
         if (completion) {
@@ -712,7 +712,7 @@ static NSString * const kCoreArticleTable = @"Article";
     return localResults;
 }
 
-- (NSArray *)localMediaFromResponseData:(NSData *)data
+- (NSArray *)localMediaFromResponseData:(NSData *)data forArticleWithId:(NSString *)articleId
 {
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     NSArray *results = [PRRemoteResults resultsWithData:json contentType:[PRRemoteMedia class]];
@@ -720,6 +720,9 @@ static NSString * const kCoreArticleTable = @"Article";
     for (PRRemoteMedia *rMedia in results) {
         [localResults addObject:[[PRLocalMedia alloc] initWithRemoteMedia:rMedia]];
     }
+    
+    
+    
     return localResults;
 }
 
@@ -944,6 +947,120 @@ static NSString * const kCoreArticleTable = @"Article";
             [newGeoPoints addObject:point];
         }
         [user addLocations:newGeoPoints];
+    }
+    
+    [[PRLocalDataStore sharedInstance] saveBackgroundContext];
+}
+
+- (void)updateArticles:(NSArray<PRRemoteArticle *> *)remoteArticle
+{
+    NSMutableArray *articlesForCreate = [[NSMutableArray alloc] initWithArray:remoteArticle];
+    NSMutableSet *ids = [NSMutableSet new];
+    for (PRRemoteArticle *article in remoteArticle) {
+        [ids addObject:article.objectId];
+    }
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreArticleTable];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier IN %@", ids]];
+    NSArray *existsArticles = [[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:nil];
+    
+    for (Article *article in existsArticles) {
+        for (PRRemoteArticle *rArticle in remoteArticle) {
+            if ([article.remoteIdentifier isEqualToString:rArticle.objectId]) {
+                [articlesForCreate removeObject:rArticle];
+                [self updateArticle:article newData:rArticle];
+            }
+        }
+    }
+    
+    for (PRRemoteArticle *article in articlesForCreate) {
+        Article *newArticle = [NSEntityDescription insertNewObjectForEntityForName:kCoreArticleTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
+        [self updateArticle:newArticle newData:article];
+    }
+    
+    [[PRLocalDataStore sharedInstance] saveBackgroundContext];
+}
+
+- (void)updateArticle:(Article *)localArticle newData:(PRRemoteArticle *)remoteArticle
+{
+    localArticle.annotation = remoteArticle.annotation;
+    localArticle.author = remoteArticle.author;
+    
+    localArticle.canLike = @(YES);
+    for (NSString *likers in remoteArticle.likes) {
+        if ([likers isEqualToString:self.currentUser.remoteIdentifier]) {
+            localArticle.canLike = @(NO);
+            break;
+        }
+    }
+    
+    localArticle.canDislike = @(YES);
+    for (NSString *dislikers in remoteArticle.disLikes) {
+        if ([dislikers isEqualToString:self.currentUser.remoteIdentifier]) {
+            localArticle.canDislike = @(NO);
+            break;
+        }
+    }
+    
+    localArticle.createdDate = remoteArticle.createdAt;
+    localArticle.rating = @(remoteArticle.rating);
+    localArticle.remoteIdentifier = remoteArticle.objectId;
+    localArticle.text = remoteArticle.text;
+    localArticle.title = remoteArticle.title;
+    
+    if (![localArticle.category.remoteIdentifier isEqualToString:remoteArticle.category.objectId]) {
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreInterestCategoryTable];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", remoteArticle.category.objectId]];
+        InterestCategory *category = [[[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:nil] firstObject];
+        localArticle.category = category;
+    }
+    
+    if (![localArticle.location.title isEqualToString:remoteArticle.location.title]) {
+        GeoPoint *geoPoint = [NSEntityDescription insertNewObjectForEntityForName:kCoreGeoPointTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
+        geoPoint.title = remoteArticle.location.title;
+        geoPoint.longitude = @(remoteArticle.location.longitude);
+        geoPoint.latitude = @(remoteArticle.location.latitude);
+        localArticle.location = geoPoint;
+    }
+    
+    if (![localArticle.image.remoteIdentifier isEqualToString:remoteArticle.image.objectId]) {
+        Media *media = [NSEntityDescription insertNewObjectForEntityForName:kCoreMediaTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
+        media.remoteIdentifier = remoteArticle.image.objectId;
+        media.contentType = remoteArticle.image.contentType;
+        media.thumbnailURL = [remoteArticle.image.thumbnailFile.url absoluteString];
+        media.mediaURL = [remoteArticle.image.mediaFile.url absoluteString];
+    }
+}
+
+- (void)updateMediaForArticleWithId:(NSString *)remoteIdentifier newMedia:(NSArray<PRRemoteMedia *> *)remoteMedia
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreArticleTable];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", remoteIdentifier]];
+    Article *article = [[[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:nil] firstObject];
+    
+    NSMutableArray *mediaForRemove = [[NSMutableArray alloc] initWithArray:[article.media allObjects]];
+    NSMutableArray *mediaForAdd = [[NSMutableArray alloc] initWithArray:remoteMedia];
+    
+    for (Media *lMedia in article.media) {
+        for (PRRemoteMedia *rMedia in remoteMedia) {
+            if ([lMedia.remoteIdentifier isEqualToString:rMedia.objectId]) {
+                [mediaForRemove removeObject:lMedia];
+                [mediaForAdd removeObject:rMedia];
+            }
+        }
+    }
+    
+    if ([mediaForRemove count]) {
+        [article removeMedia:[NSSet setWithArray:mediaForRemove]];
+    }
+    
+    for (PRRemoteMedia *media in mediaForAdd) {
+        Media *newMedia = [NSEntityDescription insertNewObjectForEntityForName:kCoreMediaTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
+        newMedia.thumbnailURL = [media.thumbnailFile.url absoluteString];
+        newMedia.mediaURL = [media.mediaFile.url absoluteString];
+        newMedia.contentType = media.contentType;
+        newMedia.remoteIdentifier = media.objectId;
+        [article addMediaObject:newMedia];
     }
     
     [[PRLocalDataStore sharedInstance] saveBackgroundContext];
