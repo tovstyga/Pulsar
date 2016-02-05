@@ -517,7 +517,10 @@ static NSString * const kCoreArticleTable = @"Article";
 
 - (void)likeArticle:(Article *)article success:(void(^)(NSError *error))completion
 {
-    [[PRNetworkDataProvider sharedInstance] requestLikeArticle:article success:^(NSData *data, NSURLResponse *response) {
+    article.canLike = @(NO);
+    article.canDislike = @(YES);
+    article.rating = @([article.rating integerValue] + 1);
+    [[PRNetworkDataProvider sharedInstance] requestLikeArticle:article.remoteIdentifier success:^(NSData *data, NSURLResponse *response) {
         if (completion) {
             completion(nil);
         }
@@ -530,7 +533,10 @@ static NSString * const kCoreArticleTable = @"Article";
 
 - (void)dislikeArticle:(Article *)article success:(void(^)(NSError *error))completion
 {
-    [[PRNetworkDataProvider sharedInstance] requestDislikeArticle:article success:^(NSData *data, NSURLResponse *response) {
+    article.canLike = @(YES);
+    article.canDislike = @(NO);
+    article.rating = @([article.rating integerValue] - 1);
+    [[PRNetworkDataProvider sharedInstance] requestDislikeArticle:article.remoteIdentifier success:^(NSData *data, NSURLResponse *response) {
         if (completion) {
             completion(nil);
         }

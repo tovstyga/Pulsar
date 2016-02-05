@@ -9,6 +9,12 @@
 #import "PRContentViewCell.h"
 #import "PRDataProvider.h"
 
+typedef NS_ENUM(NSUInteger, PRLikeState) {
+    PRLikeStateLiked,
+    PRLikeStateDisliked,
+    PRLikeStateUnknown
+};
+
 @interface PRContentViewCell()
 
 @property (weak, nonatomic) IBOutlet UIImageView *cellImage;
@@ -32,6 +38,7 @@
 
 @implementation PRContentViewCell{
     BOOL _sharingOpened;
+    PRLikeState _likeState;
 }
 
 - (void)awakeFromNib {
@@ -76,6 +83,14 @@
     self.ratingLabel.text = [NSString stringWithFormat:@"%ld", (long)[article.rating integerValue]];
     self.upButton.enabled = [article.canLike boolValue];
     self.downButton.enabled = [article.canDislike boolValue];
+    
+    if (self.upButton.enabled && self.downButton.enabled) {
+        _likeState = PRLikeStateUnknown;
+    } else if (self.upButton.enabled && !self.downButton.enabled) {
+        _likeState = PRLikeStateDisliked;
+    } else if (!self.upButton.enabled && self.downButton.enabled) {
+        _likeState = PRLikeStateLiked;
+    }
 }
 
 #pragma mark - Actions
@@ -104,12 +119,30 @@
 
 - (IBAction)upRating:(UIButton *)sender
 {
+    if (_likeState == PRLikeStateUnknown) {
+        self.upButton.enabled = NO;
+        _likeState = PRLikeStateLiked;
+    } else if (_likeState == PRLikeStateDisliked) {
+        _likeState = PRLikeStateUnknown;
+        self.downButton.enabled = YES;
+    }
     
+    [[PRDataProvider sharedInstance] likeArticle:self.article success:nil];
+    self.ratingLabel.text = [NSString stringWithFormat:@"%ld", (long)[self.article.rating integerValue]];
 }
 
 - (IBAction)downRating:(UIButton *)sender
 {
-
+    if (_likeState == PRLikeStateUnknown) {
+        self.downButton.enabled = NO;
+        _likeState = PRLikeStateDisliked;
+    } else if (_likeState == PRLikeStateLiked) {
+        _likeState = PRLikeStateUnknown;
+        self.upButton.enabled = YES;
+    }
+    
+    [[PRDataProvider sharedInstance] dislikeArticle:self.article success:nil];
+    self.ratingLabel.text = [NSString stringWithFormat:@"%ld", (long)[self.article.rating integerValue]];
 }
 
 

@@ -583,11 +583,11 @@ static PRNetworkDataProvider *sharedInstance;
     }
 }
 
-- (void)requestLikeArticle:(PRLocalArticle *)article success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+- (void)requestLikeArticle:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
 {
     if ([self isNetworkAvailable:failure]) {
         NSMutableURLRequest *request = [self requestForType:PRRequestTypeBatch];
-        NSData *body = [NSJSONSerialization dataWithJSONObject:[self queryLikeArticle:article] options:NSJSONWritingPrettyPrinted error:nil];
+        NSData *body = [NSJSONSerialization dataWithJSONObject:[self queryLikeArticle:articleId] options:NSJSONWritingPrettyPrinted error:nil];
         [request setHTTPBody:body];
         [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
             if (error && failure) {
@@ -599,11 +599,11 @@ static PRNetworkDataProvider *sharedInstance;
     }
 }
 
-- (void)requestDislikeArticle:(PRLocalArticle *)article success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
+- (void)requestDislikeArticle:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure
 {
     if ([self isNetworkAvailable:failure]) {
         NSMutableURLRequest *request = [self requestForType:PRRequestTypeBatch];
-        NSData *body = [NSJSONSerialization dataWithJSONObject:[self queryDislikeArticle:article] options:NSJSONWritingPrettyPrinted error:nil];
+        NSData *body = [NSJSONSerialization dataWithJSONObject:[self queryDislikeArticle:articleId] options:NSJSONWritingPrettyPrinted error:nil];
         [request setHTTPBody:body];
         [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
             if (error && failure) {
@@ -940,37 +940,16 @@ static PRNetworkDataProvider *sharedInstance;
     return [[PRRemoteQuery sharedInstance] batchQueryWithObjects:batchObjects];
 }
 
-- (NSDictionary *)queryLikeArticle:(PRLocalArticle *)article
+- (NSDictionary *)queryLikeArticle:(NSString *)articleId
 {
     NSMutableArray *batchObjects = [NSMutableArray new];
-    NSString *targetObject = [NSString stringWithFormat:@"Article/%@", article.objectId];
-    __block PRRemoteArray *remove = nil;
-    __block BOOL containsThisObject = NO;
+    NSString *targetObject = [NSString stringWithFormat:@"Article/%@", articleId];
     
-    [article.likes enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isEqualToString:self.currentUser]) {
-            containsThisObject = YES;
-            *stop = YES;
-        }
-    }];
+    PRRemoteArray *remove = [[PRRemoteArray alloc] initWithField:@"dislikes" action:PRRemoteArrayActionRemove objects:@[self.currentUser]];
+    PRRemoteArray *add = [[PRRemoteArray alloc] initWithField:@"likes" action:PRRemoteArrayActionAddUnique objects:@[self.currentUser]];
     
-    if (containsThisObject) {
-        return nil;
-    }
-    
-    [article.disLikes enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isEqualToString:self.currentUser]) {
-            remove = [[PRRemoteArray alloc] initWithField:@"dislikes" action:PRRemoteArrayActionRemove objects:@[self.currentUser]];
-            *stop = YES;
-        }
-    }];
-    
-    if (!remove) {
-         PRRemoteArray *add = [[PRRemoteArray alloc] initWithField:@"likes" action:PRRemoteArrayActionAddUnique objects:@[self.currentUser]];
-        [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:[add toJSONCompatable]]];
-    } else {
-        [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:[remove toJSONCompatable]]];
-    }
+    [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:[add toJSONCompatable]]];
+    [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:[remove toJSONCompatable]]];
     
     NSDictionary *incrementQuery = [[PRRemoteQuery sharedInstance] incrementField:@"rating"];
     [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:incrementQuery]];
@@ -978,37 +957,16 @@ static PRNetworkDataProvider *sharedInstance;
     return [[PRRemoteQuery sharedInstance] batchQueryWithObjects:batchObjects];
 }
 
-- (NSDictionary *)queryDislikeArticle:(PRLocalArticle *)article
+- (NSDictionary *)queryDislikeArticle:(NSString *)articleId
 {
     NSMutableArray *batchObjects = [NSMutableArray new];
-    NSString *targetObject = [NSString stringWithFormat:@"Article/%@", article.objectId];
-    __block PRRemoteArray *remove = nil;
-    __block BOOL containsThisObject = NO;
+    NSString *targetObject = [NSString stringWithFormat:@"Article/%@", articleId];
     
-    [article.disLikes enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isEqualToString:self.currentUser]) {
-            containsThisObject = YES;
-            *stop = YES;
-        }
-    }];
-    
-    if (containsThisObject) {
-        return nil;
-    }
-    
-    [article.likes enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isEqualToString:self.currentUser]) {
-            remove = [[PRRemoteArray alloc] initWithField:@"likes" action:PRRemoteArrayActionRemove objects:@[self.currentUser]];
-            *stop = YES;
-        }
-    }];
-    
-    if (!remove) {
-        PRRemoteArray *add = [[PRRemoteArray alloc] initWithField:@"dislikes" action:PRRemoteArrayActionAddUnique objects:@[self.currentUser]];
-        [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:[add toJSONCompatable]]];
-    } else {
-        [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:[remove toJSONCompatable]]];
-    }
+    PRRemoteArray *remove = remove = [[PRRemoteArray alloc] initWithField:@"likes" action:PRRemoteArrayActionRemove objects:@[self.currentUser]];
+   
+    PRRemoteArray *add = [[PRRemoteArray alloc] initWithField:@"dislikes" action:PRRemoteArrayActionAddUnique objects:@[self.currentUser]];
+    [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:[add toJSONCompatable]]];
+    [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:[remove toJSONCompatable]]];
     
     NSDictionary *decrementQuery = [[PRRemoteQuery sharedInstance] decrementField:@"rating"];
     [batchObjects addObject:[[PRRemoteBatchRequestObject alloc] initWithMethod:kHTTPMethodPUT targetClass:targetObject body:decrementQuery]];

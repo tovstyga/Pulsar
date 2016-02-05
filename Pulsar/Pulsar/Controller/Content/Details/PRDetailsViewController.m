@@ -12,6 +12,12 @@
 #import "Media.h"
 #import "InterestCategory.h"
 
+typedef NS_ENUM(NSUInteger, PRLikeState) {
+    PRLikeStateLiked,
+    PRLikeStateDisliked,
+    PRLikeStateUnknown
+};
+
 @interface PRDetailsViewController() <PRImagePresenterDataSource>
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -34,6 +40,7 @@
 
 @implementation PRDetailsViewController{
     NSInteger _selectedImageIndex;
+    PRLikeState _likeState;
 }
 
 static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_identifier";
@@ -77,6 +84,14 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
             });
         }
     }];
+    
+    if (self.upButton.enabled && self.downButton.enabled) {
+        _likeState = PRLikeStateUnknown;
+    } else if (self.upButton.enabled && !self.downButton.enabled) {
+        _likeState = PRLikeStateDisliked;
+    } else if (!self.upButton.enabled && self.downButton.enabled) {
+        _likeState = PRLikeStateLiked;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -100,12 +115,30 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
 
 - (IBAction)upRationgAction:(UIButton *)sender
 {
+    if (_likeState == PRLikeStateUnknown) {
+        self.upButton.enabled = NO;
+        _likeState = PRLikeStateLiked;
+    } else if (_likeState == PRLikeStateDisliked) {
+        _likeState = PRLikeStateUnknown;
+        self.downButton.enabled = YES;
+    }
     
+    [self.interactor likeArticle:self.article completion:nil];
+    self.rating.text = [NSString stringWithFormat:@"%ld", (long)[self.article.rating integerValue]];
 }
 
 - (IBAction)downRatingAction:(UIButton *)sender
 {
-
+    if (_likeState == PRLikeStateUnknown) {
+        self.downButton.enabled = NO;
+        _likeState = PRLikeStateDisliked;
+    } else if (_likeState == PRLikeStateLiked) {
+        _likeState = PRLikeStateUnknown;
+        self.upButton.enabled = YES;
+    }
+    
+    [self.interactor dislikeArticle:self.article completion:nil];
+    self.rating.text = [NSString stringWithFormat:@"%ld", (long)[self.article.rating integerValue]];
 }
 
 #pragma mark - UICollectionViewDataSource

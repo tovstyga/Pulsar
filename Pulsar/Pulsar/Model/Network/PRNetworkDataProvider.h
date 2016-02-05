@@ -88,8 +88,8 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
 
 - (void)requestRemoveArticleFromFavorite:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
 
-- (void)requestLikeArticle:(PRLocalArticle *)article success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+- (void)requestLikeArticle:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
 
-- (void)requestDislikeArticle:(PRLocalArticle *)article success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
+- (void)requestDislikeArticle:(NSString *)articleId success:(PRNetworkSuccessBlock)success failure:(PRNetworkFailureBlock)failure;
 
 @end
