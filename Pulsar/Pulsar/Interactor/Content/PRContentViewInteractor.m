@@ -52,6 +52,25 @@
     }];
 }
 
+- (void)thumbnailForMedia:(Media *)media completion:(void(^)(UIImage *image, NSError *error))completion
+{
+    if (!media.thumbnailURL && completion) {
+        completion(nil, nil);
+    } else {
+        [[PRDataProvider sharedInstance] loadThumbnailForMedia:media completion:^(UIImage *image, NSError *error) {
+            if (!error) {
+                if (completion) {
+                    completion(image, error);
+                }
+            } else {
+                if (completion) {
+                    completion(nil, error);
+                }
+            }
+        }];
+    }
+}
+
 - (void)reloadDataWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
     switch (self.activeFeed) {
@@ -315,6 +334,37 @@
         default:
             return NO;
     }
+}
+
+- (void)likeArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion
+{
+    [[PRDataProvider sharedInstance] likeArticle:article success:^(NSError *error) {
+        if (completion) {
+            if (error) {
+                completion([PRErrorDescriptor descriptionForError:error]);
+            } else {
+                completion(nil);
+            }
+        }
+    }];
+}
+
+- (void)dislikeArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion
+{
+    [[PRDataProvider sharedInstance] dislikeArticle:article success:^(NSError *error) {
+        if (completion) {
+            if (error) {
+                completion([PRErrorDescriptor descriptionForError:error]);
+            } else {
+                completion(nil);
+            }
+        }
+    }];
+}
+
+- (void)addArticleToFavorite:(Article *)article
+{
+     [[PRDataProvider sharedInstance] addArticleToFavorite:article success:nil];
 }
 
 @end

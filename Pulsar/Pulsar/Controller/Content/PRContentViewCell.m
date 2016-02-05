@@ -7,7 +7,7 @@
 //
 
 #import "PRContentViewCell.h"
-#import "PRDataProvider.h"
+#import "InterestCategory.h"
 
 typedef NS_ENUM(NSUInteger, PRLikeState) {
     PRLikeStateLiked,
@@ -19,7 +19,7 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
 
 @property (weak, nonatomic) IBOutlet UIImageView *cellImage;
 @property (weak, nonatomic) IBOutlet UILabel *cellTitle;
-@property (weak, nonatomic) IBOutlet UITextView *cellText;
+@property (weak, nonatomic) IBOutlet UILabel *cellText;
 @property (weak, nonatomic) IBOutlet UILabel *cellCategory;
 
 @property (weak, nonatomic) IBOutlet UIButton *sharingTwitter;
@@ -33,6 +33,10 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *categoryToShareConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *categoryToTitleConstraint;
 @property (weak, nonatomic) IBOutlet UIStackView *sharingContainer;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleToTopLongConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleToTopShortConstraint;
+
 
 @end
 
@@ -62,9 +66,8 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
         [self.cellImage setImage:[UIImage imageWithData:article.image.thumbnail]];
     } else {
         [self.cellImage setImage:[UIImage imageNamed:@"Pulse-icon"]];
-        if (article.image.thumbnailURL) {
             __weak typeof(self) wSelf = self;
-            [[PRDataProvider sharedInstance] loadThumbnailForMedia:article.image completion:^(UIImage *image, NSError *error) {
+            [self.delegate thumbnailForMedia:self.article.image completion:^(UIImage *image, NSError *error) {
                 if (!error) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         __strong typeof(wSelf) sSelf = wSelf;
@@ -74,7 +77,6 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
                     });
                 }
             }];
-        }
     }
     self.sharingFavorite.enabled = YES;
     self.cellTitle.text = article.title;
@@ -91,6 +93,8 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
     } else if (!self.upButton.enabled && self.downButton.enabled) {
         _likeState = PRLikeStateLiked;
     }
+    [self showShare:NO animated:NO];
+    _sharingOpened = NO;
 }
 
 #pragma mark - Actions
@@ -103,18 +107,18 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
 
 - (IBAction)shareOnTwitter:(UIButton *)sender
 {
-
+    [self.delegate shareTwitter:self.article];
 }
 
 - (IBAction)shareOnFacebook:(UIButton *)sender
 {
-
+    [self.delegate shareFacebook:self.article];
 }
 
 - (IBAction)saveAsFavorite:(UIButton *)sender
 {
     self.sharingFavorite.enabled = NO;
-    [[PRDataProvider sharedInstance] addArticleToFavorite:self.article success:nil];
+    [self.delegate addArticleToFavorite:self.article];
 }
 
 - (IBAction)upRating:(UIButton *)sender
@@ -127,7 +131,7 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
         self.downButton.enabled = YES;
     }
     
-    [[PRDataProvider sharedInstance] likeArticle:self.article success:nil];
+    [self.delegate likeArticle:self.article];
     self.ratingLabel.text = [NSString stringWithFormat:@"%ld", (long)[self.article.rating integerValue]];
 }
 
@@ -141,7 +145,7 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
         self.upButton.enabled = YES;
     }
     
-    [[PRDataProvider sharedInstance] dislikeArticle:self.article success:nil];
+    [self.delegate dislikeArticle:self.article];
     self.ratingLabel.text = [NSString stringWithFormat:@"%ld", (long)[self.article.rating integerValue]];
 }
 
@@ -152,6 +156,10 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
 {
     self.categoryToShareConstraint.priority = show ? UILayoutPriorityDefaultHigh : UILayoutPriorityDefaultLow;
     self.categoryToTitleConstraint.priority = show ? UILayoutPriorityDefaultLow : UILayoutPriorityDefaultHigh;
+    
+    self.titleToTopLongConstraint.priority = show ? UILayoutPriorityDefaultLow : UILayoutPriorityDefaultHigh;
+    self.titleToTopShortConstraint.priority = show ? UILayoutPriorityDefaultHigh : UILayoutPriorityDefaultLow;
+    
     if (animated) {
         if (show) {
             [UIView animateWithDuration:0.3f animations:^{

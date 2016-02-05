@@ -10,8 +10,9 @@
 #import "PRScreenLock.h"
 #import "PRContentViewCell.h"
 #import "PRDetailsViewController.h"
+#import "PRSocialHelper.h"
 
-@interface PRContentViewController()<UITabBarDelegate>
+@interface PRContentViewController()<UITabBarDelegate, PRContentCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *menuTabBarButton;
@@ -78,6 +79,9 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     if (_isOpenedMenu) {
         [self toggleMenu];
     }
+    
+//    self.contentTableView.rowHeight = UITableViewAutomaticDimension;
+//    self.contentTableView.estimatedRowHeight = 300.0;
     
     [self refresh:nil];
 }
@@ -222,9 +226,16 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kContentCellIdentifier];
     if (!cell) {
         cell = [[PRContentViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kContentCellIdentifier];
+        [(PRContentViewCell *)cell setDelegate:self];
     }
-    [(PRContentViewCell *)cell setArticle:[self.interactor articleAtIndex:indexPath.row inSection:indexPath.section]];
+    [self setupCell:(PRContentViewCell *)cell atIndexPath:indexPath];
+    [(PRContentViewCell *)cell setDelegate:self];
     return cell;
+}
+
+- (void)setupCell:(PRContentViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    [cell setArticle:[self.interactor articleAtIndex:indexPath.row inSection:indexPath.section]];
 }
 
 #pragma mark - UITableViewDelegate
@@ -260,6 +271,53 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
             });
         }];
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    PRContentViewCell *cell = [self.contentTableView dequeueReusableCellWithIdentifier:kContentCellIdentifier];
+    [self setupCell:cell atIndexPath:indexPath];
+    
+    return [self calculateHeightForConfiguredSizingCell:cell];
+}
+
+- (CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell {
+    [sizingCell layoutIfNeeded];
+    
+    CGSize size = [sizingCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    return size.height;
+}
+
+#pragma merk - PRContentCellDelegate
+
+- (void)shareTwitter:(Article *)article
+{
+    [PRSocialHelper showTwitterShareDialogForArticle:article fromViewController:self];
+}
+
+- (void)shareFacebook:(Article *)article
+{
+    [PRSocialHelper showFacebookShareDialogForArticle:article fromViewController:self];
+}
+
+- (void)likeArticle:(Article *)article
+{
+    [self.interactor likeArticle:article completion:nil];
+}
+
+- (void)dislikeArticle:(Article *)article
+{
+    [self.interactor dislikeArticle:article completion:nil];
+}
+
+- (void)thumbnailForMedia:(Media *)media completion:(void(^)(UIImage *image, NSError *error))completion
+{
+    [self.interactor thumbnailForMedia:media completion:completion];
+}
+
+- (void)addArticleToFavorite:(Article *)article
+{
+    [self.interactor addArticleToFavorite:article];
 }
 
 #pragma mark - Internal

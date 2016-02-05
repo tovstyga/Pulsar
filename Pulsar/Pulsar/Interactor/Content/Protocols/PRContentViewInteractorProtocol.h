@@ -7,6 +7,7 @@
 //
 
 #import "Article.h"
+#import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSUInteger, PRFeedType) {
     PRFeedTypeNew,
@@ -19,6 +20,8 @@ typedef NS_ENUM(NSUInteger, PRFeedType) {
 @protocol PRContentViewInteractorProtocol <NSObject>
 
 @property (nonatomic) PRFeedType activeFeed;
+
+- (void)thumbnailForMedia:(Media *)media completion:(void(^)(UIImage *image, NSError *error))completion;
 
 - (void)logoutWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion;
 
@@ -37,5 +40,11 @@ typedef NS_ENUM(NSUInteger, PRFeedType) {
 - (BOOL)isDataAvailable;
 
 - (BOOL)canLoadMore;
+
+- (void)likeArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion;
+
+- (void)dislikeArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion;
+
+- (void)addArticleToFavorite:(Article *)article;
 
 @end
