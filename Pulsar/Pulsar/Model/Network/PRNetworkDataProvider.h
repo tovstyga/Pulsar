@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "PRJsonCompatable.h"
 #import "PRLocalArticle.h"
+#import <MapKit/MapKit.h>
 
 typedef void(^PRNetworkSuccessBlock)(NSData *data, NSURLResponse *response);
 typedef void(^PRNetworkFailureBlock)(NSError *error);
@@ -62,7 +63,7 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
                                minRating:(NSInteger)minRating
                                     from:(int)lastIndex
                                     step:(int)step
-                               locations:(NSArray *)locations
+                               locations:(CLLocationCoordinate2D)location
                                  success:(PRNetworkSuccessBlock)success
                                  failure:(PRNetworkFailureBlock)failure;
 
@@ -70,13 +71,13 @@ typedef void(^PRNetworkFailureBlock)(NSError *error);
                                 lastDate:(NSDate *)date
                                     form:(int)lastIndex
                                     step:(int)step
-                               locations:(NSArray *)locations
+                               locations:(CLLocationCoordinate2D)location
                                  success:(PRNetworkSuccessBlock)success
                                  failure:(PRNetworkFailureBlock)failure;
 
 - (void)requestTopArticlesWithCategoriesIds:(NSArray *)categoriesIds
                               beforeDate:(NSDate *)date
-                               locations:(NSArray *)locations
+                               locations:(CLLocationCoordinate2D)location
                                  success:(PRNetworkSuccessBlock)success
                                  failure:(PRNetworkFailureBlock)failure;
 

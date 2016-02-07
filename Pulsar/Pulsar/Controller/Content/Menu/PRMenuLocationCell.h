@@ -12,5 +12,6 @@
 @interface PRMenuLocationCell : UITableViewCell
 
 @property (strong, nonatomic) PRLocalGeoPoint *geoPoint;
+@property (nonatomic) BOOL checked;
 
 @end

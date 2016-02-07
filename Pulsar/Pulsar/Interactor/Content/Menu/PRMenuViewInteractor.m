@@ -200,8 +200,8 @@
 
 - (PRLocalGeoPoint *)locationForIndex:(NSInteger)index
 {
-    if (index > 0 && index <= [_editableLocations count]) {
-        return _editableLocations[index - 1];
+    if (index >= 0 && index < [_editableLocations count]) {
+        return _editableLocations[index];
     }
     return nil;
 }
@@ -209,7 +209,7 @@
 - (void)removeLocationAtIndex:(NSInteger)index
 {
     if (index > 0 && index <= [_editableLocations count]) {
-        [_editableLocations removeObjectAtIndex:(index - 1)];
+        [_editableLocations removeObjectAtIndex:(index - 2)];
     }
 
 }

@@ -16,4 +16,16 @@
     self.textLabel.text = geoPoint.title;
 }
 
+- (void)setChecked:(BOOL)checked
+{
+    _checked = checked;
+    self.accessoryType = checked ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+}
+
+- (void)setSelected:(BOOL)selected
+{
+    self.checked = selected;
+    [super setSelected:selected];
+}
+
 @end

@@ -14,6 +14,7 @@ static NSString * const kLocationChangedNotification = @"current_location_change
 @interface PRLocationManager : NSObject<CLLocationManagerDelegate>
 
 @property (strong, nonatomic, readonly) CLLocation *currentLocation;
+@property (nonatomic) CLLocationCoordinate2D selectedCoordinate;
 
 + (instancetype)sharedInstance;
 

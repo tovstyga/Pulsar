@@ -469,12 +469,12 @@ static PRNetworkDataProvider *sharedInstance;
                                minRating:(NSInteger)minRating
                                     from:(int)lastIndex
                                     step:(int)step
-                               locations:(NSArray *)locations
+                               locations:(CLLocationCoordinate2D)location
                                  success:(PRNetworkSuccessBlock)success
                                  failure:(PRNetworkFailureBlock)failure
 {
     if ([self isNetworkAvailable:failure]) {
-        NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:[self queryHotArticlesWithCategories:categoriesIds rating:minRating sortDescriptor:kHotOrder]];
+        NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:[self queryHotArticlesWithCategories:categoriesIds rating:minRating sortDescriptor:kHotOrder location:location]];
         if (step) {
             if (lastIndex >= 0) {
                 [params setObject:@(lastIndex) forKey:kPathParamSkip];
@@ -500,22 +500,22 @@ static PRNetworkDataProvider *sharedInstance;
                                 lastDate:(NSDate *)date
                                     form:(int)lastIndex
                                     step:(int)step
-                               locations:(NSArray *)locations
+                               locations:(CLLocationCoordinate2D)location
                                  success:(PRNetworkSuccessBlock)success
                                  failure:(PRNetworkFailureBlock)failure
 {
-    [self requestArticlesWithCategories:categoriesIds lastDate:date from:lastIndex step:step sortDescriptor:kNewOrder success:success failure:failure];
+    [self requestArticlesWithCategories:categoriesIds lastDate:date from:lastIndex step:step location:location sortDescriptor:kNewOrder success:success failure:failure];
 }
 
 - (void)requestTopArticlesWithCategoriesIds:(NSArray *)categoriesIds
                               beforeDate:(NSDate *)date
-                               locations:(NSArray *)locations
+                               locations:(CLLocationCoordinate2D)location
                                  success:(PRNetworkSuccessBlock)success
                                  failure:(PRNetworkFailureBlock)failure
 {
     if ([self isNetworkAvailable:failure]) {
         NSMutableURLRequest *request = [self requestForType:PRRequestTypeArticleWithQuery];
-        NSData *body = [NSJSONSerialization dataWithJSONObject:[self queryTopArticlesWithCategories:categoriesIds beforeDate:date sortDescriptor:kTopOrder] options:NSJSONWritingPrettyPrinted error:nil];
+        NSData *body = [NSJSONSerialization dataWithJSONObject:[self queryTopArticlesWithCategories:categoriesIds beforeDate:date sortDescriptor:kTopOrder location:location] options:NSJSONWritingPrettyPrinted error:nil];
         [request setHTTPBody:body];
         [self performRequest:request completion:^(NSData *data, NSURLResponse *response, NSError *error) {
             if (error && failure) {
@@ -621,12 +621,13 @@ static PRNetworkDataProvider *sharedInstance;
                              lastDate:(NSDate *)date
                                  from:(int)lastIndex
                                  step:(int)step
+                             location:(CLLocationCoordinate2D)location
                        sortDescriptor:(NSString *)sortDescriptor
                               success:(PRNetworkSuccessBlock)success
                               failure:(PRNetworkFailureBlock)failure
 {
     if ([self isNetworkAvailable:failure]) {
-        NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:[self queryNewArticlesWithCategories:categories date:date sortDescriptor:sortDescriptor]];
+        NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:[self queryNewArticlesWithCategories:categories date:date sortDescriptor:sortDescriptor location:location]];
         [params setObject:kArticleIncludeFields forKey:kPathParamIncludeKey];
         if (step) {
             if (lastIndex >= 0) {
@@ -850,30 +851,30 @@ static PRNetworkDataProvider *sharedInstance;
 
 #pragma mark - Queries
 
-- (NSDictionary *)queryTopArticlesWithCategories:(NSArray *)filterCategories beforeDate:(NSDate *)date sortDescriptor:(NSString *)sort
+- (NSDictionary *)queryTopArticlesWithCategories:(NSArray *)filterCategories beforeDate:(NSDate *)date sortDescriptor:(NSString *)sort location:(CLLocationCoordinate2D)location
 {
     NSDateFormatter *formatter = [NSDateFormatter new];
     [formatter setDateFormat:kParseDateFormat];
-    return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"createdAt" : @{@"$gte" : [formatter stringFromDate:date], @"$lte" : [formatter stringFromDate:[NSDate date]]}}};
+    return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"createdAt" : @{@"$gte" : [formatter stringFromDate:date], @"$lte" : [formatter stringFromDate:[NSDate date]]}, @"location" : @{@"$nearSphere" : @{ @"__type" : @"GeoPoint", @"latitude" : @(location.latitude), @"longitude":@(location.longitude)},@"$maxDistanceInKilometers": @(100.0)}}};
 }
 
-- (NSDictionary *)queryHotArticlesWithCategories:(NSArray *)filterCategories rating:(NSInteger)rating sortDescriptor:(NSString *)sort
+- (NSDictionary *)queryHotArticlesWithCategories:(NSArray *)filterCategories rating:(NSInteger)rating sortDescriptor:(NSString *)sort location:(CLLocationCoordinate2D)location
 {
     if (rating) {
-        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"rating" : @{@"$lte" : @(rating)}}};
+        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"rating" : @{@"$lte" : @(rating)}, @"location" : @{@"$nearSphere" : @{ @"__type" : @"GeoPoint", @"latitude" : @(location.latitude), @"longitude":@(location.longitude)},@"$maxDistanceInKilometers": @(100.0)}}};
     } else {
-        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}}};
+        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"location" : @{@"$nearSphere" : @{ @"__type" : @"GeoPoint", @"latitude" : @(location.latitude), @"longitude":@(location.longitude)},@"$maxDistanceInKilometers": @(100.0)}}};
     }
 }
 
-- (NSDictionary *)queryNewArticlesWithCategories:(NSArray *)filterCategories date:(NSDate *)date sortDescriptor:(NSString *)sort
+- (NSDictionary *)queryNewArticlesWithCategories:(NSArray *)filterCategories date:(NSDate *)date sortDescriptor:(NSString *)sort location:(CLLocationCoordinate2D)location
 {
     if (date) {
         NSDateFormatter *formatter = [NSDateFormatter new];
         [formatter setDateFormat:kParseDateFormat];
-        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"createdAt" : @{@"$lte" : [formatter stringFromDate:date]}}};
+        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"createdAt" : @{@"$lte" : [formatter stringFromDate:date]}, @"location" : @{@"$nearSphere" : @{ @"__type" : @"GeoPoint", @"latitude" : @(location.latitude), @"longitude":@(location.longitude)},@"$maxDistanceInKilometers": @(100.0)}}};
     } else {
-        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}}};
+        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"location" : @{@"$nearSphere" : @{ @"__type" : @"GeoPoint", @"latitude" : @(location.latitude), @"longitude":@(location.longitude)},@"$maxDistanceInKilometers": @(100.0)}}};
     }
 }
 

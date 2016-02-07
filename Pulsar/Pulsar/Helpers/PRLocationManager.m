@@ -66,5 +66,12 @@ static PRLocationManager *sharedInstance;
     [[NSNotificationCenter defaultCenter] postNotificationName:kLocationChangedNotification object:_currentLocation];
 }
 
+- (CLLocationCoordinate2D)selectedCoordinate
+{
+    if (_selectedCoordinate.longitude != 0) {
+        return _selectedCoordinate;
+    }
+    return self.currentLocation.coordinate;
+}
 
 @end

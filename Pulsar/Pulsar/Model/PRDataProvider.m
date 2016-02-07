@@ -22,6 +22,7 @@
 #import "PRRemotePointer.h"
 #import "PRUploadMediaOperation.h"
 #import "PRConstants.h"
+#import "PRLocationManager.h"
 
 #import "PRLocalDataStore.h"
 
@@ -562,8 +563,7 @@ static NSString * const kCoreArticleTable = @"Article";
     if (forced) {
         _hotArticleCount = 0;
     }
-    //нужно мержить результаты выборки с прошлыми результатами или фирмировтаь исключения при запросе
-    [[PRNetworkDataProvider sharedInstance] requestHotArticlesWithCategoriesIds:[self categoriesIdsFrom:[self.currentUser.interests allObjects]] minRating:NSIntegerMax from:_hotArticleCount step:kFetchLimith locations:[self.currentUser.locations allObjects] success:^(NSData *data, NSURLResponse *response) {
+    [[PRNetworkDataProvider sharedInstance] requestHotArticlesWithCategoriesIds:[self categoriesIdsFrom:[self.currentUser.interests allObjects]] minRating:NSIntegerMax from:_hotArticleCount step:kFetchLimith locations:[PRLocationManager sharedInstance].selectedCoordinate success:^(NSData *data, NSURLResponse *response) {
         NSArray *articles = [self localArticlesFromResponseData:data];
         _hotArticleCount +=[articles count];
         _minRatingArticle = [[(Article *)[articles lastObject] rating] integerValue];
@@ -593,7 +593,7 @@ static NSString * const kCoreArticleTable = @"Article";
         _newArticleRequestTime = [NSDate date];
         _newArticlesCount = 0;
     }
-    [[PRNetworkDataProvider sharedInstance] requestNewArticlesWithCategoriesIds:[self categoriesIdsFrom:[self.currentUser.interests allObjects]] lastDate:_newArticleRequestTime form:_newArticlesCount step:kFetchLimith locations:[self.currentUser.locations allObjects] success:^(NSData *data, NSURLResponse *response) {
+    [[PRNetworkDataProvider sharedInstance] requestNewArticlesWithCategoriesIds:[self categoriesIdsFrom:[self.currentUser.interests allObjects]] lastDate:_newArticleRequestTime form:_newArticlesCount step:kFetchLimith locations:[PRLocationManager sharedInstance].selectedCoordinate success:^(NSData *data, NSURLResponse *response) {
         NSArray *articles = [[self localArticlesFromResponseData:data] sortedArrayUsingComparator:^NSComparisonResult(Article *obj1, Article *obj2) {
             return [obj2.createdDate compare:obj1.createdDate];
         }];
@@ -614,23 +614,23 @@ static NSString * const kCoreArticleTable = @"Article";
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSInteger gmtCorrection = [[NSTimeZone localTimeZone] secondsFromGMT];
         NSDate *now = [NSDate date];
-        NSArray *geoPoints = [self.currentUser.locations allObjects];
+        CLLocationCoordinate2D geoPoint = [PRLocationManager sharedInstance].selectedCoordinate;
         __block PRArticleCollection *articleCollection = [[PRArticleCollection alloc] init];
         dispatch_group_t fetchGroup = dispatch_group_create();
         dispatch_group_enter(fetchGroup);
-        [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-HOUR -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+        [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-HOUR -gmtCorrection] locations:geoPoint success:^(NSData *data, NSURLResponse *response) {
             [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchHour];
             
-            [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-DAY -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+            [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-DAY -gmtCorrection] locations:geoPoint success:^(NSData *data, NSURLResponse *response) {
                 [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchDay];
                 
-                [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-WEEK -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+                [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-WEEK -gmtCorrection] locations:geoPoint success:^(NSData *data, NSURLResponse *response) {
                     [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchWeek];
                     
-                    [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-MONTH -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+                    [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-MONTH -gmtCorrection] locations:geoPoint success:^(NSData *data, NSURLResponse *response) {
                         [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchMonth];
                         
-                        [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-YEAR -gmtCorrection] locations:geoPoints success:^(NSData *data, NSURLResponse *response) {
+                        [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-YEAR -gmtCorrection] locations:geoPoint success:^(NSData *data, NSURLResponse *response) {
                             
                             [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchYear];
                             if (completion) {

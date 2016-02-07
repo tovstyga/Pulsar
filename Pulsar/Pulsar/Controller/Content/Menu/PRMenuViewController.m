@@ -11,6 +11,7 @@
 #import "PRMenuLocationCell.h"
 #import "PRLocalCategory.h"
 #import "InterestCategory.h"
+#import "PRLocationManager.h"
 
 @interface PRMenuViewController()
 
@@ -21,6 +22,7 @@
 
 @implementation PRMenuViewController{
     int _tasksInProcess;
+    NSIndexPath *_selectedLocation;
 }
 
 static NSString * const kCategoryCellIdentifier = @"menu_category_cell_identifier";
@@ -32,6 +34,7 @@ static NSString * const kToMapSegueIdentifier = @"map_screen_segue_identifier";
 static NSString * const kCategoriesSectionTitle = @"Categories";
 static NSString * const kLocationsSectionTitle = @"Locations";
 static NSString * const kAddLocationLabel = @"Add new location";
+static NSString * const kCurrentLocationLabel = @"Current location";
 
 #pragma mark - Actions
 
@@ -115,9 +118,23 @@ static NSString * const kAddLocationLabel = @"Add new location";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section) {
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
         if (indexPath.row) {
-        
+            if (_selectedLocation.row != indexPath.row) {
+                if (_selectedLocation) {
+                    [tableView deselectRowAtIndexPath:_selectedLocation animated:YES];
+                }
+                _selectedLocation = indexPath;
+                NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+                [indexSet addIndex:1];
+                [tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+                
+                if (indexPath.row == 1) {
+                    [PRLocationManager sharedInstance].selectedCoordinate = [PRLocationManager sharedInstance].currentLocation.coordinate;
+                } else {
+                    PRLocalGeoPoint *point = [self.interactor locationForIndex:indexPath.row - 2];
+                    [PRLocationManager sharedInstance].selectedCoordinate = CLLocationCoordinate2DMake(point.latitude, point.longitude);
+                }
+            }
         } else {
             [self performSegueWithIdentifier:kToMapSegueIdentifier sender:self];
         }
@@ -130,7 +147,7 @@ static NSString * const kAddLocationLabel = @"Add new location";
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section) {
-    
+
     } else {
         [[self.interactor categoryForIndex:[indexPath row]] setSelected:@(NO)];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -150,7 +167,7 @@ static NSString * const kAddLocationLabel = @"Add new location";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section) {
-        return [self.interactor availableLocations] + 1;
+        return [self.interactor availableLocations] + 2;
     }
     return [self.interactor availableCategories];
 }
@@ -159,18 +176,34 @@ static NSString * const kAddLocationLabel = @"Add new location";
 {
     UITableViewCell *cell = nil;
     if (indexPath.section) {
-        if (indexPath.row) {
+        if (indexPath.row > 1) {
             PRMenuLocationCell *locationCell = [tableView dequeueReusableCellWithIdentifier:kLocationCellIdentifier];
             if (!locationCell) {
                 locationCell = [[PRMenuLocationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kLocationCellIdentifier];
             }
-            locationCell.geoPoint = [self.interactor locationForIndex:indexPath.row];
+            locationCell.geoPoint = [self.interactor locationForIndex:indexPath.row - 2];
+            if (_selectedLocation.row == indexPath.row) {
+                [tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+
+            }
+            cell = locationCell;
+        } else if (indexPath.row) {
+            PRMenuLocationCell *locationCell = [tableView dequeueReusableCellWithIdentifier:kLocationCellIdentifier];
+            if (!locationCell) {
+                locationCell = [[PRMenuLocationCell alloc]  initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kAddLocationCellIdentifier];
+            }
+            locationCell.textLabel.text = kCurrentLocationLabel;
+            if (!_selectedLocation || indexPath.row == _selectedLocation.row) {
+                [tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+            }
             cell = locationCell;
         } else {
             cell = [tableView dequeueReusableCellWithIdentifier:kAddLocationCellIdentifier];
             if (!cell) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kAddLocationCellIdentifier];
             }
+            [tableView deselectRowAtIndexPath:indexPath animated:NO];
+            cell.accessoryType = UITableViewCellAccessoryNone;
             cell.textLabel.text = kAddLocationLabel;
         }
     } else {
@@ -203,7 +236,7 @@ static NSString * const kAddLocationLabel = @"Add new location";
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section &&  indexPath.row) {
+    if (indexPath.section && indexPath.row > 1) {
         return YES;
     }
     return NO;
