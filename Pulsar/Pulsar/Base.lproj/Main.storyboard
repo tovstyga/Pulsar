@@ -293,8 +293,8 @@
                                 <items>
                                     <tabBarItem title="Hot" id="6fB-ho-Dde"/>
                                     <tabBarItem title="New" id="eAf-Ag-QYO"/>
-                                    <tabBarItem title="Top" id="Oos-pU-63b"/>
-                                    <tabBarItem title="Favorites" id="GqP-xX-JG6"/>
+                                    <tabBarItem systemItem="mostViewed" id="Oos-pU-63b"/>
+                                    <tabBarItem systemItem="favorites" id="GqP-xX-JG6"/>
                                     <tabBarItem title="Created" id="cFG-tM-a46"/>
                                 </items>
                             </tabBar>

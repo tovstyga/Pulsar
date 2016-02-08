@@ -136,6 +136,7 @@ static NSString * const kCurrentLocationLabel = @"Current location";
                 }
             }
         } else {
+            [tableView deselectRowAtIndexPath:indexPath animated:NO];
             [self performSegueWithIdentifier:kToMapSegueIdentifier sender:self];
         }
     } else {

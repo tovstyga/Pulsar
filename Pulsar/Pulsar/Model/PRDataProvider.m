@@ -466,6 +466,9 @@ static NSString * const kCoreArticleTable = @"Article";
             NSArray *result = [[self localArticlesFromResponseData:data] sortedArrayUsingComparator:^NSComparisonResult(Article *obj1, Article *obj2) {
                 return [obj2.createdDate compare:obj1.createdDate];
             }];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self updateUserArticles:result];
+            });
             completion(result, nil);
         }
     } failure:^(NSError *error) {
@@ -482,6 +485,10 @@ static NSString * const kCoreArticleTable = @"Article";
             NSArray *result = [[self localArticlesFromResponseData:data] sortedArrayUsingComparator:^NSComparisonResult(Article *obj1, Article *obj2) {
                 return [obj2.createdDate compare:obj1.createdDate];
             }];
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self updateUserFavorites:result];
+            });
             completion(result, nil);
         }
     } failure:^(NSError *error) {
@@ -1140,6 +1147,22 @@ static NSString * const kCoreArticleTable = @"Article";
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreMediaTable];
     [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", identifier]];
     return [[[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:nil] firstObject];
+}
+
+- (void)updateUserArticles:(NSArray<Article *> *)articles
+{
+    NSSet *set = [NSSet setWithArray:articles];
+    [self.currentUser removeArticles:self.currentUser.articles];
+    [self.currentUser setArticles:set];
+    [[PRLocalDataStore sharedInstance] saveMainContextAndWait:NO];
+}
+
+- (void)updateUserFavorites:(NSArray<Article *> *)articles
+{
+    NSSet *set = [NSSet setWithArray:articles];
+    [self.currentUser removeFavorite:self.currentUser.favorite];
+    [self.currentUser setFavorite:set];
+    [[PRLocalDataStore sharedInstance] saveMainContextAndWait:NO];
 }
 
 @end
