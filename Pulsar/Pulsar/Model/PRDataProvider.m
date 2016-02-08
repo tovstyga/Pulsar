@@ -366,6 +366,7 @@ static NSString * const kCoreArticleTable = @"Article";
                     uploadOperation.article = pointerToNewArticle;
                     [self.uploadQueue addOperation:uploadOperation];
                 }
+                localArticle.images = nil;
                 dispatch_group_leave(publishGroup);
             } failure:^(NSError *error) {
                 if (completion) {

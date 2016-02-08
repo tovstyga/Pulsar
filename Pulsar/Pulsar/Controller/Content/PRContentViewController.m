@@ -72,6 +72,8 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     [self.refreshControll addTarget:self action:@selector(refreshing) forControlEvents:UIControlEventValueChanged];
     [self.contentTableView addSubview:self.refreshControll];
     
+    [self refresh:nil];
+    
     _closedMenuDefaultConstraint = self.view.frame.size.width;
     _isOpenedMenu = NO;
     [self.categoriesMenuConstraint setConstant:_closedMenuDefaultConstraint];
@@ -83,7 +85,6 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 //    self.contentTableView.rowHeight = UITableViewAutomaticDimension;
 //    self.contentTableView.estimatedRowHeight = 300.0;
     
-    [self refresh:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated

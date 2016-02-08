@@ -24,6 +24,12 @@ static NSUInteger const kMaxImageSize = 1024 * 1024 * 11;
 - (void)main
 {
     if (self.cancelled) {
+        if (self.uploadCompletion) {
+            self.uploadCompletion(nil);
+        }
+        self.uploadCompletion = nil;
+        self.uploadImage = nil;
+        self.article = nil;
         return;
     }
     __block NSString *mediaIdentidier = nil;
@@ -77,6 +83,9 @@ static NSUInteger const kMaxImageSize = 1024 * 1024 * 11;
     if (self.uploadCompletion) {
         self.uploadCompletion(mediaIdentidier);
     }
+    self.uploadCompletion = nil;
+    self.uploadImage = nil;
+    self.article = nil;
 }
 
 @end

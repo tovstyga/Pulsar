@@ -68,7 +68,7 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
         [self.cellImage setImage:[UIImage imageNamed:@"Pulse-icon"]];
             __weak typeof(self) wSelf = self;
             [self.delegate thumbnailForMedia:self.article.image completion:^(UIImage *image, NSError *error) {
-                if (!error) {
+                if (!error && image) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         __strong typeof(wSelf) sSelf = wSelf;
                         if (sSelf) {

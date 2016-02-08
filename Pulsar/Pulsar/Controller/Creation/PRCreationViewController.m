@@ -90,6 +90,10 @@ static int const kHeightFromKeyboard = 10;
 
 - (IBAction)cancelAction:(UIBarButtonItem *)sender
 {
+    [_images removeAllObjects];
+    [self.galletyCollectionView reloadData];
+    self.imageView.image = nil;
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
