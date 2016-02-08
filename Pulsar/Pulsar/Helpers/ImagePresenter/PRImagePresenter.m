@@ -66,6 +66,7 @@
         self.shadowView.alpha = 0;
         self.imageView.alpha = 0;
     } completion:^(BOOL finished) {
+        self.imageView.image = nil;
         [self.view removeFromSuperview];
     }];
     

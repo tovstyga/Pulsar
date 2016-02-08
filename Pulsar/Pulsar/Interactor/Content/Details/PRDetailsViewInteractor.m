@@ -9,6 +9,7 @@
 #import "PRDetailsViewInteractor.h"
 #import "PRDataProvider.h"
 #import "PRErrorDescriptor.h"
+#import "PRLocalDataStore.h"
 
 @implementation PRDetailsViewInteractor{
     NSArray *_media;
@@ -93,6 +94,7 @@
         if ([(Media *)_media[index] image]) {
             if (completion) {
                 completion([UIImage imageWithData:[(Media *)_media[index] image]], nil);
+                [[[PRLocalDataStore sharedInstance] mainContext] refreshObject:_media[index] mergeChanges:YES];
             }
         } else if ([(Media *)_media[index] mediaURL]) {
             [[PRDataProvider sharedInstance] loadContentForMedia:_media[index] completion:^(UIImage *image, NSError *error) {

@@ -11,6 +11,7 @@
 #import "PRDetailsCollectionViewCell.h"
 #import "Media.h"
 #import "InterestCategory.h"
+#import "PRLocalDataStore.h"
 
 typedef NS_ENUM(NSUInteger, PRLikeState) {
     PRLikeStateLiked,
@@ -176,6 +177,7 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
     } else {
         if (self.article.image.image) {
             completion([UIImage imageWithData:self.article.image.image], nil);
+            [[[PRLocalDataStore sharedInstance] mainContext] refreshObject:self.article.image mergeChanges:YES];
         } else {
             [self.interactor loadImageForMedia:self.article.image completion:^(UIImage *image, NSString *errorMessage) {
                 completion(image, errorMessage);
