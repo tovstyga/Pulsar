@@ -72,8 +72,6 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     [self.refreshControll addTarget:self action:@selector(refreshing) forControlEvents:UIControlEventValueChanged];
     [self.contentTableView addSubview:self.refreshControll];
     
-    [self refresh:nil];
-    
     _closedMenuDefaultConstraint = self.view.frame.size.width;
     _isOpenedMenu = NO;
     [self.categoriesMenuConstraint setConstant:_closedMenuDefaultConstraint];
@@ -89,6 +87,10 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
+        [self refresh:nil];
+    });
     [super viewWillAppear:animated];
 }
 
