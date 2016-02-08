@@ -87,6 +87,7 @@ static PRPickerViewPresenter *sharedInstance;
 {
     if (self.completion) {
         self.completion(NO, _selectedIndex);
+        self.completion = nil;
     }
     [_pickerView hideActionSheetAnimated:YES];
 }
@@ -95,6 +96,7 @@ static PRPickerViewPresenter *sharedInstance;
 {
     if (self.completion) {
         self.completion(YES, _selectedIndex);
+        self.completion = nil;
     }
     [_pickerView hideActionSheetAnimated:YES];
 }

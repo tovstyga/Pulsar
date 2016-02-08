@@ -91,9 +91,8 @@ static int const kHeightFromKeyboard = 10;
 - (IBAction)cancelAction:(UIBarButtonItem *)sender
 {
     [_images removeAllObjects];
-    [self.galletyCollectionView reloadData];
     self.imageView.image = nil;
-    
+    [self.galletyCollectionView reloadData];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -130,24 +129,32 @@ static int const kHeightFromKeyboard = 10;
     [self hideKeyboard];
     __block NSArray *categories = [self.interactor allAvailableCategoriesNames];
     
+    __weak typeof(self) wSelf = self;
     void(^actionBlock)() = ^(){
-        
-        [[PRPickerViewPresenter sharedInstance] presentActionSheetInView:self.view contentData:categories selectedItem:_selectedCategory completion:^(BOOL accept, NSInteger lastSelectedIndex) {
+        __strong typeof(wSelf) sSelf = wSelf;
+        if (sSelf) {
+        [[PRPickerViewPresenter sharedInstance] presentActionSheetInView:sSelf.view contentData:categories selectedItem:_selectedCategory completion:^(BOOL accept, NSInteger lastSelectedIndex) {
             _selectedCategory = lastSelectedIndex;
             if (accept) {
-                [self.categoryButton setTitle:categories[lastSelectedIndex] forState:UIControlStateNormal];
-                _acceptedCategory = lastSelectedIndex;
+                __strong typeof(wSelf) sSelf2 = wSelf;
+                if (sSelf2) {
+                    [sSelf2.categoryButton setTitle:categories[lastSelectedIndex] forState:UIControlStateNormal];
+                    _acceptedCategory = lastSelectedIndex;
+                }
             }
         }];
+        }
     };
     
     if ([categories count] == 0) {
         [[PRScreenLock sharedInstance] lockView:self.view animated:YES];
         [self.interactor loadCategoriesWithCompletion:^(BOOL success, NSString *errorMessage) {
-            if (!success) {
-                [self showAlertWithMessage:errorMessage];
-            } else {
-                categories = [self.interactor allAvailableCategoriesNames];
+            __strong typeof(wSelf) sSelf = wSelf;
+            if (!success && sSelf) {
+                
+                [sSelf showAlertWithMessage:errorMessage];
+            } else if (sSelf) {
+                categories = [sSelf.interactor allAvailableCategoriesNames];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[PRScreenLock sharedInstance] unlockAnimated:YES];
                     actionBlock();

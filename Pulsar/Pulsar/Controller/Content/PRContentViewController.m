@@ -43,6 +43,7 @@
     NSIndexPath *_selectedItem;
     
     BOOL _loadingInProcess;
+    dispatch_once_t once;
 }
 
 static CGFloat const kSpaceFromMenuToRightBorder = 40;
@@ -87,7 +88,6 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    static dispatch_once_t once;
     dispatch_once(&once, ^{
         [self refresh:nil];
     });
@@ -232,12 +232,12 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
         [(PRContentViewCell *)cell setDelegate:self];
     }
     [self setupCell:(PRContentViewCell *)cell atIndexPath:indexPath];
-    [(PRContentViewCell *)cell setDelegate:self];
     return cell;
 }
 
 - (void)setupCell:(PRContentViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+    [cell setDelegate:self];
     [cell setArticle:[self.interactor articleAtIndex:indexPath.row inSection:indexPath.section]];
 }
 

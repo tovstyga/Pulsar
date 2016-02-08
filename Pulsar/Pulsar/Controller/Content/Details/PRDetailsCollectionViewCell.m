@@ -10,4 +10,10 @@
 
 @implementation PRDetailsCollectionViewCell
 
+- (void)prepareForReuse
+{
+    self.image.image = nil;
+    [super prepareForReuse];
+}
+
 @end
