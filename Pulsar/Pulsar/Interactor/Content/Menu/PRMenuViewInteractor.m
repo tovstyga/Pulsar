@@ -40,18 +40,22 @@
         dispatch_group_t loadCategoryCroup = dispatch_group_create();
         dispatch_group_enter(loadCategoryCroup);
         [[PRDataProvider sharedInstance] allCategories:^(NSArray *categories, NSError *error) {
-            if (!error) {
+            if (categories) {
                 __block NSArray *allCategories = categories;
                 _categories = categories;
                 [[PRDataProvider sharedInstance] categoriesForCurrentUser:^(NSArray *categories, NSError *error) {
-                    if (!error) {
+                    if (categories) {
                         __strong typeof(wSelf) sSelf = wSelf;
                         if (sSelf) {
                             [sSelf generateDataSourceOfAllCategories:allCategories userCategories:categories];
                             dispatch_group_leave(loadCategoryCroup);
                         }
                         if (completion) {
-                            completion(YES, nil);
+                            if (error) {
+                                completion(YES, [PRErrorDescriptor descriptionForError:error]);
+                            } else {
+                                completion(YES, nil);
+                            }
                         }
                     } else if (completion) {
                         completion(NO, [PRErrorDescriptor descriptionForError:error]);
