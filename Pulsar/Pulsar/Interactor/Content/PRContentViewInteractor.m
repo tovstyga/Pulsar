@@ -84,7 +84,13 @@
                         completion(YES, nil);
                     }
                 } else if (completion) {
-                    completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                    if (articles) {
+                        _topArticles = articles;
+                        [self changeDataAvailable];
+                        completion(YES, [PRErrorDescriptor descriptionForError:error]);
+                    } else {
+                        completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                    }
                 }
             }];
             break;
@@ -99,8 +105,13 @@
                         completion(YES, nil);
                     }
                 } else if (completion) {
-                    completion(NO, [PRErrorDescriptor descriptionForError:error]);
-                }
+                    if (articles) {
+                        _createdArticles = [[NSMutableArray alloc] initWithArray:articles];
+                        [self changeDataAvailable];
+                        completion(YES, [PRErrorDescriptor descriptionForError:error]);
+                    } else {
+                        completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                    }                }
             }];
             break;
         }
@@ -114,7 +125,13 @@
                         completion(YES, nil);
                     }
                 } else if (completion) {
-                    completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                    if (articles) {
+                        _favoriteArticles = [[NSMutableArray alloc] initWithArray:articles];
+                        [self changeDataAvailable];
+                        completion(YES, [PRErrorDescriptor descriptionForError:error]);
+                    } else {
+                        completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                    }
                 }
             }];
             break;
@@ -130,7 +147,14 @@
                         completion(YES, nil);
                     }
                 } else if (completion) {
-                    completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                    if (articles) {
+                        _hotArticles = [[NSMutableArray alloc] initWithArray:articles];
+                        _canMoreHot = [articles count];
+                        [self changeDataAvailable];
+                        completion(YES, [PRErrorDescriptor descriptionForError:error]);
+                    } else {
+                        completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                    }
                 }
             }];
             break;
@@ -146,7 +170,14 @@
                         completion(YES, nil);
                     }
                 } else if (completion) {
-                    completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                    if (articles) {
+                        _newArticles = [[NSMutableArray alloc] initWithArray:articles];
+                        _canMoreNew = [articles count];
+                        [self changeDataAvailable];
+                        completion(YES, [PRErrorDescriptor descriptionForError:error]);
+                    } else {
+                        completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                    }
                 }
 
             }];

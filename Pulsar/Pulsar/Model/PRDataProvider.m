@@ -473,7 +473,14 @@ static NSString * const kCoreArticleTable = @"Article";
         }
     } failure:^(NSError *error) {
         if (completion) {
-            completion(nil, error);
+            if (error.code == 999) { //rechability
+                NSArray *result = [[self.currentUser.articles allObjects] sortedArrayUsingComparator:^NSComparisonResult(Article *obj1, Article *obj2) {
+                    return [obj2.createdDate compare:obj1.createdDate];
+                }];
+                completion(result, error);
+            } else {
+                completion(nil, error);
+            }
         }
     }];
 }
@@ -493,7 +500,14 @@ static NSString * const kCoreArticleTable = @"Article";
         }
     } failure:^(NSError *error) {
         if (completion) {
-            completion(nil, error);
+            if (error.code == 999) {
+                NSArray *result = [[self.currentUser.favorite allObjects] sortedArrayUsingComparator:^NSComparisonResult(Article *obj1, Article *obj2) {
+                    return [obj2.createdDate compare:obj1.createdDate];
+                }];
+                completion(result, error);
+            } else {
+                completion(nil, error);
+            }
         }
     }];
 }
@@ -580,7 +594,11 @@ static NSString * const kCoreArticleTable = @"Article";
         }
     } failure:^(NSError *error) {
         if (completion) {
-            completion(nil, error);
+            if (error.code == 999 && forced) {
+                completion([self loadLocalHotArticles], error);
+            } else {
+                completion(nil, error);
+            }
         }
     }];
 }
@@ -610,7 +628,9 @@ static NSString * const kCoreArticleTable = @"Article";
             completion(articles ,nil);
         }
     } failure:^(NSError *error) {
-        if (completion) {
+        if (error.code == 999 && forced) {
+            completion([self loadLocalNewArticles], error);
+        } else {
             completion(nil, error);
         }
     }];
@@ -625,6 +645,18 @@ static NSString * const kCoreArticleTable = @"Article";
         CLLocationCoordinate2D geoPoint = [PRLocationManager sharedInstance].selectedCoordinate;
         __block PRArticleCollection *articleCollection = [[PRArticleCollection alloc] init];
         dispatch_group_t fetchGroup = dispatch_group_create();
+        
+        void(^errorBlock)(NSError *error) = ^(NSError *error) {
+            if (completion) {
+                if (error.code == 999) {
+                    completion([self loadLocalTopArticles], error);
+                } else {
+                    completion(nil, error);
+                }
+            }
+            dispatch_group_leave(fetchGroup);
+        };
+        
         dispatch_group_enter(fetchGroup);
         [[PRNetworkDataProvider sharedInstance] requestTopArticlesWithCategoriesIds:categoriest beforeDate:[now dateByAddingTimeInterval:-HOUR -gmtCorrection] locations:geoPoint success:^(NSData *data, NSURLResponse *response) {
             [articleCollection setFetchResult:[self localArticlesFromResponseData:data] forKey:PRArticleFetchHour];
@@ -646,40 +678,15 @@ static NSString * const kCoreArticleTable = @"Article";
                             }
                             dispatch_group_leave(fetchGroup);
                             
-                        } failure:^(NSError *error) {
-                            if (completion) {
-                                completion(nil, error);
-                            }
-                            dispatch_group_leave(fetchGroup);
-                        }];
+                        } failure:errorBlock];
                         
-                    } failure:^(NSError *error) {
-                        if (completion) {
-                            completion(nil, error);
-                        }
-                        dispatch_group_leave(fetchGroup);
-                    }];
+                    } failure:errorBlock];
                     
-                } failure:^(NSError *error) {
-                    if (completion) {
-                        completion(nil, error);
-                    }
-                    dispatch_group_leave(fetchGroup);
-                }];
+                } failure:errorBlock];
                 
-            } failure:^(NSError *error) {
-                if (completion) {
-                    completion(nil, error);
-                }
-                dispatch_group_leave(fetchGroup);
-            }];
+            } failure:errorBlock];
             
-        } failure:^(NSError *error) {
-            if (completion) {
-                completion(nil, error);
-            }
-            dispatch_group_leave(fetchGroup);
-        }];
+        } failure:errorBlock];
         
         dispatch_group_wait(fetchGroup, DISPATCH_TIME_FOREVER);
     });
@@ -1163,6 +1170,42 @@ static NSString * const kCoreArticleTable = @"Article";
     [self.currentUser removeFavorite:self.currentUser.favorite];
     [self.currentUser setFavorite:set];
     [[PRLocalDataStore sharedInstance] saveMainContextAndWait:NO];
+}
+
+- (NSArray<Article *> *)loadLocalHotArticles
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kArticleClassName];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rating" ascending:NO];
+    [request setSortDescriptors:@[sortDescriptor]];
+    return [[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:nil];
+}
+
+- (NSArray<Article *> *)loadLocalNewArticles
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kArticleClassName];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
+    [request setSortDescriptors:@[sortDescriptor]];
+    return [[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:nil];
+}
+
+- (PRArticleCollection *)loadLocalTopArticles
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kArticleClassName];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rating" ascending:NO];
+    [request setSortDescriptors:@[sortDescriptor]];
+    
+    PRArticleCollection *result = [[PRArticleCollection alloc] init];
+    
+    NSInteger gmtCorrection = [[NSTimeZone localTimeZone] secondsFromGMT];
+    NSDate *now = [NSDate date];
+    NSArray *dates = @[[now dateByAddingTimeInterval:-HOUR -gmtCorrection], [now dateByAddingTimeInterval:-DAY -gmtCorrection], [now dateByAddingTimeInterval:-WEEK -gmtCorrection], [now dateByAddingTimeInterval:-MONTH -gmtCorrection], [now dateByAddingTimeInterval:-YEAR -gmtCorrection]];
+    for (int i = 0; i < dates.count; i++) {
+        [request setPredicate:[NSPredicate predicateWithFormat:@"createdDate >= %@", dates[i]]];
+        NSArray *array = [[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:nil];
+        [result setFetchResult:array forKey:i];
+    }
+    
+    return result;
 }
 
 @end
