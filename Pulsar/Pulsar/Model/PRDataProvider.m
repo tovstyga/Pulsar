@@ -1175,6 +1175,7 @@ static NSString * const kCoreArticleTable = @"Article";
 - (NSArray<Article *> *)loadLocalHotArticles
 {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kArticleClassName];
+    [request setPredicate:[self categoriesFiltrationPredicate]];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rating" ascending:NO];
     [request setSortDescriptors:@[sortDescriptor]];
     return [[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:nil];
@@ -1183,6 +1184,7 @@ static NSString * const kCoreArticleTable = @"Article";
 - (NSArray<Article *> *)loadLocalNewArticles
 {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kArticleClassName];
+    [request setPredicate:[self categoriesFiltrationPredicate]];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdDate" ascending:NO];
     [request setSortDescriptors:@[sortDescriptor]];
     return [[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:nil];
@@ -1198,14 +1200,30 @@ static NSString * const kCoreArticleTable = @"Article";
     
     NSInteger gmtCorrection = [[NSTimeZone localTimeZone] secondsFromGMT];
     NSDate *now = [NSDate date];
+    
+    NSMutableArray *ids = [NSMutableArray new];
+    for (InterestCategory *catecgory in [self.currentUser.interests allObjects]) {
+        [ids addObject:catecgory.remoteIdentifier];
+    }
+    
     NSArray *dates = @[[now dateByAddingTimeInterval:-HOUR -gmtCorrection], [now dateByAddingTimeInterval:-DAY -gmtCorrection], [now dateByAddingTimeInterval:-WEEK -gmtCorrection], [now dateByAddingTimeInterval:-MONTH -gmtCorrection], [now dateByAddingTimeInterval:-YEAR -gmtCorrection]];
     for (int i = 0; i < dates.count; i++) {
-        [request setPredicate:[NSPredicate predicateWithFormat:@"createdDate >= %@", dates[i]]];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"createdDate >= %@ AND category.remoteIdentifier IN %@", dates[i], ids]];
         NSArray *array = [[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:nil];
         [result setFetchResult:array forKey:i];
     }
     
     return result;
+}
+
+- (NSPredicate *)categoriesFiltrationPredicate
+{
+    NSMutableArray *ids = [NSMutableArray new];
+    for (InterestCategory *catecgory in [self.currentUser.interests allObjects]) {
+        [ids addObject:catecgory.remoteIdentifier];
+    }
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"category.remoteIdentifier IN %@", ids];
+    return predicate;
 }
 
 @end
