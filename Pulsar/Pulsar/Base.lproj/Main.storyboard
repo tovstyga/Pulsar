@@ -120,7 +120,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title Title Title Title Title Title Title Title Title Title Title " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Agf-Xv-QIL" userLabel="Title Title Title Title Title Title Title Title Title Title Title">
-                                                    <rect key="frame" x="96" y="25" width="277" height="36"/>
+                                                    <rect key="frame" x="96" y="13" width="277" height="36"/>
                                                     <gestureRecognizers/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="36" id="Huh-Mg-n5L"/>
@@ -130,7 +130,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yGR-Ks-aWM">
-                                                    <rect key="frame" x="96" y="60" width="277" height="30"/>
+                                                    <rect key="frame" x="96" y="48" width="277" height="30"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IJK-Jw-9Kx">
                                                             <rect key="frame" x="0.0" y="0.0" width="92" height="30"/>
@@ -174,7 +174,7 @@
                                                     </constraints>
                                                 </stackView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C6q-sc-tbS">
-                                                    <rect key="frame" x="96" y="69" width="277" height="30"/>
+                                                    <rect key="frame" x="96" y="57" width="277" height="30"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2p1-yi-Eh0">
                                                             <rect key="frame" x="0.0" y="0.0" width="139" height="30"/>
@@ -249,22 +249,22 @@
                                                 <constraint firstItem="7Yg-58-v5P" firstAttribute="leading" secondItem="1kR-Ke-6Af" secondAttribute="leadingMargin" id="3I9-sU-IEf"/>
                                                 <constraint firstItem="Agf-Xv-QIL" firstAttribute="top" secondItem="1kR-Ke-6Af" secondAttribute="topMargin" priority="250" constant="-8" id="5iA-ug-aKb"/>
                                                 <constraint firstItem="yGR-Ks-aWM" firstAttribute="trailing" secondItem="1kR-Ke-6Af" secondAttribute="trailingMargin" id="Ccs-Pv-vFl"/>
-                                                <constraint firstItem="C6q-sc-tbS" firstAttribute="top" secondItem="Agf-Xv-QIL" secondAttribute="bottom" priority="250" constant="32" id="F5b-fG-psI"/>
                                                 <constraint firstItem="yGR-Ks-aWM" firstAttribute="leading" secondItem="7Yg-58-v5P" secondAttribute="trailing" constant="8" id="IfO-l5-UkD"/>
                                                 <constraint firstItem="7J7-dN-064" firstAttribute="trailing" secondItem="1kR-Ke-6Af" secondAttribute="trailingMargin" id="LSv-Ha-PJz"/>
                                                 <constraint firstItem="C6q-sc-tbS" firstAttribute="leading" secondItem="7Yg-58-v5P" secondAttribute="trailing" constant="8" id="Nwt-Df-YLz"/>
+                                                <constraint firstItem="7J7-dN-064" firstAttribute="top" secondItem="C6q-sc-tbS" secondAttribute="bottom" priority="250" constant="8" id="PmT-FJ-pQa"/>
+                                                <constraint firstItem="7J7-dN-064" firstAttribute="top" secondItem="C6q-sc-tbS" secondAttribute="bottom" priority="750" constant="20" id="Ujk-kY-M7T"/>
                                                 <constraint firstItem="C6q-sc-tbS" firstAttribute="trailing" secondItem="1kR-Ke-6Af" secondAttribute="trailingMargin" id="WO3-R8-i1g"/>
-                                                <constraint firstItem="C6q-sc-tbS" firstAttribute="top" secondItem="Agf-Xv-QIL" secondAttribute="bottom" priority="750" constant="8" id="amo-js-Urc"/>
                                                 <constraint firstItem="Agf-Xv-QIL" firstAttribute="leading" secondItem="7Yg-58-v5P" secondAttribute="trailing" constant="8" id="bMd-qo-LOn"/>
                                                 <constraint firstItem="7J7-dN-064" firstAttribute="top" secondItem="7Yg-58-v5P" secondAttribute="bottom" constant="19" id="bZQ-Et-AZB"/>
-                                                <constraint firstItem="Agf-Xv-QIL" firstAttribute="top" secondItem="1kR-Ke-6Af" secondAttribute="topMargin" priority="750" constant="17" id="dut-Z9-hWx"/>
+                                                <constraint firstItem="Agf-Xv-QIL" firstAttribute="top" secondItem="1kR-Ke-6Af" secondAttribute="topMargin" priority="750" constant="5" id="dut-Z9-hWx"/>
                                                 <constraint firstItem="yGR-Ks-aWM" firstAttribute="top" secondItem="Agf-Xv-QIL" secondAttribute="bottom" constant="-1" id="llo-yR-Mbh"/>
                                                 <constraint firstItem="7J7-dN-064" firstAttribute="leading" secondItem="1kR-Ke-6Af" secondAttribute="leadingMargin" id="w1x-nu-kqK"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="categoryToShareConstraint" destination="F5b-fG-psI" id="Ray-hW-LUp"/>
-                                            <outlet property="categoryToTitleConstraint" destination="amo-js-Urc" id="XLn-JO-VnQ"/>
+                                            <outlet property="categoryToShareConstraint" destination="PmT-FJ-pQa" id="C5Q-7Q-CoB"/>
+                                            <outlet property="categoryToTitleConstraint" destination="Ujk-kY-M7T" id="Ek3-4C-B3S"/>
                                             <outlet property="cellCategory" destination="2p1-yi-Eh0" id="5hR-v5-Kzl"/>
                                             <outlet property="cellImage" destination="7Yg-58-v5P" id="Xv3-bc-sCZ"/>
                                             <outlet property="cellText" destination="7J7-dN-064" id="ojI-hE-DJo"/>

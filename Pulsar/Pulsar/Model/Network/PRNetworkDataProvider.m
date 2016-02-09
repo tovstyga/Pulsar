@@ -855,27 +855,29 @@ static PRNetworkDataProvider *sharedInstance;
 {
     NSDateFormatter *formatter = [NSDateFormatter new];
     [formatter setDateFormat:kParseDateFormat];
-    return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"createdAt" : @{@"$gte" : [formatter stringFromDate:date], @"$lte" : [formatter stringFromDate:[NSDate date]]}, @"location" : @{@"$nearSphere" : @{ @"__type" : @"GeoPoint", @"latitude" : @(location.latitude), @"longitude":@(location.longitude)},@"$maxDistanceInKilometers": @(100.0)}}};
+    return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : [self conditionsForCategories:filterCategories], @"createdAt" : @{@"$gte" : [formatter stringFromDate:date], @"$lte" : [formatter stringFromDate:[NSDate date]]}, @"location" : [self conditionForLocation:location]}};
 }
 
 - (NSDictionary *)queryHotArticlesWithCategories:(NSArray *)filterCategories rating:(NSInteger)rating sortDescriptor:(NSString *)sort location:(CLLocationCoordinate2D)location
 {
-    if (rating) {
-        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"rating" : @{@"$lte" : @(rating)}, @"location" : @{@"$nearSphere" : @{ @"__type" : @"GeoPoint", @"latitude" : @(location.latitude), @"longitude":@(location.longitude)},@"$maxDistanceInKilometers": @(100.0)}}};
-    } else {
-        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"location" : @{@"$nearSphere" : @{ @"__type" : @"GeoPoint", @"latitude" : @(location.latitude), @"longitude":@(location.longitude)},@"$maxDistanceInKilometers": @(100.0)}}};
-    }
+    return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : [self conditionsForCategories:filterCategories], @"rating" : @{@"$lte" : @(rating)}, @"location" : [self conditionForLocation:location]}};
 }
 
 - (NSDictionary *)queryNewArticlesWithCategories:(NSArray *)filterCategories date:(NSDate *)date sortDescriptor:(NSString *)sort location:(CLLocationCoordinate2D)location
 {
-    if (date) {
-        NSDateFormatter *formatter = [NSDateFormatter new];
-        [formatter setDateFormat:kParseDateFormat];
-        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"createdAt" : @{@"$lte" : [formatter stringFromDate:date]}, @"location" : @{@"$nearSphere" : @{ @"__type" : @"GeoPoint", @"latitude" : @(location.latitude), @"longitude":@(location.longitude)},@"$maxDistanceInKilometers": @(100.0)}}};
-    } else {
-        return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : @{@"$in" : [self categoriesToPointers:filterCategories]}, @"location" : @{@"$nearSphere" : @{ @"__type" : @"GeoPoint", @"latitude" : @(location.latitude), @"longitude":@(location.longitude)},@"$maxDistanceInKilometers": @(100.0)}}};
-    }
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    [formatter setDateFormat:kParseDateFormat];
+    return @{@"_method" : @"GET", kPathParamIncludeKey : kArticleIncludeFields, kPathParamOrder : sort, @"where" : @{@"tag" : [self conditionsForCategories:filterCategories], @"createdAt" : @{@"$lte" : [formatter stringFromDate:date]}, @"location" : [self conditionForLocation:location]}};
+}
+
+- (NSDictionary *)conditionsForCategories:(NSArray *)filterCategories
+{
+    return @{@"$in" : [self categoriesToPointers:filterCategories]};
+}
+
+- (NSDictionary *)conditionForLocation:(CLLocationCoordinate2D)location
+{
+    return @{@"$nearSphere" : @{ @"__type" : @"GeoPoint", @"latitude" : @(location.latitude), @"longitude":@(location.longitude)},@"$maxDistanceInKilometers": @(100.0)};
 }
 
 - (NSArray *)categoriesToPointers:(NSArray *)categories
