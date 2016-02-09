@@ -69,6 +69,7 @@
 		40E1CBC51C5F4D4C002EFF72 /* Media+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBC21C5F4D4C002EFF72 /* Media+CoreDataProperties.m */; };
 		40E1CBC61C5F4D4C002EFF72 /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E1CBC41C5F4D4C002EFF72 /* Media.m */; };
 		40E233531C60DECF00DC605A /* PRArticleCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E233521C60DECF00DC605A /* PRArticleCollection.m */; };
+		40E3D5E91C6A33930070CE84 /* PRLocalDataStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E3D5E81C6A33930070CE84 /* PRLocalDataStoreManager.m */; };
 		40E6B9C01C297EAA0083A449 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9BF1C297EAA0083A449 /* main.m */; };
 		40E6B9C31C297EAA0083A449 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E6B9C21C297EAA0083A449 /* AppDelegate.m */; };
 		40E6B9C91C297EAA0083A449 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40E6B9C71C297EAA0083A449 /* Main.storyboard */; };
@@ -227,6 +228,8 @@
 		40E1CBC41C5F4D4C002EFF72 /* Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Media.m; path = ../DataBase/Media.m; sourceTree = "<group>"; };
 		40E233511C60DECF00DC605A /* PRArticleCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRArticleCollection.h; sourceTree = "<group>"; };
 		40E233521C60DECF00DC605A /* PRArticleCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRArticleCollection.m; sourceTree = "<group>"; };
+		40E3D5E71C6A33930070CE84 /* PRLocalDataStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRLocalDataStoreManager.h; sourceTree = "<group>"; };
+		40E3D5E81C6A33930070CE84 /* PRLocalDataStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRLocalDataStoreManager.m; sourceTree = "<group>"; };
 		40E6B9BB1C297EAA0083A449 /* Pulsar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pulsar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E6B9BF1C297EAA0083A449 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		40E6B9C11C297EAA0083A449 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -506,6 +509,8 @@
 				4081B5B71C5BB55A0023383E /* PRDataModel.xcdatamodeld */,
 				4081B5E01C5BC89D0023383E /* PRLocalDataStore.h */,
 				4081B5E11C5BC89D0023383E /* PRLocalDataStore.m */,
+				40E3D5E71C6A33930070CE84 /* PRLocalDataStoreManager.h */,
+				40E3D5E81C6A33930070CE84 /* PRLocalDataStoreManager.m */,
 			);
 			path = DataBase;
 			sourceTree = "<group>";
@@ -976,6 +981,7 @@
 				4081B5B51C5B93590023383E /* PRDetailsCollectionViewCell.m in Sources */,
 				40FF1A081C4393D4005A14BE /* PRScreenLock.m in Sources */,
 				40646F0C1C64BE7B00EBA618 /* PRSocialHelper.m in Sources */,
+				40E3D5E91C6A33930070CE84 /* PRLocalDataStoreManager.m in Sources */,
 				40FC3EB11C5A17BB00C528E9 /* PRLocalMedia.m in Sources */,
 				4073DFC51C5612C400D46C8E /* PRRemotePublishedArticle.m in Sources */,
 				40FC3EAA1C59FACA00C528E9 /* PRRemoteArticle.m in Sources */,
