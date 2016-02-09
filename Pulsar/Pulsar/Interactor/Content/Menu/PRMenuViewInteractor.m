@@ -81,8 +81,12 @@
                 }
                 dispatch_group_leave(loadLocationGroup);
             } else {
+                if (geopoints) {
+                    _locations = geopoints;
+                    _editableLocations = [[NSMutableArray alloc] initWithArray:geopoints];
+                }
                 if (completion) {
-                    completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                    completion(geopoints ? YES : NO, [PRErrorDescriptor descriptionForError:error]);
                 }
                 dispatch_group_leave(loadLocationGroup);
             }

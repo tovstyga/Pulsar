@@ -75,24 +75,24 @@
                                 <items>
                                     <navigationItem title="News" id="AGW-ND-h6r">
                                         <leftBarButtonItems>
-                                            <barButtonItem title="Filters" id="sVw-97-6GF" userLabel="Menu">
+                                            <barButtonItem systemItem="bookmarks" id="sVw-97-6GF" userLabel="Menu">
                                                 <connections>
                                                     <action selector="toggleFilters:" destination="BQC-lu-wVt" id="FFy-RW-ykM"/>
                                                 </connections>
                                             </barButtonItem>
-                                            <barButtonItem title="Logout" id="lov-R6-ZGU">
+                                            <barButtonItem systemItem="reply" id="lov-R6-ZGU">
                                                 <connections>
                                                     <action selector="logout:" destination="BQC-lu-wVt" id="vwS-zh-4uP"/>
                                                 </connections>
                                             </barButtonItem>
                                         </leftBarButtonItems>
                                         <rightBarButtonItems>
-                                            <barButtonItem title="Refresh" id="O99-a0-j7w">
+                                            <barButtonItem systemItem="refresh" id="O99-a0-j7w">
                                                 <connections>
                                                     <action selector="refresh:" destination="BQC-lu-wVt" id="Ykq-EF-gh9"/>
                                                 </connections>
                                             </barButtonItem>
-                                            <barButtonItem title="Make new" id="wUa-kL-A0x">
+                                            <barButtonItem systemItem="add" id="wUa-kL-A0x">
                                                 <connections>
                                                     <segue destination="qli-vd-Vwn" kind="show" id="d3d-2s-2hi"/>
                                                 </connections>
@@ -291,11 +291,11 @@
                                 <rect key="frame" x="0.0" y="687" width="414" height="49"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <items>
-                                    <tabBarItem title="Hot" id="6fB-ho-Dde"/>
-                                    <tabBarItem title="New" id="eAf-Ag-QYO"/>
+                                    <tabBarItem title="Hot" image="hot" id="6fB-ho-Dde"/>
+                                    <tabBarItem title="New" image="clock" id="eAf-Ag-QYO"/>
                                     <tabBarItem systemItem="mostViewed" id="Oos-pU-63b"/>
                                     <tabBarItem systemItem="favorites" id="GqP-xX-JG6"/>
-                                    <tabBarItem title="Created" id="cFG-tM-a46"/>
+                                    <tabBarItem title="Created" image="created" id="cFG-tM-a46"/>
                                 </items>
                             </tabBar>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ukm-zn-J62">
@@ -377,12 +377,12 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                 <items>
                                     <navigationItem title="New" id="jPm-fv-iyy">
-                                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="Qw0-WR-TlD">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Qw0-WR-TlD">
                                             <connections>
                                                 <action selector="cancelAction:" destination="qli-vd-Vwn" id="CcB-Ls-hqd"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Publish" id="wSb-4P-cHd">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="wSb-4P-cHd">
                                             <connections>
                                                 <action selector="publishAction:" destination="qli-vd-Vwn" id="7xE-OE-iH1"/>
                                             </connections>
@@ -911,12 +911,12 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                 <items>
                                     <navigationItem id="IJM-RW-1yh">
-                                        <barButtonItem key="leftBarButtonItem" title="Close" id="foZ-Gs-LaZ">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="foZ-Gs-LaZ">
                                             <connections>
                                                 <action selector="closeAction:" destination="WBA-94-xCi" id="zgL-cL-y9k"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Save location" id="QB5-NX-J3u">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="QB5-NX-J3u">
                                             <connections>
                                                 <action selector="saveLocationAction:" destination="WBA-94-xCi" id="1f8-Dk-a9N"/>
                                             </connections>
@@ -1044,7 +1044,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                 <items>
                                     <navigationItem title="Details" id="vCP-jt-YHK">
-                                        <barButtonItem key="leftBarButtonItem" title="Back" id="yUW-Ju-NYh">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="yUW-Ju-NYh">
                                             <connections>
                                                 <action selector="cancelAction:" destination="IMN-rm-sOR" id="jI0-jE-sFS"/>
                                             </connections>
@@ -1219,7 +1219,10 @@
     </scenes>
     <resources>
         <image name="Pulse-icon" width="80" height="80"/>
+        <image name="clock" width="32" height="31"/>
+        <image name="created" width="32" height="32"/>
         <image name="cross" width="80" height="80"/>
+        <image name="hot" width="32" height="32"/>
         <image name="plus" width="80" height="80"/>
     </resources>
     <inferredMetricsTieBreakers>
