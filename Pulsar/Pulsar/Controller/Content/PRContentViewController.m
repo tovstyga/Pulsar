@@ -281,6 +281,7 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     static PRContentViewCell *cell;
     if (!cell) {
         cell = [self.contentTableView dequeueReusableCellWithIdentifier:kContentCellIdentifier];
+        [cell setMaxTextWidth:CGRectGetWidth(self.contentTableView.frame)];
     }
     [self setupCell:cell atIndexPath:indexPath];
     

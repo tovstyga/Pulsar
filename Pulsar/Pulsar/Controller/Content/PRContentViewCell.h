@@ -26,4 +26,6 @@
 @property (strong, nonatomic) Article *article;
 @property (weak, nonatomic) id<PRContentCellDelegate> delegate;
 
+- (void)setMaxTextWidth:(CGFloat)width;
+
 @end

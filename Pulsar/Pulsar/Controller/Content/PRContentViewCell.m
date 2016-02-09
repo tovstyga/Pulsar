@@ -45,6 +45,8 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
     PRLikeState _likeState;
 }
 
+static int const kRightBorderMargin = 100;
+
 - (void)awakeFromNib {
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickOnTitle)];
     [self.cellTitle addGestureRecognizer:tapRecognizer];
@@ -58,6 +60,11 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
 }
 
 #pragma mark - Accessors
+
+- (void)setMaxTextWidth:(CGFloat)width
+{
+    self.cellText.preferredMaxLayoutWidth = width - kRightBorderMargin;
+}
 
 - (void)setArticle:(Article *)article
 {
