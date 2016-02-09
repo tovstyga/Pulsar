@@ -185,10 +185,9 @@
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5DX-3B-vc7">
                                                             <rect key="frame" x="139" y="0.0" width="138" height="30"/>
                                                             <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kUX-5P-rVM">
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kUX-5P-rVM">
                                                                     <rect key="frame" x="0.0" y="0.0" width="46" height="30"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                                    <state key="normal" title="Up"/>
+                                                                    <state key="normal" image="like"/>
                                                                     <connections>
                                                                         <action selector="upRating:" destination="rk1-gh-pbU" eventType="touchUpInside" id="DyQ-95-u1t"/>
                                                                     </connections>
@@ -199,10 +198,9 @@
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Myc-gh-luP">
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Myc-gh-luP">
                                                                     <rect key="frame" x="92" y="0.0" width="46" height="30"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                                    <state key="normal" title="Down"/>
+                                                                    <state key="normal" image="dislike"/>
                                                                     <connections>
                                                                         <action selector="downRating:" destination="rk1-gh-pbU" eventType="touchUpInside" id="f7W-uA-bpJ"/>
                                                                     </connections>
@@ -1135,7 +1133,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFR-kL-8Dx">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFR-kL-8Dx">
                                 <rect key="frame" x="227" y="147" width="46" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="OYy-zd-E4G"/>
@@ -1143,18 +1141,18 @@
                                     <constraint firstAttribute="height" constant="30" id="pdH-TY-QR3"/>
                                     <constraint firstAttribute="width" constant="46" id="tih-y7-WP4"/>
                                 </constraints>
-                                <state key="normal" title="Up"/>
+                                <state key="normal" image="like"/>
                                 <connections>
                                     <action selector="upRationgAction:" destination="IMN-rm-sOR" eventType="touchUpInside" id="e0V-Tr-iS0"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ls9-Xa-ol9">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ls9-Xa-ol9">
                                 <rect key="frame" x="348" y="147" width="46" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="46" id="U4g-yb-BA8"/>
                                     <constraint firstAttribute="height" constant="30" id="vJf-nH-3Fe"/>
                                 </constraints>
-                                <state key="normal" title="Down"/>
+                                <state key="normal" image="dislike"/>
                                 <connections>
                                     <action selector="downRatingAction:" destination="IMN-rm-sOR" eventType="touchUpInside" id="dA3-u7-F6W"/>
                                 </connections>
@@ -1222,7 +1220,9 @@
         <image name="clock" width="32" height="31"/>
         <image name="created" width="32" height="32"/>
         <image name="cross" width="80" height="80"/>
+        <image name="dislike" width="32" height="36"/>
         <image name="hot" width="32" height="32"/>
+        <image name="like" width="34" height="37"/>
         <image name="plus" width="80" height="80"/>
     </resources>
     <inferredMetricsTieBreakers>
