@@ -348,6 +348,7 @@
         for (int i = 0; i < [self numberOfSections]; i++) {
             if ([self numberOfItemsInSection:i]) {
                 _isDataAvailable = YES;
+                break;
             }
         }
     } else {

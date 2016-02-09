@@ -278,7 +278,10 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    PRContentViewCell *cell = [self.contentTableView dequeueReusableCellWithIdentifier:kContentCellIdentifier];
+    static PRContentViewCell *cell;
+    if (!cell) {
+        cell = [self.contentTableView dequeueReusableCellWithIdentifier:kContentCellIdentifier];
+    }
     [self setupCell:cell atIndexPath:indexPath];
     
     return [self calculateHeightForConfiguredSizingCell:cell];
