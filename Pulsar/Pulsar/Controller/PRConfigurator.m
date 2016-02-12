@@ -68,8 +68,8 @@ static PRConfigurator *sharedInstance;
 
 - (void)configureViewController:(UIViewController *)viewController sourceViewController:(UIViewController *)sourceViewController
 {
-    if ([viewController isMemberOfClass:[PRLoginViewController class]]) {
-        [(PRLoginViewController *)viewController setInteractor:[self loginInteractor]];
+    if (([viewController isKindOfClass:[UINavigationController class]]) && [[(UINavigationController *)viewController topViewController] isMemberOfClass:[PRLoginViewController class]]) {
+        [(PRLoginViewController *)[(UINavigationController *)viewController topViewController] setInteractor:[self loginInteractor]];
     } else if ([viewController isMemberOfClass:[PRRegistrationViewController class]]) {
         [(PRRegistrationViewController *)viewController setInteractor:[self registrationInteractor]];
     } else if ([viewController isMemberOfClass:[PRRestoreAccountViewController class]]) {

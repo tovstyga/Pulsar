@@ -88,7 +88,7 @@ static int const kHeightFromKeyboard = 10;
 
 - (IBAction)cancelAction:(UIButton *)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)registerAction:(UIButton *)sender
@@ -104,7 +104,7 @@ static int const kHeightFromKeyboard = 10;
                                  __strong typeof(wSelf) sSelf = wSelf;
                                  if (success) {
                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                         [sSelf performSegueWithIdentifier:kToContentSegueIdentifier sender:sSelf];
+                                         [sSelf dismissViewControllerAnimated:YES completion:nil];
                                      });
                                  } else {
                                      [sSelf showAlertWithMessage:errorMessage];

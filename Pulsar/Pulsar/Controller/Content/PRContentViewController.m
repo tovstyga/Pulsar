@@ -16,6 +16,8 @@
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *menuTabBarButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *addButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *logoutButton;
 @property (weak, nonatomic) IBOutlet UITabBar *tabBar;
 
 @property (weak, nonatomic) IBOutlet UITabBarItem *tabItemHot;
@@ -25,7 +27,6 @@
 @property (weak, nonatomic) IBOutlet UITabBarItem *tabItemCreated;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tabBarConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topBarConstraint;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *categoriesMenuConstraint;
 @property (weak, nonatomic) IBOutlet UITableView *contentTableView;
@@ -135,6 +136,7 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
         [[PRScreenLock sharedInstance] unlock];
         if (success) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                once++;
                 [sSelf performSegueWithIdentifier:kToLoginSegueIdentifier sender:sSelf];
             });
         } else {
@@ -358,6 +360,13 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
             [self.delegate menuWillOpen];
         }
     }
+    
+    self.refreshButton.enabled = hide ? YES : NO;
+    self.logoutButton.enabled = hide ? YES : NO;
+    self.addButton.enabled = hide ? YES : NO;
+    self.contentTableView.userInteractionEnabled = hide ? YES : NO;
+    
+    
     _isOpenedMenu = !hide;
     self.categoriesMenuConstraint.constant = hide ? _closedMenuDefaultConstraint : kSpaceFromMenuToRightBorder;
     [UIView animateWithDuration:0.3f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{

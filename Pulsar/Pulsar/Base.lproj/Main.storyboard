@@ -319,10 +319,12 @@
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
+                        <outlet property="addButton" destination="HYW-UZ-MqU" id="LWb-1i-fZd"/>
                         <outlet property="categoriesMenuConstraint" destination="e8s-J6-dYN" id="2Da-e3-wkm"/>
                         <outlet property="contentTableView" destination="8iQ-Co-4u7" id="3v8-RE-oXc"/>
+                        <outlet property="logoutButton" destination="nNX-dP-dP1" id="N50-DW-Q3j"/>
                         <outlet property="menuTabBarButton" destination="B7V-gC-bf1" id="cTc-CW-Lcj"/>
-                        <outlet property="refreshButton" destination="Vm7-T3-bco" id="6da-4v-yGI"/>
+                        <outlet property="refreshButton" destination="Vm7-T3-bco" id="8Wr-JR-gYx"/>
                         <outlet property="tabBar" destination="x6l-uK-PnR" id="bc3-oJ-Qpy"/>
                         <outlet property="tabBarConstraint" destination="VHl-Lg-tHJ" id="aZR-ko-bEE"/>
                         <outlet property="tabItemCreated" destination="cFG-tM-a46" id="7NC-dU-ggn"/>
@@ -330,7 +332,7 @@
                         <outlet property="tabItemHot" destination="6fB-ho-Dde" id="mVe-66-7bA"/>
                         <outlet property="tabItemNew" destination="eAf-Ag-QYO" id="ZXF-oT-vhx"/>
                         <outlet property="tabItemTop" destination="Oos-pU-63b" id="E7S-bk-HSj"/>
-                        <segue destination="4bO-jm-Nis" kind="presentation" identifier="content_to_login_segue" id="MMh-xj-UCO"/>
+                        <segue destination="Aw4-uS-fCp" kind="presentation" identifier="content_to_login_segue" id="MMh-xj-UCO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MWr-LR-Bb4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -554,7 +556,7 @@
             </objects>
             <point key="canvasLocation" x="1682" y="521"/>
         </scene>
-        <!--Login View Controller-->
+        <!--Authorization-->
         <scene sceneID="rOR-Sa-GMG">
             <objects>
                 <viewController id="4bO-jm-Nis" customClass="PRLoginViewController" sceneMemberID="viewController">
@@ -593,7 +595,7 @@
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="EE9-5C-h9b" kind="presentation" id="ivA-vV-Edo"/>
+                                    <segue destination="EE9-5C-h9b" kind="show" id="xcI-Vf-pge"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jgw-oB-gAe">
@@ -604,7 +606,7 @@
                                     <color key="titleShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="registrationAction:" destination="4bO-jm-Nis" eventType="touchUpInside" id="FtJ-FF-viU"/>
+                                    <segue destination="5Ye-i9-dne" kind="show" id="FnS-ph-YXV"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -634,13 +636,12 @@
                             <outletCollection property="gestureRecognizers" destination="F55-j2-IWa" appends="YES" id="y6K-xi-vC7"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" id="zvk-V1-xXm"/>
+                    <navigationItem key="navigationItem" title="Authorization" id="zvk-V1-xXm"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
                         <outlet property="approvalButton" destination="DaG-NB-9Kn" id="eCs-Jg-97h"/>
                         <outlet property="loginTextField" destination="CoD-jJ-EnI" id="XJ6-zf-dlD"/>
                         <outlet property="passwordTextField" destination="lgg-hS-7ub" id="1TB-Ah-e7W"/>
-                        <segue destination="5Ye-i9-dne" kind="presentation" identifier="to_registration_segue" id="F9g-5l-vZh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tag-us-Kq7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -650,9 +651,9 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1639" y="-628"/>
+            <point key="canvasLocation" x="2265" y="-628"/>
         </scene>
-        <!--Restore Account View Controller-->
+        <!--Restore Pass-->
         <scene sceneID="X48-OS-v9F">
             <objects>
                 <viewController id="EE9-5C-h9b" customClass="PRRestoreAccountViewController" sceneMemberID="viewController">
@@ -716,6 +717,7 @@
                             <outletCollection property="gestureRecognizers" destination="CVM-dw-zcE" appends="YES" id="xh9-va-R13"/>
                         </connections>
                     </view>
+                    <navigationItem key="navigationItem" title="Restore Pass" id="cNR-O7-pX1"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
                         <outlet property="approvalButton" destination="Ul6-wz-65s" id="F3j-0U-eGv"/>
@@ -729,9 +731,9 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2167" y="-1074"/>
+            <point key="canvasLocation" x="2793" y="-1074"/>
         </scene>
-        <!--Registration View Controller-->
+        <!--Registration-->
         <scene sceneID="UwP-fz-EZ0">
             <objects>
                 <viewController id="5Ye-i9-dne" customClass="PRRegistrationViewController" sceneMemberID="viewController">
@@ -744,43 +746,43 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pjs-v8-Jza">
-                                <rect key="frame" x="30" y="45" width="354" height="21"/>
+                                <rect key="frame" x="30" y="89" width="354" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Login" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BmV-el-ATJ">
-                                <rect key="frame" x="30" y="81" width="354" height="30"/>
+                                <rect key="frame" x="30" y="125" width="354" height="30"/>
                                 <color key="backgroundColor" red="0.88627450980392153" green="0.76862745098039209" blue="0.78823529411764703" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="E-Mail" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3yA-e8-Hda">
-                                <rect key="frame" x="30" y="141" width="354" height="21"/>
+                                <rect key="frame" x="30" y="185" width="354" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="user@mail.com" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DTt-KL-mV7">
-                                <rect key="frame" x="30" y="177" width="354" height="30"/>
+                                <rect key="frame" x="30" y="221" width="354" height="30"/>
                                 <color key="backgroundColor" red="0.8862745098" green="0.76862745099999996" blue="0.78823529410000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="next"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d0f-3b-qDC">
-                                <rect key="frame" x="30" y="237" width="354" height="21"/>
+                                <rect key="frame" x="30" y="281" width="354" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confirm password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1lv-CG-FbF">
-                                <rect key="frame" x="30" y="333" width="354" height="21"/>
+                                <rect key="frame" x="30" y="377" width="354" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dbM-Zk-b7G">
-                                <rect key="frame" x="30" y="369" width="354" height="30"/>
+                                <rect key="frame" x="30" y="413" width="354" height="30"/>
                                 <color key="backgroundColor" red="0.79607843137254897" green="0.88627450980392153" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
@@ -806,7 +808,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4u1-KK-cVR">
-                                <rect key="frame" x="30" y="273" width="354" height="30"/>
+                                <rect key="frame" x="30" y="317" width="354" height="30"/>
                                 <color key="backgroundColor" red="0.8862745098" green="0.76862745099999996" blue="0.78823529410000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next" secureTextEntry="YES"/>
@@ -850,6 +852,7 @@
                             <outletCollection property="gestureRecognizers" destination="R29-8f-8yl" appends="YES" id="8CA-Ad-g1w"/>
                         </connections>
                     </view>
+                    <navigationItem key="navigationItem" title="Registration" id="5gg-dJ-htg"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
                         <outlet property="approvalButton" destination="XoK-Ig-ARY" id="awK-w1-WsC"/>
@@ -866,7 +869,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2167" y="-261"/>
+            <point key="canvasLocation" x="2793" y="-261"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="k2Y-P5-9M0">
@@ -1192,6 +1195,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IFR-by-sTO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="537" y="495"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="RlM-g2-03b">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Aw4-uS-fCp" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="0br-vt-afb">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="4bO-jm-Nis" kind="relationship" relationship="rootViewController" id="yaB-Bv-THv"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="X0K-ZI-G0r" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1639" y="-628"/>
         </scene>
     </scenes>
     <resources>

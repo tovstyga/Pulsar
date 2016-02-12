@@ -227,6 +227,9 @@
 - (void)generateDataSourceOfAllCategories:(NSArray *)allCategories userCategories:(NSArray *)userCategories
 {
     _categories = [allCategories copy];
+    [_categories enumerateObjectsUsingBlock:^(InterestCategory *category, NSUInteger idx, BOOL *stop) {
+        category.selected = @(NO);
+    }];
     NSMutableArray *states = [NSMutableArray new];
     for (InterestCategory *userCategory in userCategories) {
         [_categories enumerateObjectsUsingBlock:^(InterestCategory *categoty, NSUInteger idx, BOOL *stop) {

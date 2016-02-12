@@ -125,10 +125,11 @@ static NSString * const kMediaClassName = @"Media";
         id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         PRRemoteRegistrationResponse *sessionInfo = [[PRRemoteRegistrationResponse alloc] initWithJSON:json];
         self.networkSessionKey = sessionInfo.sessionToken;
-        [self resumeSession:nil]; //for loading user data
-        if (completion) {
-            completion(nil);
-        }
+        [self resumeSession:^(BOOL success) {
+            if (completion) {
+                completion(nil);
+            }
+        }]; //for loading user data
     } failure:^(NSError *error) {
         if (completion) {
             completion(error);
@@ -173,6 +174,11 @@ static NSString * const kMediaClassName = @"Media";
 {
     [[PRNetworkDataProvider sharedInstance] requestLogoutWithSuccess:^(NSData *data, NSURLResponse *response) {
         self.networkSessionKey = nil;
+        _currentUser = nil;
+        _allCategories = nil;
+        dispatch_sync(dispatch_get_main_queue(), ^{
+           [[[PRLocalDataStore sharedInstance] mainContext] reset]; 
+        });
         if (completion) {
             completion(nil);
         }
@@ -185,10 +191,14 @@ static NSString * const kMediaClassName = @"Media";
 
 - (void)resumeSession:(void (^)(BOOL))completion
 {
+    _currentUser = nil;
+    _allCategories = nil;
     [[PRNetworkDataProvider sharedInstance] validateSessionToken:self.networkSessionKey success:^(NSData *data, NSURLResponse *response) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
             PRTokenValidationResponse *validationResponse = [[PRTokenValidationResponse alloc] initWithJSON:json];
+            _currentUser = nil;
+            _allCategories = nil;
             [self.storeManager createIfNeedsUserWithId:validationResponse.objectId email:validationResponse.email name:validationResponse.userName];
             if (completion) {
                 completion(YES);
