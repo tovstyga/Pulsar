@@ -29,6 +29,12 @@
     [self startLocations];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self applyMapViewMemoryFix];
+}
+
 #pragma mark - Actions
 
 - (IBAction)closeAction:(UIBarButtonItem *)sender
@@ -139,6 +145,32 @@
         CLLocationCoordinate2D droppedAt = view.annotation.coordinate;
         [view.annotation setCoordinate:droppedAt];
     }
+}
+
+- (void)applyMapViewMemoryFix{
+    
+    switch (self.mapView.mapType) {
+        case MKMapTypeHybrid:
+        {
+            self.mapView.mapType = MKMapTypeStandard;
+        }
+            
+            break;
+        case MKMapTypeStandard:
+        {
+            self.mapView.mapType = MKMapTypeHybrid;
+        }
+            
+            break;
+        default:
+            break;
+    }
+    [self.mapView removeAnnotation:self.annotation];
+    self.annotation = nil;
+    self.mapView.showsUserLocation = NO;
+    self.mapView.delegate = nil;
+    [self.mapView removeFromSuperview];
+    self.mapView = nil;
 }
 
 @end
