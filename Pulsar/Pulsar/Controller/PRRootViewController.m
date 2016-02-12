@@ -34,10 +34,6 @@
     [[PRConfigurator sharedInstance] configureViewController:segue.destinationViewController sourceViewController:segue.sourceViewController];
 }
 
-- (BOOL)prefersStatusBarHidden {
-    return YES;
-}
-
 - (void)showAlertWithMessage:(NSString *)message
 {
     if (![NSThread isMainThread]) {

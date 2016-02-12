@@ -20,7 +20,7 @@
 
 @implementation PRLoginViewController
 
-static NSString * const kToContentSegueIdentifier = @"login_to_content_segue";
+static NSString * const kToRegistrationSegueIdentifier = @"to_registration_segue";
 
 #pragma mark - LifeCycle
 
@@ -54,13 +54,18 @@ static NSString * const kToContentSegueIdentifier = @"login_to_content_segue";
                             __strong typeof(wSelf) sSelf = wSelf;
                             if (success) {
                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                    [sSelf performSegueWithIdentifier:kToContentSegueIdentifier sender:sSelf];
+                                    [sSelf dismissViewControllerAnimated:YES completion:nil];
                                 });
                             } else {
                                 [sSelf showAlertWithMessage:errorMessage];
                             }
                         }
                     }];
+}
+
+- (IBAction)registrationAction:(UIButton *)sender
+{
+    [self performSegueWithIdentifier:kToRegistrationSegueIdentifier sender:self];
 }
 
 - (IBAction)tapOnView:(UITapGestureRecognizer *)sender

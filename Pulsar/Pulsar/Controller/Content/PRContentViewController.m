@@ -14,7 +14,6 @@
 
 @interface PRContentViewController()<UITabBarDelegate, PRContentCellDelegate>
 
-@property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *menuTabBarButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
 @property (weak, nonatomic) IBOutlet UITabBar *tabBar;
@@ -47,7 +46,7 @@
 }
 
 static CGFloat const kSpaceFromMenuToRightBorder = 40;
-static NSString * const kToContentSegueIdentifier = @"content_to_login_segue";
+static NSString * const kToLoginSegueIdentifier = @"content_to_login_segue";
 
 static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
@@ -80,23 +79,18 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     if (_isOpenedMenu) {
         [self toggleMenu];
     }
-    
-//    self.contentTableView.rowHeight = UITableViewAutomaticDimension;
-//    self.contentTableView.estimatedRowHeight = 300.0;
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    dispatch_once(&once, ^{
-        [self refresh:nil];
-    });
     [super viewWillAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
+    if ([self.interactor isLogined]) {
+        dispatch_once(&once, ^{
+            [self refresh:nil];
+        });
+    } else {
+        [self performSegueWithIdentifier:kToLoginSegueIdentifier sender:self];
+    }
 }
 
 #pragma mark - Events
@@ -121,8 +115,9 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     [self.interactor reloadDataWithCompletion:^(BOOL success, NSString *errorMessage) {
         if (success) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.contentTableView reloadData];
                 [self showRefreshControll:NO];
+                [self.contentTableView reloadData];
+                [self.contentTableView scrollsToTop];
                 self.contentTableView.userInteractionEnabled = YES;
                 self.refreshButton.enabled = YES;
                 _loadingInProcess = NO;
@@ -140,7 +135,7 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
         [[PRScreenLock sharedInstance] unlock];
         if (success) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [sSelf performSegueWithIdentifier:kToContentSegueIdentifier sender:sSelf];
+                [sSelf performSegueWithIdentifier:kToLoginSegueIdentifier sender:sSelf];
             });
         } else {
             [sSelf showAlertWithMessage:errorMessage];

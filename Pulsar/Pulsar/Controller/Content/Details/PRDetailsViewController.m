@@ -102,10 +102,6 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
 
 #pragma mark - Actions
 
-- (IBAction)cancelAction:(UIBarButtonItem *)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
 
 - (IBAction)clickOnImage:(UITapGestureRecognizer *)sender
 {
@@ -186,13 +182,19 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
     }
 }
 
+- (void)imagePresenterDidClose
+{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
 #pragma mark - Internal
 
 - (void)showImage
 {
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     if (!self.imagePresenter) {
         self.imagePresenter = [[PRImagePresenter alloc] init];
-        self.imagePresenter.dataSource = self;
+        self.imagePresenter.delegate = self;
     }
     [self.imagePresenter presentFromParentViewController:self animated:YES completion:nil];
 }

@@ -74,8 +74,8 @@ static PRConfigurator *sharedInstance;
         [(PRRegistrationViewController *)viewController setInteractor:[self registrationInteractor]];
     } else if ([viewController isMemberOfClass:[PRRestoreAccountViewController class]]) {
         [(PRRestoreAccountViewController *)viewController setInteractor:[self restoreAccountInteractor]];
-    } else if ([viewController isMemberOfClass:[PRContentViewController class]]) {
-        [(PRContentViewController *)viewController setInteractor:[self contentInteractor]];
+    } else if ([viewController isKindOfClass:[UINavigationController class]] && [[(UINavigationController *)viewController topViewController] isMemberOfClass:[PRContentViewController class]]) {
+        [(PRContentViewController *)[(UINavigationController *)viewController topViewController] setInteractor:[self contentInteractor]];
     } else if ([viewController isMemberOfClass:[PRMenuViewController class]]) {
         [(PRMenuViewController *)viewController setInteractor:[self menuInteractorWithDelegate:sourceViewController]];
         if ([viewController conformsToProtocol:@protocol(PRContentViewDelegate)] && [sourceViewController isKindOfClass:[PRContentViewController class]]) {

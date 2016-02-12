@@ -21,6 +21,8 @@ typedef NS_ENUM(NSUInteger, PRFeedType) {
 
 @property (nonatomic) PRFeedType activeFeed;
 
+- (BOOL)isLogined;
+
 - (void)thumbnailForMedia:(Media *)media completion:(void(^)(UIImage *image, NSError *error))completion;
 
 - (void)logoutWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion;

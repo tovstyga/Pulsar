@@ -7,11 +7,11 @@
 //
 
 #import "PRLaunchScreenViewController.h"
+#import "PRContentViewController.h"
 #import "PRDataProvider.h"
 
 @implementation PRLaunchScreenViewController
 
-static NSString * const kToLoginSegueIdentifier = @"launch_to_login_segue";
 static NSString * const kToContentSegueIdentifier = @"launch_to_content_segue";
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -29,11 +29,7 @@ static NSString * const kToContentSegueIdentifier = @"launch_to_content_segue";
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (weakSelf) {
                     __strong typeof(weakSelf) strongSelf = weakSelf;
-                    if (success) {
-                        [strongSelf performSegueWithIdentifier:kToContentSegueIdentifier sender:strongSelf];
-                    } else {
-                        [strongSelf performSegueWithIdentifier:kToLoginSegueIdentifier sender:strongSelf];
-                    }
+                    [strongSelf performSegueWithIdentifier:kToContentSegueIdentifier sender:strongSelf];
                 }
             });
         }];

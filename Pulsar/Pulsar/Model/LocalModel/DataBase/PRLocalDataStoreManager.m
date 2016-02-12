@@ -57,11 +57,21 @@ static NSString * const kArticleClassName = @"Article";
     [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", identifier]];
     NSError *error = nil;
     NSArray *result = [[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:&error];
+
+//    NSError * __block error = nil;
+//    NSManagedObjectContext *privateContext = [[PRLocalDataStore sharedInstance] backgroundContext];
+//    
+//    NSArray * __block result;
+//    
+//    [privateContext performBlockAndWait:^{
+//        result = [privateContext executeFetchRequest:request error:&error];
+//    }];
+    
     if ([result count]) {
         [self preloading];
         return YES;
     }
-    
+#warning
     User *user = [NSEntityDescription insertNewObjectForEntityForName:kCoreUserTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
     user.remoteIdentifier = identifier;
     user.email = email;

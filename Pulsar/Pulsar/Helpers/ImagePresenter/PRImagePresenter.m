@@ -22,7 +22,7 @@
 
 - (void)presentFromParentViewController:(UIViewController *)parentViewController animated:(BOOL)flag completion:(void (^)(void))completion
 {
-    if (!self.dataSource) {
+    if (!self.delegate) {
         if (completion) {
             completion();
         }
@@ -41,7 +41,7 @@
             }
         }];
     }
-    [self.dataSource loadImageWithCompletion:^(UIImage *image, NSString *errorMessage) {
+    [self.delegate loadImageWithCompletion:^(UIImage *image, NSString *errorMessage) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (image) {
                 [self.imageView setImage:image];
@@ -68,6 +68,9 @@
     } completion:^(BOOL finished) {
         self.imageView.image = nil;
         [self.view removeFromSuperview];
+        if ([self.delegate respondsToSelector:@selector(imagePresenterDidClose)]) {
+            [self.delegate imagePresenterDidClose];
+        }
     }];
     
 }

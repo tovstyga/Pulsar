@@ -39,6 +39,11 @@
     return self;
 }
 
+- (BOOL)isLogined
+{
+    return [PRDataProvider sharedInstance].currentUser;
+}
+
 - (void)logoutWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
     [[PRDataProvider sharedInstance] logoutWithCompletion:^(NSError *error) {

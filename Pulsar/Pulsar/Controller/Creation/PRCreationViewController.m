@@ -93,7 +93,7 @@ static int const kHeightFromKeyboard = 10;
     [_images removeAllObjects];
     self.imageView.image = nil;
     [self.galletyCollectionView reloadData];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)publishAction:(UIBarButtonItem *)sender

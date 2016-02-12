@@ -14,11 +14,15 @@
 
 - (void)loadImageWithCompletion:(void(^)(UIImage *image, NSString *errorMessage))completion;
 
+@optional
+
+- (void)imagePresenterDidClose;
+
 @end
 
 @interface PRImagePresenter : UIViewController
 
-@property (weak, nonatomic) id<PRImagePresenterDataSource> dataSource;
+@property (weak, nonatomic) id<PRImagePresenterDataSource> delegate;
 
 - (void)presentFromParentViewController:(UIViewController *)parentViewController animated:(BOOL)flag completion:(void (^)(void))completion;
 
