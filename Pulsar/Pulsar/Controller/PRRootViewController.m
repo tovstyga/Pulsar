@@ -9,6 +9,7 @@
 #import "PRConfigurator.h"
 #import "PRRootViewController.h"
 #import "PRAlertHelper.h"
+#import "PRLocalDataStore.h"
 
 @interface PRRootViewController ()
 
@@ -21,6 +22,15 @@
 }
 
 - (void)didReceiveMemoryWarning {
+    
+    [[[PRLocalDataStore sharedInstance] backgroundContext] performBlock:^{
+        [[[PRLocalDataStore sharedInstance] backgroundContext] refreshAllObjects];
+    }];
+    
+    [[[PRLocalDataStore sharedInstance] mainContext] performBlock:^{
+        [[[PRLocalDataStore sharedInstance] mainContext] refreshAllObjects];
+    }];
+    
     [super didReceiveMemoryWarning];
 }
 
