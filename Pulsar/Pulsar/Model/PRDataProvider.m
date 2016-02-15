@@ -191,8 +191,6 @@ static NSString * const kMediaClassName = @"Media";
 
 - (void)resumeSession:(void (^)(BOOL))completion
 {
-    _currentUser = nil;
-    _allCategories = nil;
     [[PRNetworkDataProvider sharedInstance] validateSessionToken:self.networkSessionKey success:^(NSData *data, NSURLResponse *response) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
@@ -747,12 +745,9 @@ static NSString * const kMediaClassName = @"Media";
         results = [PRRemoteResults resultsWithData:json contentType:[PRRemoteCategory class]];
         [self.storeManager updateCategories:results];
     }
-    __block NSArray *localResults = nil;
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        localResults = [self.storeManager allLocalCategoriesForMain];
-    });
-    _allCategories = localResults;
-    return localResults;
+
+    _allCategories = [self.storeManager allLocalCategoriesForMain];
+    return _allCategories;
 }
 
 - (NSArray *)localUserCategoriesFromResponseData:(NSData *)data

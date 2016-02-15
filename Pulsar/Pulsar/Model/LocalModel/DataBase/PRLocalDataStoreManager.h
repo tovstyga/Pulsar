@@ -18,7 +18,7 @@
 
 - (User *)loadUser;
 
-- (BOOL)createIfNeedsUserWithId:(NSString *)identifier email:(NSString *)email name:(NSString *)name;
+- (void)createIfNeedsUserWithId:(NSString *)identifier email:(NSString *)email name:(NSString *)name;
 
 - (void)addUserCategories:(NSArray<InterestCategory *> *)addCategories remove:(NSArray<InterestCategory *> *)removeCategories;
 

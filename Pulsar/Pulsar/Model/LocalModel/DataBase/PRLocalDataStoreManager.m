@@ -51,36 +51,32 @@ static NSString * const kArticleClassName = @"Article";
     dispatch_group_wait(loadingGroup, DISPATCH_TIME_FOREVER);
 }
 
-- (BOOL)createIfNeedsUserWithId:(NSString *)identifier email:(NSString *)email name:(NSString *)name
+- (void)createIfNeedsUserWithId:(NSString *)identifier email:(NSString *)email name:(NSString *)name
 {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreUserTable];
     [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", identifier]];
-    NSError *error = nil;
-    NSArray *result = [[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:&error];
+    __block NSArray *result = nil;
 
-//    NSError * __block error = nil;
-//    NSManagedObjectContext *privateContext = [[PRLocalDataStore sharedInstance] backgroundContext];
-//    
-//    NSArray * __block result;
-//    
-//    [privateContext performBlockAndWait:^{
-//        result = [privateContext executeFetchRequest:request error:&error];
-//    }];
+    NSManagedObjectContext *privateContext = [[PRLocalDataStore sharedInstance] backgroundContext];
+    [privateContext performBlockAndWait:^{
+        result = [privateContext executeFetchRequest:request error:nil];
+    }];
     
     if ([result count]) {
         [self preloading];
-        return YES;
+        return;
     }
-#warning
-    User *user = [NSEntityDescription insertNewObjectForEntityForName:kCoreUserTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
-    user.remoteIdentifier = identifier;
-    user.email = email;
-    user.userName = name;
+
+    [privateContext performBlockAndWait:^{
+        User *user = [NSEntityDescription insertNewObjectForEntityForName:kCoreUserTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
+        user.remoteIdentifier = identifier;
+        user.email = email;
+        user.userName = name;
+    }];
+    
     [[PRLocalDataStore sharedInstance] saveBackgroundContext];
     
     [self preloading];
-    
-    return YES;
 }
 
 - (User *)loadUser
@@ -101,77 +97,84 @@ static NSString * const kArticleClassName = @"Article";
     
     NSMutableArray *categoriesForAdd = [[NSMutableArray alloc] initWithArray:categories];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreInterestCategoryTable];
-    NSError *error;
-    NSArray *fetchResult = [[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:&error];
-    NSMutableArray *categoriesForRemove = [[NSMutableArray alloc] initWithArray:fetchResult];
-    for (InterestCategory *iCategory in fetchResult) {
-        for (PRRemoteCategory *category in categories) {
-            if ([iCategory.remoteIdentifier isEqualToString:category.objectId]) {
-                [categoriesForRemove removeObject:iCategory];
-                [categoriesForAdd removeObject:category];
+    
+    [workContext performBlockAndWait:^{
+        NSArray *fetchResult = [[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:nil];
+        NSMutableArray *categoriesForRemove = [[NSMutableArray alloc] initWithArray:fetchResult];
+        for (InterestCategory *iCategory in fetchResult) {
+            for (PRRemoteCategory *category in categories) {
+                if ([iCategory.remoteIdentifier isEqualToString:category.objectId]) {
+                    [categoriesForRemove removeObject:iCategory];
+                    [categoriesForAdd removeObject:category];
+                }
             }
         }
-    }
-    
-    for (PRRemoteCategory *category in categoriesForAdd) {
-        InterestCategory *newCategory = [NSEntityDescription insertNewObjectForEntityForName:kCoreInterestCategoryTable inManagedObjectContext:workContext];
-        newCategory.remoteIdentifier = category.objectId;
-        newCategory.name = category.name;
-    }
-    
-    for (InterestCategory *category in categoriesForRemove) {
-        [workContext deleteObject:category];
-    }
+        
+        for (PRRemoteCategory *category in categoriesForAdd) {
+            InterestCategory *newCategory = [NSEntityDescription insertNewObjectForEntityForName:kCoreInterestCategoryTable inManagedObjectContext:workContext];
+            newCategory.remoteIdentifier = category.objectId;
+            newCategory.name = category.name;
+        }
+        
+        for (InterestCategory *category in categoriesForRemove) {
+            [workContext deleteObject:category];
+        }
+    }];
     
     [[PRLocalDataStore sharedInstance] saveBackgroundContext];
-    
 }
 
 - (NSArray<InterestCategory *> *)allLocalCategoriesForMain
 {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreInterestCategoryTable];
-    NSError *error;
-    return [[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:&error];
+    __block NSArray *result = nil;
+    [[[PRLocalDataStore sharedInstance] mainContext] performBlockAndWait:^{
+        result = [[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:nil];
+    }];
+    return result;
 }
 
 - (void)updateUserCategories:(NSArray<PRRemoteCategory *> *)categories
 {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreUserTable];
     [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", [PRNetworkDataProvider sharedInstance].currentUser]];
-    NSError *error;
-    User *user = [[[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:&error] firstObject];
     
-    NSMutableArray *categoryForRemove = nil;
-    if ([user.interests count]) {
-        categoryForRemove = [[NSMutableArray alloc] initWithArray:[user.interests allObjects]];
-    }
-    
-    NSMutableArray *categoriesForAdd = [[NSMutableArray alloc] initWithArray:categories];
-    for (InterestCategory *iCategory in user.interests) {
-        for (PRRemoteCategory *category in categories) {
-            if ([iCategory.remoteIdentifier isEqualToString:category.objectId]) {
-                [categoriesForAdd removeObject:category];
-                [categoryForRemove removeObject:iCategory];
+    NSManagedObjectContext *privateContext = [[PRLocalDataStore sharedInstance] backgroundContext];
+    [privateContext performBlockAndWait:^{
+        User *user = [[privateContext executeFetchRequest:request error:nil] firstObject];
+        
+        NSMutableArray *categoryForRemove = nil;
+        if ([user.interests count]) {
+            categoryForRemove = [[NSMutableArray alloc] initWithArray:[user.interests allObjects]];
+        }
+        
+        NSMutableArray *categoriesForAdd = [[NSMutableArray alloc] initWithArray:categories];
+        for (InterestCategory *iCategory in user.interests) {
+            for (PRRemoteCategory *category in categories) {
+                if ([iCategory.remoteIdentifier isEqualToString:category.objectId]) {
+                    [categoriesForAdd removeObject:category];
+                    [categoryForRemove removeObject:iCategory];
+                }
             }
         }
-    }
-    
-    if ([categoryForRemove count]) {
-        NSSet *remove = [[NSSet alloc] initWithArray:categoryForRemove];
-        [user removeInterests:remove];
-    }
-    
-    if ([categoriesForAdd count]) {
-        NSMutableArray *ids = [[NSMutableArray alloc] initWithCapacity:[categoriesForAdd count]];
-        for (PRRemoteCategory *category in categoriesForAdd) {
-            [ids addObject:category.objectId];
+        
+        if ([categoryForRemove count]) {
+            NSSet *remove = [[NSSet alloc] initWithArray:categoryForRemove];
+            [user removeInterests:remove];
         }
-        NSFetchRequest *localCategoriesRequest = [NSFetchRequest fetchRequestWithEntityName:kCoreInterestCategoryTable];
-        [localCategoriesRequest setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier IN %@", ids]];
-        NSArray *add = [[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:localCategoriesRequest error:nil];
-        NSSet *forAdd = [[NSSet alloc] initWithArray:add];
-        [user addInterests:forAdd];
-    }
+        
+        if ([categoriesForAdd count]) {
+            NSMutableArray *ids = [[NSMutableArray alloc] initWithCapacity:[categoriesForAdd count]];
+            for (PRRemoteCategory *category in categoriesForAdd) {
+                [ids addObject:category.objectId];
+            }
+            NSFetchRequest *localCategoriesRequest = [NSFetchRequest fetchRequestWithEntityName:kCoreInterestCategoryTable];
+            [localCategoriesRequest setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier IN %@", ids]];
+            NSArray *add = [privateContext executeFetchRequest:localCategoriesRequest error:nil];
+            NSSet *forAdd = [[NSSet alloc] initWithArray:add];
+            [user addInterests:forAdd];
+        }
+    }];
     
     [[PRLocalDataStore sharedInstance] saveBackgroundContext];
 }
@@ -180,20 +183,23 @@ static NSString * const kArticleClassName = @"Article";
 {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreUserTable];
     [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", [PRNetworkDataProvider sharedInstance].currentUser]];
-    NSError *error;
-    User *user = [[[[PRLocalDataStore sharedInstance] mainContext] executeFetchRequest:request error:&error] firstObject];
-    
-    if (removeCategories) {
-        NSSet *remove = [[NSSet alloc] initWithArray:removeCategories];
-        [user removeInterests:remove];
-    }
-    
-    if (addCategories) {
-        NSSet *add = [[NSSet alloc] initWithArray:addCategories];
-        [user addInterests:add];
-    }
-    
-    [[PRLocalDataStore sharedInstance] saveMainContextAndWait:NO];
+
+    NSManagedObjectContext *mainContext = [[PRLocalDataStore sharedInstance] mainContext];
+    [mainContext performBlock:^{
+        User *user = [[mainContext executeFetchRequest:request error:nil] firstObject];
+        
+        if (removeCategories) {
+            NSSet *remove = [[NSSet alloc] initWithArray:removeCategories];
+            [user removeInterests:remove];
+        }
+        
+        if (addCategories) {
+            NSSet *add = [[NSSet alloc] initWithArray:addCategories];
+            [user addInterests:add];
+        }
+        
+        [[PRLocalDataStore sharedInstance] saveMainContextAndWait:NO];
+    }];
 }
 
 - (void)updateUserGeoPoints:(NSArray<PRRemoteGeoPoint *> *)newPoints
@@ -202,40 +208,42 @@ static NSString * const kArticleClassName = @"Article";
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreUserTable];
     [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", [PRNetworkDataProvider sharedInstance].currentUser]];
-    NSError *error;
-    User *user = [[workContext executeFetchRequest:request error:&error] firstObject];
     
-    NSMutableArray *pointsForRemove = nil;
-    if ([user.locations count]) {
-        pointsForRemove = [[NSMutableArray alloc] initWithArray:[user.locations allObjects]];
-    }
-    
-    NSMutableArray *pointsForAdd = [[NSMutableArray alloc] initWithArray:newPoints];
-    for (GeoPoint *geoPoint in user.locations) {
-        for (PRRemoteGeoPoint *rPoint in newPoints) {
-            if ([geoPoint.title isEqualToString:rPoint.title]) {
-                [pointsForAdd removeObject:rPoint];
-                [pointsForRemove removeObject:geoPoint];
+    [workContext performBlockAndWait:^{
+        User *user = [[workContext executeFetchRequest:request error:nil] firstObject];
+        
+        NSMutableArray *pointsForRemove = nil;
+        if ([user.locations count]) {
+            pointsForRemove = [[NSMutableArray alloc] initWithArray:[user.locations allObjects]];
+        }
+        
+        NSMutableArray *pointsForAdd = [[NSMutableArray alloc] initWithArray:newPoints];
+        for (GeoPoint *geoPoint in user.locations) {
+            for (PRRemoteGeoPoint *rPoint in newPoints) {
+                if ([geoPoint.title isEqualToString:rPoint.title]) {
+                    [pointsForAdd removeObject:rPoint];
+                    [pointsForRemove removeObject:geoPoint];
+                }
             }
         }
-    }
-    
-    if ([pointsForRemove count]) {
-        NSSet *remove = [[NSSet alloc] initWithArray:pointsForRemove];
-        [user removeLocations:remove];
-    }
-    
-    if ([pointsForAdd count]) {
-        NSMutableSet *newGeoPoints = [NSMutableSet new];
-        for (PRRemoteGeoPoint *geoPoint in pointsForAdd) {
-            GeoPoint *point = [NSEntityDescription insertNewObjectForEntityForName:kCoreGeoPointTable inManagedObjectContext:workContext];
-            point.title = geoPoint.title;
-            point.longitude = @(geoPoint.longitude);
-            point.latitude = @(geoPoint.latitude);
-            [newGeoPoints addObject:point];
+        
+        if ([pointsForRemove count]) {
+            NSSet *remove = [[NSSet alloc] initWithArray:pointsForRemove];
+            [user removeLocations:remove];
         }
-        [user addLocations:newGeoPoints];
-    }
+        
+        if ([pointsForAdd count]) {
+            NSMutableSet *newGeoPoints = [NSMutableSet new];
+            for (PRRemoteGeoPoint *geoPoint in pointsForAdd) {
+                GeoPoint *point = [NSEntityDescription insertNewObjectForEntityForName:kCoreGeoPointTable inManagedObjectContext:workContext];
+                point.title = geoPoint.title;
+                point.longitude = @(geoPoint.longitude);
+                point.latitude = @(geoPoint.latitude);
+                [newGeoPoints addObject:point];
+            }
+            [user addLocations:newGeoPoints];
+        }
+    }];
     
     [[PRLocalDataStore sharedInstance] saveBackgroundContext];
 }
@@ -250,21 +258,24 @@ static NSString * const kArticleClassName = @"Article";
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreArticleTable];
     [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier IN %@", ids]];
-    NSArray *existsArticles = [[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:nil];
-    
-    for (Article *article in existsArticles) {
-        for (PRRemoteArticle *rArticle in remoteArticle) {
-            if ([article.remoteIdentifier isEqualToString:rArticle.objectId]) {
-                [articlesForCreate removeObject:rArticle];
-                [self updateArticle:article newData:rArticle];
+    NSManagedObjectContext *privateContext = [[PRLocalDataStore sharedInstance] backgroundContext];
+    [privateContext performBlockAndWait:^{
+        NSArray *existsArticles = [privateContext executeFetchRequest:request error:nil];
+        
+        for (Article *article in existsArticles) {
+            for (PRRemoteArticle *rArticle in remoteArticle) {
+                if ([article.remoteIdentifier isEqualToString:rArticle.objectId]) {
+                    [articlesForCreate removeObject:rArticle];
+                    [self updateArticle:article newData:rArticle];
+                }
             }
         }
-    }
-    
-    for (PRRemoteArticle *article in articlesForCreate) {
-        Article *newArticle = [NSEntityDescription insertNewObjectForEntityForName:kCoreArticleTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
-        [self updateArticle:newArticle newData:article];
-    }
+        
+        for (PRRemoteArticle *article in articlesForCreate) {
+            Article *newArticle = [NSEntityDescription insertNewObjectForEntityForName:kCoreArticleTable inManagedObjectContext:privateContext];
+            [self updateArticle:newArticle newData:article];
+        }
+    }];
     
     [[PRLocalDataStore sharedInstance] saveBackgroundContext];
 }
@@ -325,32 +336,37 @@ static NSString * const kArticleClassName = @"Article";
 {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kCoreArticleTable];
     [request setPredicate:[NSPredicate predicateWithFormat:@"remoteIdentifier == %@", remoteIdentifier]];
-    Article *article = [[[[PRLocalDataStore sharedInstance] backgroundContext] executeFetchRequest:request error:nil] firstObject];
     
-    NSMutableArray *mediaForRemove = [[NSMutableArray alloc] initWithArray:[article.media allObjects]];
-    NSMutableArray *mediaForAdd = [[NSMutableArray alloc] initWithArray:remoteMedia];
+    NSManagedObjectContext *privateContext = [[PRLocalDataStore sharedInstance] backgroundContext];
     
-    for (Media *lMedia in article.media) {
-        for (PRRemoteMedia *rMedia in remoteMedia) {
-            if ([lMedia.remoteIdentifier isEqualToString:rMedia.objectId]) {
-                [mediaForRemove removeObject:lMedia];
-                [mediaForAdd removeObject:rMedia];
+    [privateContext performBlockAndWait:^{
+        Article *article = [[privateContext executeFetchRequest:request error:nil] firstObject];
+        
+        NSMutableArray *mediaForRemove = [[NSMutableArray alloc] initWithArray:[article.media allObjects]];
+        NSMutableArray *mediaForAdd = [[NSMutableArray alloc] initWithArray:remoteMedia];
+        
+        for (Media *lMedia in article.media) {
+            for (PRRemoteMedia *rMedia in remoteMedia) {
+                if ([lMedia.remoteIdentifier isEqualToString:rMedia.objectId]) {
+                    [mediaForRemove removeObject:lMedia];
+                    [mediaForAdd removeObject:rMedia];
+                }
             }
         }
-    }
-    
-    if ([mediaForRemove count]) {
-        [article removeMedia:[NSSet setWithArray:mediaForRemove]];
-    }
-    
-    for (PRRemoteMedia *media in mediaForAdd) {
-        Media *newMedia = [NSEntityDescription insertNewObjectForEntityForName:kCoreMediaTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
-        newMedia.thumbnailURL = [media.thumbnailFile.url absoluteString];
-        newMedia.mediaURL = [media.mediaFile.url absoluteString];
-        newMedia.contentType = media.contentType;
-        newMedia.remoteIdentifier = media.objectId;
-        [article addMediaObject:newMedia];
-    }
+        
+        if ([mediaForRemove count]) {
+            [article removeMedia:[NSSet setWithArray:mediaForRemove]];
+        }
+        
+        for (PRRemoteMedia *media in mediaForAdd) {
+            Media *newMedia = [NSEntityDescription insertNewObjectForEntityForName:kCoreMediaTable inManagedObjectContext:[[PRLocalDataStore sharedInstance] backgroundContext]];
+            newMedia.thumbnailURL = [media.thumbnailFile.url absoluteString];
+            newMedia.mediaURL = [media.mediaFile.url absoluteString];
+            newMedia.contentType = media.contentType;
+            newMedia.remoteIdentifier = media.objectId;
+            [article addMediaObject:newMedia];
+        }
+    }];
     
     [[PRLocalDataStore sharedInstance] saveBackgroundContext];
 }
