@@ -113,15 +113,13 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     _loadingInProcess = YES;
     [self showRefreshControll:YES];
     [self.contentTableView scrollsToTop];
-    [self.contentTableView setContentOffset:CGPointMake(0, -kNavigationBarHeight) animated:YES];
     [self.refreshButton setEnabled:NO];
     self.contentTableView.userInteractionEnabled = NO;
     [self.interactor reloadDataWithCompletion:^(BOOL success, NSString *errorMessage) {
         if (success) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self showRefreshControll:NO];
                 [self.contentTableView reloadData];
-                [self.contentTableView scrollsToTop];
+                [self showRefreshControll:NO];
                 self.contentTableView.userInteractionEnabled = YES;
                 self.refreshButton.enabled = YES;
                 _loadingInProcess = NO;
