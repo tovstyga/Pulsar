@@ -46,6 +46,7 @@
     dispatch_once_t once;
 }
 
+static CGFloat const kNavigationBarHeight = 64;
 static CGFloat const kSpaceFromMenuToRightBorder = 40;
 static NSString * const kToLoginSegueIdentifier = @"content_to_login_segue";
 
@@ -72,6 +73,7 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     self.refreshControll = [[UIRefreshControl alloc] init];
     [self.refreshControll addTarget:self action:@selector(refreshing) forControlEvents:UIControlEventValueChanged];
     [self.contentTableView addSubview:self.refreshControll];
+//    self.contentTableView.scrollIndicatorInsets = UIEdgeInsetsMake(-64, 0, 0, 0);
     
     _closedMenuDefaultConstraint = self.view.frame.size.width;
     _isOpenedMenu = NO;
@@ -111,6 +113,7 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     _loadingInProcess = YES;
     [self showRefreshControll:YES];
     [self.contentTableView scrollsToTop];
+    [self.contentTableView setContentOffset:CGPointMake(0, -kNavigationBarHeight) animated:YES];
     [self.refreshButton setEnabled:NO];
     self.contentTableView.userInteractionEnabled = NO;
     [self.interactor reloadDataWithCompletion:^(BOOL success, NSString *errorMessage) {
@@ -335,10 +338,10 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 {
     if (show) {
         [self.refreshControll beginRefreshing];
-        [self.contentTableView setContentOffset:CGPointMake(0, -self.refreshControll.frame.size.height) animated:YES];
+        [self.contentTableView setContentOffset:CGPointMake(0, -kNavigationBarHeight -self.refreshControll.frame.size.height) animated:YES];
     } else {
         [self.refreshControll endRefreshing];
-        [self.contentTableView setContentOffset:CGPointMake(0, 0) animated:YES];
+        [self.contentTableView setContentOffset:CGPointMake(0, -kNavigationBarHeight) animated:YES];
     }
 }
 
