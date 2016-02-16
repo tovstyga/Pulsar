@@ -21,6 +21,14 @@
 #define MONTH DAY*30
 #define YEAR DAY * 365
 
+#define CACHED_PERIOD DAY * 3
+
+@interface PRLocalDataStoreManager()
+
+@property (strong, nonatomic) NSDate *lastCleaningDate;
+
+@end
+
 @implementation PRLocalDataStoreManager
 
 static NSString * const kCoreUserTable = @"User";
@@ -31,11 +39,14 @@ static NSString * const kCoreArticleTable = @"Article";
 
 static NSString * const kArticleClassName = @"Article";
 
+@synthesize lastCleaningDate = _lastCleaningDate;
+
 - (void)preloading
 {
     dispatch_group_t loadingGroup = dispatch_group_create();
     //update categories
     dispatch_group_enter(loadingGroup);
+    [self clearOldArticles];
     [[PRDataProvider sharedInstance] allCategories:^(NSArray *categories, NSError *error) {
         [[PRDataProvider sharedInstance] categoriesForCurrentUser:^(NSArray *categories, NSError *error) {
             dispatch_group_leave(loadingGroup);
@@ -301,6 +312,7 @@ static NSString * const kArticleClassName = @"Article";
         }
     }
     
+    localArticle.updatedDate = [NSDate date];
     localArticle.createdDate = remoteArticle.createdAt;
     localArticle.rating = @(remoteArticle.rating);
     localArticle.remoteIdentifier = remoteArticle.objectId;
@@ -463,5 +475,43 @@ static NSString * const kArticleClassName = @"Article";
     return predicate;
 }
 
+- (void)clearOldArticles
+{
+    if (self.lastCleaningDate && [PRDataProvider sharedInstance].currentUser) {
+        NSMutableSet *protectedArticles = [[NSMutableSet alloc] init];
+        [protectedArticles addObjectsFromArray:[[PRDataProvider sharedInstance].currentUser.favorite allObjects]];
+        [protectedArticles addObjectsFromArray:[[PRDataProvider sharedInstance].currentUser.articles allObjects]];
+        
+        NSFetchRequest *oldObjectsRequest = [NSFetchRequest fetchRequestWithEntityName:kCoreArticleTable];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (SELF IN %@) AND NOT (updatedDate >= %@)", [protectedArticles allObjects], [self.lastCleaningDate dateByAddingTimeInterval:-CACHED_PERIOD]];
+        [oldObjectsRequest setPredicate:predicate];
+        NSManagedObjectContext *privateContext = [[PRLocalDataStore sharedInstance] backgroundContext];
+        [privateContext performBlockAndWait:^{
+            NSArray *oldObjects = [privateContext executeFetchRequest:oldObjectsRequest error:nil];
+            for (Article *article in oldObjects) {
+                [privateContext deleteObject:article];
+            }
+        }];
+        
+        [[PRLocalDataStore sharedInstance] saveBackgroundContext];
+    }
+    self.lastCleaningDate = [NSDate date];
+}
+
+- (void)setLastCleaningDate:(NSDate *)lastCleaningDate
+{
+    if (![_lastCleaningDate isEqualToDate:lastCleaningDate]) {
+        [[NSUserDefaults standardUserDefaults] setObject:lastCleaningDate forKey:@"last_cleaning_date"];
+        _lastCleaningDate = lastCleaningDate;
+    }
+}
+
+- (NSDate *)lastCleaningDate
+{
+    if (!_lastCleaningDate) {
+        _lastCleaningDate = [[NSUserDefaults standardUserDefaults] objectForKey:@"last_cleaning_date"];
+    }
+    return _lastCleaningDate;
+}
 
 @end

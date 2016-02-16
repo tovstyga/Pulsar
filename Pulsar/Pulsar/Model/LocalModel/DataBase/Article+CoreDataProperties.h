@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *canDislike;
 @property (nullable, nonatomic, retain) NSNumber *canLike;
 @property (nullable, nonatomic, retain) NSDate *createdDate;
+@property (nullable, nonatomic, retain) NSDate *updatedDate;
 @property (nullable, nonatomic, retain) NSNumber *rating;
 @property (nullable, nonatomic, retain) NSString *remoteIdentifier;
 @property (nullable, nonatomic, retain) NSString *text;

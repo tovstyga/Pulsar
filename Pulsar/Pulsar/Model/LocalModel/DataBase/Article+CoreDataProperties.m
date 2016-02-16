@@ -26,5 +26,6 @@
 @dynamic image;
 @dynamic location;
 @dynamic media;
+@dynamic updatedDate;
 
 @end

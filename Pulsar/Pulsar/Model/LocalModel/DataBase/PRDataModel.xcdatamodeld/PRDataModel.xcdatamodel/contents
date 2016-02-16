@@ -10,10 +10,11 @@
         <attribute name="remoteIdentifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updatedDate" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InterestCategory" syncable="YES"/>
-        <relationship name="image" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Media" syncable="YES"/>
-        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="GeoPoint" syncable="YES"/>
-        <relationship name="media" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Media" syncable="YES"/>
+        <relationship name="image" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Media" syncable="YES"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="GeoPoint" syncable="YES"/>
+        <relationship name="media" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Media" syncable="YES"/>
     </entity>
     <entity name="GeoPoint" representedClassName="GeoPoint" syncable="YES">
         <attribute name="latitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -43,10 +44,10 @@
         <relationship name="locations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GeoPoint" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Article" positionX="-497" positionY="149" width="128" height="238"/>
+        <element name="Article" positionX="-497" positionY="149" width="128" height="253"/>
         <element name="GeoPoint" positionX="-783" positionY="0" width="128" height="90"/>
-        <element name="Media" positionX="-180" positionY="171" width="128" height="133"/>
-        <element name="User" positionX="-506" positionY="-126" width="128" height="148"/>
         <element name="InterestCategory" positionX="-200" positionY="-30" width="128" height="88"/>
+        <element name="Media" positionX="-38" positionY="297" width="128" height="133"/>
+        <element name="User" positionX="-506" positionY="-126" width="128" height="148"/>
     </elements>
 </model>
