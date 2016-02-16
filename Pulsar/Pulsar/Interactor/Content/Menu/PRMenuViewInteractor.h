@@ -8,10 +8,8 @@
 
 #import "PRRootViewController.h"
 #import "PRMenuViewInteractorProtocol.h"
-#import "PRMenuInteractorDelegateProtocol.h"
+#import "PRRootInteractor.h"
 
-@interface PRMenuViewInteractor : NSObject<PRMenuViewInteractorProtocol>
-
-@property (weak, nonatomic) id<PRMenuInteractorDelegate> delegate;
+@interface PRMenuViewInteractor : PRRootInteractor<PRMenuViewInteractorProtocol>
 
 @end

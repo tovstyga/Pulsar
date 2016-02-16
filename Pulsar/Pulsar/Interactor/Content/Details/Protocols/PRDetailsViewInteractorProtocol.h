@@ -9,8 +9,9 @@
 #import "Article.h"
 #import "Media.h"
 #import <UIKit/UIKit.h>
+#import "PRRootInteractorProtocol.h"
 
-@protocol PRDetailsViewInteractorProtocol <NSObject>
+@protocol PRDetailsViewInteractorProtocol <PRRootInteractorProtocol>
 
 - (void)loadThumbnailForMedia:(Media *)media completion:(void(^)(UIImage *image, NSString *errorMessage))completion;
 

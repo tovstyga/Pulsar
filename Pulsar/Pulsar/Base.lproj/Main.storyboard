@@ -322,6 +322,7 @@
                         <outlet property="addButton" destination="HYW-UZ-MqU" id="LWb-1i-fZd"/>
                         <outlet property="categoriesMenuConstraint" destination="e8s-J6-dYN" id="2Da-e3-wkm"/>
                         <outlet property="contentTableView" destination="8iQ-Co-4u7" id="3v8-RE-oXc"/>
+                        <outlet property="interactor" destination="Ldn-Lt-aIh" id="rj8-kP-r76"/>
                         <outlet property="logoutButton" destination="nNX-dP-dP1" id="N50-DW-Q3j"/>
                         <outlet property="menuTabBarButton" destination="B7V-gC-bf1" id="cTc-CW-Lcj"/>
                         <outlet property="refreshButton" destination="Vm7-T3-bco" id="8Wr-JR-gYx"/>
@@ -336,6 +337,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MWr-LR-Bb4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="Ldn-Lt-aIh" customClass="PRContentViewInteractor"/>
                 <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="W6P-Ha-3L5">
                     <rectEdge key="edges" left="YES"/>
                     <connections>
@@ -542,12 +544,14 @@
                         <outlet property="categoryButton" destination="NM6-ka-DP0" id="zxB-t5-tcr"/>
                         <outlet property="galletyCollectionView" destination="XBW-nk-J9G" id="uiP-Xd-26m"/>
                         <outlet property="imageView" destination="aEG-iY-nE9" id="ZxE-yI-nVg"/>
+                        <outlet property="interactor" destination="Cts-wJ-AYd" id="acX-kz-v0T"/>
                         <outlet property="mainTextView" destination="uVf-O1-Ue4" id="JZA-4b-E11"/>
                         <outlet property="tapOnMainViewRecognizer" destination="uwl-Op-Zlk" id="1Op-r0-dIv"/>
                         <outlet property="titleTextField" destination="7uD-1M-H5t" id="Fu4-JQ-irB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="01i-PG-RKX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="Cts-wJ-AYd" customClass="PRCreationViewInteractor"/>
                 <tapGestureRecognizer enabled="NO" id="uwl-Op-Zlk">
                     <connections>
                         <action selector="tapOnView:" destination="qli-vd-Vwn" id="X7N-Iz-iLq"/>
@@ -640,11 +644,13 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
                         <outlet property="approvalButton" destination="DaG-NB-9Kn" id="eCs-Jg-97h"/>
+                        <outlet property="interactor" destination="BBX-0h-rpR" id="c0Q-wK-GWp"/>
                         <outlet property="loginTextField" destination="CoD-jJ-EnI" id="XJ6-zf-dlD"/>
                         <outlet property="passwordTextField" destination="lgg-hS-7ub" id="1TB-Ah-e7W"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tag-us-Kq7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="BBX-0h-rpR" customClass="PRLoginViewInteractor"/>
                 <tapGestureRecognizer id="F55-j2-IWa">
                     <connections>
                         <action selector="tapOnView:" destination="4bO-jm-Nis" id="mzW-ym-zLG"/>
@@ -722,9 +728,11 @@
                     <connections>
                         <outlet property="approvalButton" destination="Ul6-wz-65s" id="F3j-0U-eGv"/>
                         <outlet property="emailTextField" destination="TfF-sX-aJK" id="kfP-dR-i9W"/>
+                        <outlet property="interactor" destination="yr4-vp-Dh0" id="Lvm-0u-gEE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7YD-SZ-ocG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="yr4-vp-Dh0" customClass="PRRestoreAccountInteractor"/>
                 <tapGestureRecognizer id="CVM-dw-zcE">
                     <connections>
                         <action selector="tapOnView:" destination="EE9-5C-h9b" id="at2-5T-gJd"/>
@@ -857,12 +865,14 @@
                     <connections>
                         <outlet property="approvalButton" destination="XoK-Ig-ARY" id="awK-w1-WsC"/>
                         <outlet property="confirmTextField" destination="dbM-Zk-b7G" id="xr3-ii-s5E"/>
+                        <outlet property="interactor" destination="rxt-VT-lYH" id="Zry-YU-icP"/>
                         <outlet property="loginTextField" destination="BmV-el-ATJ" id="uOM-FQ-RUq"/>
                         <outlet property="mailTextField" destination="DTt-KL-mV7" id="xuu-qS-PFs"/>
                         <outlet property="passwordTextField" destination="4u1-KK-cVR" id="chi-uI-svm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="71g-oX-azF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="rxt-VT-lYH" customClass="PRRegistrationViewInteractor"/>
                 <tapGestureRecognizer id="R29-8f-8yl">
                     <connections>
                         <action selector="tapOnViewAction:" destination="5Ye-i9-dne" id="6m8-LB-Puh"/>
@@ -920,10 +930,12 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
+                        <outlet property="interactor" destination="kYa-0r-dxh" id="H9R-Lp-hvU"/>
                         <outlet property="mapView" destination="CdC-m4-5vn" id="x20-Yv-FyA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U7X-Zl-ItU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="kYa-0r-dxh" customClass="PRMapViewInteractor"/>
             </objects>
             <point key="canvasLocation" x="537" y="1580"/>
         </scene>
@@ -985,11 +997,13 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="414" height="736"/>
                     <connections>
+                        <outlet property="interactor" destination="PVG-ub-mYN" id="g4Y-GH-duc"/>
                         <outlet property="tableView" destination="3zH-pE-CM5" id="nkp-Jv-iBs"/>
                         <segue destination="WBA-94-xCi" kind="presentation" identifier="map_screen_segue_identifier" id="Icj-uZ-JOm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XIr-5m-t4W" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="PVG-ub-mYN" customClass="PRMenuViewInteractor"/>
             </objects>
             <point key="canvasLocation" x="1087" y="1575"/>
         </scene>
@@ -1162,6 +1176,7 @@
                         <outlet property="downButton" destination="ls9-Xa-ol9" id="5K4-s0-RGk"/>
                         <outlet property="hideMediaCollectionConstraint" destination="XgQ-hy-m1J" id="HMY-ZW-mu1"/>
                         <outlet property="imageView" destination="gjN-vH-E7a" id="iRR-9v-KhE"/>
+                        <outlet property="interactor" destination="SEP-fv-ooq" id="uni-hU-Ln7"/>
                         <outlet property="mainText" destination="xVn-OY-OGV" id="8FI-ZB-a1F"/>
                         <outlet property="megiaCollection" destination="MS9-bX-7XI" id="JRx-Sx-Ffe"/>
                         <outlet property="rating" destination="6Vq-jm-KoU" id="UZg-uW-Wuk"/>
@@ -1170,6 +1185,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ozd-g8-7gr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="SEP-fv-ooq" customClass="PRDetailsViewInteractor"/>
                 <tapGestureRecognizer id="zTF-Tw-CIc">
                     <connections>
                         <action selector="clickOnImage:" destination="IMN-rm-sOR" id="nr0-2P-LG1"/>

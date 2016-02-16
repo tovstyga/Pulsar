@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PRRootInteractorProtocol.h"
 
 @interface PRRootViewController : UIViewController
+
+@property (strong, nonatomic) IBOutlet id<PRRootInteractorProtocol> interactor;
 
 - (void)showAlertWithMessage:(NSString *)message;
 

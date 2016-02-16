@@ -17,10 +17,11 @@
 
 - (void)loadThumbnailForMedia:(Media *)media completion:(void(^)(UIImage *image, NSString *errorMessage))completion;
 {
-    [[PRDataProvider sharedInstance] loadThumbnailForMedia:media completion:^(UIImage *image, NSError *error) {
+    __weak typeof(self) wSelf = self;
+    [self.dataProvider loadThumbnailForMedia:media completion:^(UIImage *image, NSError *error) {
         if (error) {
             if (completion) {
-                completion(nil, [PRErrorDescriptor descriptionForError:error]);
+                completion(nil, [wSelf.errorDescriptor descriptionForError:error]);
             }
         } else {
             if (completion) {
@@ -32,10 +33,11 @@
 
 - (void)loadImageForMedia:(Media *)media completion:(void(^)(UIImage *image, NSString *errorMessage))completion
 {
-    [[PRDataProvider sharedInstance] loadContentForMedia:media completion:^(UIImage *image, NSError *error) {
+    __weak typeof(self) wSelf = self;
+    [self.dataProvider loadContentForMedia:media completion:^(UIImage *image, NSError *error) {
         if (error) {
             if (completion) {
-                completion(nil, [PRErrorDescriptor descriptionForError:error]);
+                completion(nil, [wSelf.errorDescriptor descriptionForError:error]);
             }
         } else {
             if (completion) {
@@ -47,10 +49,11 @@
 
 - (void)loadMediaContentForArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion
 {
-    [[PRDataProvider sharedInstance] loadMediaForArticle:article completion:^(NSArray<Media *> *mediaArray, NSError *error) {
+    __weak typeof(self) wSelf = self;
+    [self.dataProvider loadMediaForArticle:article completion:^(NSArray<Media *> *mediaArray, NSError *error) {
         if (error) {
             if (completion) {
-                completion([PRErrorDescriptor descriptionForError:error]);
+                completion([wSelf.errorDescriptor descriptionForError:error]);
             }
         } else {
             _media = mediaArray;
@@ -58,10 +61,12 @@
                 dispatch_group_t loadThumbnailsGorup = dispatch_group_create();
                 for (Media *media in mediaArray) {
                     if (media.thumbnailURL && !media.thumbnail) {
-                        dispatch_group_enter(loadThumbnailsGorup);
-                        [[PRDataProvider sharedInstance] loadThumbnailForMedia:media completion:^(UIImage *image, NSError *error) {
-                             dispatch_group_leave(loadThumbnailsGorup);
-                        }];
+                        if (wSelf) {
+                            dispatch_group_enter(loadThumbnailsGorup);
+                            [wSelf.dataProvider loadThumbnailForMedia:media completion:^(UIImage *image, NSError *error) {
+                                dispatch_group_leave(loadThumbnailsGorup);
+                            }];
+                        }
                     }
                 }
                 
@@ -97,14 +102,15 @@
                 [[[PRLocalDataStore sharedInstance] mainContext] refreshObject:_media[index] mergeChanges:YES];
             }
         } else if ([(Media *)_media[index] mediaURL]) {
-            [[PRDataProvider sharedInstance] loadContentForMedia:_media[index] completion:^(UIImage *image, NSError *error) {
+            __weak typeof(self) wSelf = self;
+            [self.dataProvider loadContentForMedia:_media[index] completion:^(UIImage *image, NSError *error) {
                 if (!error) {
                     if (completion) {
                         completion(image, nil);
                     }
                 } else {
                     if (completion) {
-                        completion(nil, [PRErrorDescriptor descriptionForError:error]);
+                        completion(nil, [wSelf.errorDescriptor descriptionForError:error]);
                     }
                 }
             }];
@@ -120,10 +126,11 @@
 
 - (void)likeArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion
 {
-    [[PRDataProvider sharedInstance] likeArticle:article success:^(NSError *error) {
+    __weak typeof(self) wSelf = self;
+    [self.dataProvider likeArticle:article success:^(NSError *error) {
         if (completion) {
             if (error) {
-                completion([PRErrorDescriptor descriptionForError:error]);
+                completion([wSelf.errorDescriptor descriptionForError:error]);
             } else {
                 completion(nil);
             }
@@ -133,10 +140,11 @@
 
 - (void)dislikeArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion
 {
-    [[PRDataProvider sharedInstance] dislikeArticle:article success:^(NSError *error) {
+    __weak typeof(self) wSelf = self;
+    [self.dataProvider dislikeArticle:article success:^(NSError *error) {
         if (completion) {
             if (error) {
-                completion([PRErrorDescriptor descriptionForError:error]);
+                completion([wSelf.errorDescriptor descriptionForError:error]);
             } else {
                 completion(nil);
             }

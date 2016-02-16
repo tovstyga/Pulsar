@@ -8,6 +8,7 @@
 
 #import "Article.h"
 #import <UIKit/UIKit.h>
+#import "PRRootInteractorProtocol.h"
 
 typedef NS_ENUM(NSUInteger, PRFeedType) {
     PRFeedTypeNew,
@@ -17,7 +18,7 @@ typedef NS_ENUM(NSUInteger, PRFeedType) {
     PRFeedTypeFavorites
 };
 
-@protocol PRContentViewInteractorProtocol <NSObject>
+@protocol PRContentViewInteractorProtocol <PRRootInteractorProtocol>
 
 @property (nonatomic) PRFeedType activeFeed;
 

@@ -6,7 +6,9 @@
 //  Copyright © 2015 TAB. All rights reserved.
 //
 
-@protocol RPLoginViewInteractorProtocol <NSObject>
+#import "PRRootInteractorProtocol.h"
+
+@protocol RPLoginViewInteractorProtocol <PRRootInteractorProtocol>
 
 - (void)loginUser:(NSString *)userName withPassword:(NSString *)password completion:(void(^)(BOOL success, NSString *errorMessage))completion;
 

@@ -8,8 +8,12 @@
 
 #import "InterestCategory.h"
 #import "PRLocalGeoPoint.h"
+#import "PRRootInteractorProtocol.h"
+#import "PRMenuInteractorDelegateProtocol.h"
 
-@protocol PRMenuViewInteractorProtocol <NSObject>
+@protocol PRMenuViewInteractorProtocol <PRRootInteractorProtocol>
+
+@property (weak, nonatomic) id<PRMenuInteractorDelegate> delegate;
 
 - (void)fetchCategoriesWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion;
 

@@ -14,9 +14,9 @@
 
 - (void)loginUser:(NSString *)userName withPassword:(NSString *)password completion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
-    [[PRDataProvider sharedInstance] loginUser:userName password:password completion:^(NSError *error) {
+    [self.dataProvider loginUser:userName password:password completion:^(NSError *error) {
         if (completion) {
-            error ? completion(NO, [PRErrorDescriptor descriptionForError:error]) : completion(YES, nil);
+            error ? completion(NO, [self.errorDescriptor descriptionForError:error]) : completion(YES, nil);
         }
     }];
 }

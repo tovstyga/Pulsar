@@ -40,10 +40,11 @@
     article.images = images;
     PRLocalGeoPoint *currentLocation = [[PRLocalGeoPoint alloc] initWithLatitude:[PRLocationManager sharedInstance].currentLocation.coordinate.latitude longitude:[PRLocationManager sharedInstance].currentLocation.coordinate.longitude title:nil];
     article.location = currentLocation;
-    [[PRDataProvider sharedInstance] publishNewArticle:article completion:^(NSError *error) {
+    __weak typeof(self) wSelf = self;
+    [self.dataProvider publishNewArticle:article completion:^(NSError *error) {
         if (error) {
             if (completion) {
-                completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                completion(NO, [wSelf.errorDescriptor descriptionForError:error]);
             }
         } else {
             if (completion) {
@@ -56,10 +57,11 @@
 
 - (void)loadCategoriesWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
-    [[PRDataProvider sharedInstance] allCategories:^(NSArray *categories, NSError *error) {
+    __weak typeof(self) wSelf = self;
+    [self.dataProvider allCategories:^(NSArray *categories, NSError *error) {
         if (error) {
             if (completion) {
-                completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                completion(NO, [wSelf.errorDescriptor descriptionForError:error]);
             }
         } else {
             _categories = categories;

@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PRRootInteractorProtocol.h"
 
-@protocol PRCreationViewInteractorProtocol <NSObject>
+@protocol PRCreationViewInteractorProtocol <PRRootInteractorProtocol>
 
 - (void)publishNewArticleWithTitle:(NSString *)title
                         annotation:(NSString *)annotation

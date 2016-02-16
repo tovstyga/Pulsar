@@ -17,6 +17,8 @@
 
 @implementation PRRestoreAccountViewController
 
+@dynamic interactor;
+
 #pragma mark - LifeCycle
 
 - (void)viewDidLoad

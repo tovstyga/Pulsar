@@ -23,6 +23,8 @@
     dispatch_once_t once;
 }
 
+@synthesize interactor;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

@@ -13,6 +13,8 @@
 
 @implementation PRMapViewInteractor
 
+@synthesize delegate;
+
 - (void)addPointWithName:(NSString *)name
                longitude:(float)longitude
                 latitude:(float)latitude
@@ -20,16 +22,16 @@
 {
     __weak typeof(self) wSelf = self;
     PRLocalGeoPoint *geoPoint = [[PRLocalGeoPoint alloc] initWithLatitude:latitude longitude:longitude title:name];
-    [[PRDataProvider sharedInstance] addGeoPoint:geoPoint completion:^(NSError *error) {
+    [self.dataProvider addGeoPoint:geoPoint completion:^(NSError *error) {
+        __strong typeof(wSelf) sSelf = wSelf;
         if (!error) {
-            __strong typeof(wSelf) sSelf = wSelf;
             if (sSelf && [sSelf.delegate respondsToSelector:@selector(didAddNewLocation)]) {
                 [sSelf.delegate didAddNewLocation];
             }
         }
         if (completion) {
             if (error) {
-                completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                completion(NO, [sSelf.errorDescriptor descriptionForError:error]);
             } else {
                 completion(YES, nil);
             }

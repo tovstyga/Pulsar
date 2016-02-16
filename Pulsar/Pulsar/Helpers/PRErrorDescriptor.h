@@ -10,6 +10,8 @@
 
 @interface PRErrorDescriptor : NSObject
 
-+ (NSString *)descriptionForError:(NSError *)error;
++ (instancetype)sharedInstance;
+
+- (NSString *)descriptionForError:(NSError *)error;
 
 @end

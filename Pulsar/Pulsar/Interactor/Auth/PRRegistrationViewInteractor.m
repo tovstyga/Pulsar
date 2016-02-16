@@ -12,6 +12,8 @@
 
 @implementation PRRegistrationViewInteractor
 
+@synthesize validator;
+
 - (BOOL)validateEmail:(NSString *)email
 {
     return [self.validator validateEmail:email];
@@ -22,9 +24,9 @@
                  email:(NSString *)email
             completion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
-    [[PRDataProvider sharedInstance] registrateUser:userName password:password email:email completion:^(NSError *error) {
+    [self.dataProvider registrateUser:userName password:password email:email completion:^(NSError *error) {
         if (completion) {
-            error ? completion(NO, [PRErrorDescriptor descriptionForError:error]) : completion(YES, nil);
+            error ? completion(NO, [self.errorDescriptor descriptionForError:error]) : completion(YES, nil);
         }
     }];
 }

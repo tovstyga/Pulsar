@@ -41,6 +41,8 @@ static NSString * const kGalleryCellIdentifier = @"callery_cell_identifier";
 
 static int const kHeightFromKeyboard = 10;
 
+@dynamic interactor;
+
 #pragma mark - LifeCycle
 
 - (void)viewDidLoad

@@ -8,10 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "PRRestoreAccountViewInteractorProtocol.h"
-#import "PREmailValidator.h"
+#import "PRRootInteractor.h"
 
-@interface PRRestoreAccountInteractor : NSObject<PRRestoreAccountViewInteractorProtocol>
-
-@property (strong, nonatomic) PREmailValidator *validator;
+@interface PRRestoreAccountInteractor : PRRootInteractor<PRRestoreAccountViewInteractorProtocol>
 
 @end

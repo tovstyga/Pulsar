@@ -6,7 +6,12 @@
 //  Copyright © 2015 TAB. All rights reserved.
 //
 
-@protocol RPRegistrationViewInteractorProtocol <NSObject>
+#import "PRRootInteractorProtocol.h"
+#import "PREmailValidator.h"
+
+@protocol RPRegistrationViewInteractorProtocol <PRRootInteractorProtocol>
+
+@property (strong, nonatomic) PREmailValidator *validator;
 
 - (BOOL)validateEmail:(NSString *)email;
 - (void)registrateUser:(NSString *)userName withPassword:(NSString *)password email:(NSString *)email completion:(void(^)(BOOL success, NSString *errorMessage))completion;

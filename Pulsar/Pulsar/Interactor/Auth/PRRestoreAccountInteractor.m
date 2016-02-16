@@ -12,6 +12,8 @@
 
 @implementation PRRestoreAccountInteractor
 
+@synthesize validator;
+
 - (BOOL)validateEmail:(NSString *)email
 {
     return [self.validator validateEmail:email];
@@ -19,9 +21,9 @@
 
 - (void)restoreAccountForEmail:(NSString *)email completion:(void (^)(BOOL, NSString *))completion
 {
-    [[PRDataProvider sharedInstance] sendNewPasswordOnEmail:email completion:^(NSError *error) {
+    [self.dataProvider sendNewPasswordOnEmail:email completion:^(NSError *error) {
         if (completion) {
-            error ? completion(NO, [PRErrorDescriptor descriptionForError:error]) : completion(YES, nil);
+            error ? completion(NO, [self.errorDescriptor descriptionForError:error]) : completion(YES, nil);
         }
     }];
 }

@@ -41,16 +41,22 @@
 
 - (BOOL)isLogined
 {
-    return [PRDataProvider sharedInstance].currentUser;
+    return self.dataProvider.currentUser;
 }
 
 - (void)logoutWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
-    [[PRDataProvider sharedInstance] logoutWithCompletion:^(NSError *error) {
+    __weak typeof(self) wSelf = self;
+    [self.dataProvider logoutWithCompletion:^(NSError *error) {
         if (completion) {
             if (error) {
-                completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                completion(NO, [wSelf.errorDescriptor descriptionForError:error]);
             } else {
+                _hotArticles = [NSMutableArray new];
+                _newArticles = [NSMutableArray new];
+                _topArticles = [[PRArticleCollection alloc] init];
+                _favoriteArticles = [NSMutableArray new];
+                _createdArticles = [NSMutableArray new];
                 completion(YES, nil);
             }
         }
@@ -62,7 +68,7 @@
     if (!media.thumbnailURL && completion) {
         completion(nil, nil);
     } else {
-        [[PRDataProvider sharedInstance] loadThumbnailForMedia:media completion:^(UIImage *image, NSError *error) {
+        [self.dataProvider loadThumbnailForMedia:media completion:^(UIImage *image, NSError *error) {
             if (!error) {
                 if (completion) {
                     completion(image, error);
@@ -78,10 +84,11 @@
 
 - (void)reloadDataWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
+    __weak typeof(self) wSelf = self;
     switch (self.activeFeed) {
         case PRFeedTypeTop:
         {
-            [[PRDataProvider sharedInstance] refreshTopArticlesWithCompletion:^(PRArticleCollection *articles, NSError *error) {
+            [self.dataProvider refreshTopArticlesWithCompletion:^(PRArticleCollection *articles, NSError *error) {
                 if (!error) {
                     _topArticles = articles;
                     [self changeDataAvailable];
@@ -92,9 +99,9 @@
                     if (articles) {
                         _topArticles = articles;
                         [self changeDataAvailable];
-                        completion(YES, [PRErrorDescriptor descriptionForError:error]);
+                        completion(YES, [wSelf.errorDescriptor descriptionForError:error]);
                     } else {
-                        completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                        completion(NO, [wSelf.errorDescriptor descriptionForError:error]);
                     }
                 }
             }];
@@ -102,7 +109,7 @@
         }
         case PRFeedTypeCreated:
         {
-            [[PRDataProvider sharedInstance] allMyArticles:^(NSArray *articles, NSError *error) {
+            [self.dataProvider allMyArticles:^(NSArray *articles, NSError *error) {
                 if (!error) {
                     _createdArticles = [[NSMutableArray alloc] initWithArray:articles];
                     [self changeDataAvailable];
@@ -113,16 +120,16 @@
                     if (articles) {
                         _createdArticles = [[NSMutableArray alloc] initWithArray:articles];
                         [self changeDataAvailable];
-                        completion(YES, [PRErrorDescriptor descriptionForError:error]);
+                        completion(YES, [wSelf.errorDescriptor descriptionForError:error]);
                     } else {
-                        completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                        completion(NO, [wSelf.errorDescriptor descriptionForError:error]);
                     }                }
             }];
             break;
         }
         case PRFeedTypeFavorites:
         {
-            [[PRDataProvider sharedInstance] favoriteArticles:^(NSArray *articles, NSError *error) {
+            [self.dataProvider favoriteArticles:^(NSArray *articles, NSError *error) {
                 if (!error) {
                     _favoriteArticles = [[NSMutableArray alloc] initWithArray:articles];
                     [self changeDataAvailable];
@@ -133,9 +140,9 @@
                     if (articles) {
                         _favoriteArticles = [[NSMutableArray alloc] initWithArray:articles];
                         [self changeDataAvailable];
-                        completion(YES, [PRErrorDescriptor descriptionForError:error]);
+                        completion(YES, [wSelf.errorDescriptor descriptionForError:error]);
                     } else {
-                        completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                        completion(NO, [wSelf.errorDescriptor descriptionForError:error]);
                     }
                 }
             }];
@@ -143,7 +150,7 @@
         }
         case PRFeedTypeHot:
         {
-            [[PRDataProvider sharedInstance] refreshHotArticlesWithCompletion:^(NSArray *articles, NSError *error) {
+            [self.dataProvider refreshHotArticlesWithCompletion:^(NSArray *articles, NSError *error) {
                 if (!error) {
                     _hotArticles = [[NSMutableArray alloc] initWithArray:articles];
                     _canMoreHot = [articles count];
@@ -156,9 +163,9 @@
                         _hotArticles = [[NSMutableArray alloc] initWithArray:articles];
                         _canMoreHot = [articles count];
                         [self changeDataAvailable];
-                        completion(YES, [PRErrorDescriptor descriptionForError:error]);
+                        completion(YES, [wSelf.errorDescriptor descriptionForError:error]);
                     } else {
-                        completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                        completion(NO, [wSelf.errorDescriptor descriptionForError:error]);
                     }
                 }
             }];
@@ -166,7 +173,7 @@
         }
         case PRFeedTypeNew:
         {
-            [[PRDataProvider sharedInstance] refreshNewArticlesWithCompletion:^(NSArray *articles, NSError *error) {
+            [self.dataProvider refreshNewArticlesWithCompletion:^(NSArray *articles, NSError *error) {
                 if (!error) {
                     _newArticles = [[NSMutableArray alloc] initWithArray:articles];
                     _canMoreNew = [articles count];
@@ -179,9 +186,9 @@
                         _newArticles = [[NSMutableArray alloc] initWithArray:articles];
                         _canMoreNew = [articles count];
                         [self changeDataAvailable];
-                        completion(YES, [PRErrorDescriptor descriptionForError:error]);
+                        completion(YES, [wSelf.errorDescriptor descriptionForError:error]);
                     } else {
-                        completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                        completion(NO, [wSelf.errorDescriptor descriptionForError:error]);
                     }
                 }
 
@@ -198,6 +205,7 @@
 
 - (void)loadNewDataWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
+    __weak typeof(self) wSelf = self;
     switch (self.activeFeed) {
         case PRFeedTypeTop:
         {
@@ -216,7 +224,7 @@
         }
         case PRFeedTypeHot:
         {
-            [[PRDataProvider sharedInstance] loadNextHotArticlesWithCompletion:^(NSArray *articles, NSError *error) {
+            [self.dataProvider loadNextHotArticlesWithCompletion:^(NSArray *articles, NSError *error) {
                 if (!error) {
                     [_hotArticles addObjectsFromArray:articles];
                     _canMoreHot = [articles count];
@@ -225,14 +233,14 @@
                         completion(YES, nil);
                     }
                 } else if (completion) {
-                    completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                    completion(NO, [wSelf.errorDescriptor descriptionForError:error]);
                 }
             }];
             break;
         }
         case PRFeedTypeNew:
         {
-            [[PRDataProvider sharedInstance] loadNextNewArticlesWithCompletion:^(NSArray *articles, NSError *error) {
+            [self.dataProvider loadNextNewArticlesWithCompletion:^(NSArray *articles, NSError *error) {
                 if (!error) {
                     [_newArticles addObjectsFromArray:articles];
                     _canMoreNew = [articles count];
@@ -241,7 +249,7 @@
                         completion(YES, nil);
                     }
                 } else if (completion) {
-                    completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                    completion(NO, [wSelf.errorDescriptor descriptionForError:error]);
                 }
             }];
             break;
@@ -375,10 +383,11 @@
 
 - (void)likeArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion
 {
-    [[PRDataProvider sharedInstance] likeArticle:article success:^(NSError *error) {
+    __weak typeof(self) wSelf = self;
+    [self.dataProvider likeArticle:article success:^(NSError *error) {
         if (completion) {
             if (error) {
-                completion([PRErrorDescriptor descriptionForError:error]);
+                completion([wSelf.errorDescriptor descriptionForError:error]);
             } else {
                 completion(nil);
             }
@@ -388,10 +397,11 @@
 
 - (void)dislikeArticle:(Article *)article completion:(void(^)(NSString *errorMessage))completion
 {
-    [[PRDataProvider sharedInstance] dislikeArticle:article success:^(NSError *error) {
+    __weak typeof(self) wSelf = self;
+    [self.dataProvider dislikeArticle:article success:^(NSError *error) {
         if (completion) {
             if (error) {
-                completion([PRErrorDescriptor descriptionForError:error]);
+                completion([wSelf.errorDescriptor descriptionForError:error]);
             } else {
                 completion(nil);
             }
@@ -401,7 +411,7 @@
 
 - (void)addArticleToFavorite:(Article *)article
 {
-     [[PRDataProvider sharedInstance] addArticleToFavorite:article success:nil];
+     [self.dataProvider addArticleToFavorite:article success:nil];
 }
 
 @end

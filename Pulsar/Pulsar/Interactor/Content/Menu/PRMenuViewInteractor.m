@@ -23,6 +23,8 @@
     NSOperationQueue *_loadingQueue;
 }
 
+@synthesize delegate;
+
 - (instancetype)init
 {
     self = [super init];
@@ -37,33 +39,42 @@
 {
     __weak typeof(self) wSelf = self;
     [_loadingQueue addOperationWithBlock:^{
+        __strong typeof(wSelf) sSelf = wSelf;
+        if (!sSelf) {
+            return;
+        }
         dispatch_group_t loadCategoryCroup = dispatch_group_create();
         dispatch_group_enter(loadCategoryCroup);
-        [[PRDataProvider sharedInstance] allCategories:^(NSArray *categories, NSError *error) {
-            if (categories) {
+        [sSelf.dataProvider allCategories:^(NSArray *categories, NSError *error) {
+            __strong typeof(wSelf) sSelf = wSelf;
+            if (categories && sSelf) {
                 __block NSArray *allCategories = categories;
                 _categories = categories;
-                [[PRDataProvider sharedInstance] categoriesForCurrentUser:^(NSArray *categories, NSError *error) {
+                [sSelf.dataProvider categoriesForCurrentUser:^(NSArray *categories, NSError *error) {
                     if (categories) {
                         __strong typeof(wSelf) sSelf = wSelf;
                         if (sSelf) {
                             [sSelf generateDataSourceOfAllCategories:allCategories userCategories:categories];
-                            dispatch_group_leave(loadCategoryCroup);
                         }
                         if (completion) {
                             if (error) {
-                                completion(YES, [PRErrorDescriptor descriptionForError:error]);
+                                completion(YES, [sSelf.errorDescriptor descriptionForError:error]);
                             } else {
                                 completion(YES, nil);
                             }
                         }
-                    } else if (completion) {
-                        completion(NO, [PRErrorDescriptor descriptionForError:error]);
+                        dispatch_group_leave(loadCategoryCroup);
+                    } else {
+                        if (completion) {
+                            completion(NO, [wSelf.errorDescriptor descriptionForError:error]);
+                        }
                         dispatch_group_leave(loadCategoryCroup);
                     }
                 }];
-            } else if (completion) {
-                completion(NO, [PRErrorDescriptor descriptionForError:error]);
+            } else {
+                if (completion) {
+                    completion(NO, [wSelf.errorDescriptor descriptionForError:error]);
+                }
                 dispatch_group_leave(loadCategoryCroup);
             }
         }];
@@ -73,10 +84,15 @@
 
 - (void)fetchGeoPointsWithCompletion:(void (^)(BOOL, NSString *))completion
 {
+    __weak typeof(self) wSelf = self;
     [_loadingQueue addOperationWithBlock:^{
+        __strong typeof(wSelf) sSelf = wSelf;
+        if (!sSelf) {
+            return;
+        }
         dispatch_group_t loadLocationGroup  = dispatch_group_create();
         dispatch_group_enter(loadLocationGroup);
-        [[PRDataProvider sharedInstance] allGeopoints:^(NSArray *geopoints, NSError *error) {
+        [sSelf.dataProvider allGeopoints:^(NSArray *geopoints, NSError *error) {
             if (!error) {
                 _locations = geopoints;
                 _editableLocations = [[NSMutableArray alloc] initWithArray:geopoints];
@@ -90,7 +106,7 @@
                     _editableLocations = [[NSMutableArray alloc] initWithArray:geopoints];
                 }
                 if (completion) {
-                    completion(geopoints ? YES : NO, [PRErrorDescriptor descriptionForError:error]);
+                    completion(geopoints ? YES : NO, [wSelf.errorDescriptor descriptionForError:error]);
                 }
                 dispatch_group_leave(loadLocationGroup);
             }
@@ -106,6 +122,7 @@
     }
     
     __weak typeof(self) wSelf = self;
+    PRDataProvider *dataProvider = self.dataProvider;
     [_loadingQueue addOperationWithBlock:^{
 
         dispatch_group_t savingGroup = dispatch_group_create();
@@ -136,7 +153,7 @@
         
         if ([locationsForRemove count]) {
             dispatch_group_enter(savingGroup);
-            [[PRDataProvider sharedInstance] removeGeoPoints:locationsForRemove completion:^(NSError *error) {
+            [dataProvider removeGeoPoints:locationsForRemove completion:^(NSError *error) {
                 executionError = error;
                 dispatch_group_leave(savingGroup);
             }];
@@ -144,19 +161,19 @@
     
         if ([categoriesForAdd  count] && [categoriesForRemove count]) {
             dispatch_group_enter(savingGroup);
-            [[PRDataProvider sharedInstance] userCategoryAdd:categoriesForAdd remove:categoriesForRemove completion:^(NSError *error) {
+            [dataProvider userCategoryAdd:categoriesForAdd remove:categoriesForRemove completion:^(NSError *error) {
                 executionError = error;
                 dispatch_group_leave(savingGroup);
             }];
         } else if ([categoriesForAdd count]) {
             dispatch_group_enter(savingGroup);
-            [[PRDataProvider sharedInstance] addCategoriesForCurrentUser:categoriesForAdd completion:^(NSError *error) {
+            [dataProvider addCategoriesForCurrentUser:categoriesForAdd completion:^(NSError *error) {
                 executionError = error;
                 dispatch_group_leave(savingGroup);
             }];
         } else if ([categoriesForRemove count]) {
             dispatch_group_enter(savingGroup);
-            [[PRDataProvider sharedInstance] removeCategoriesForCurrentUser:categoriesForRemove completion:^(NSError *error) {
+            [dataProvider removeCategoriesForCurrentUser:categoriesForRemove completion:^(NSError *error) {
                 executionError = error;
                 dispatch_group_leave(savingGroup);
             }];
@@ -178,7 +195,7 @@
             
             if (completion) {
                 if (executionError) {
-                    completion(NO, [PRErrorDescriptor descriptionForError:executionError]);
+                    completion(NO, [sSelf.errorDescriptor descriptionForError:executionError]);
                 } else {
                     completion(YES, nil);
                 }

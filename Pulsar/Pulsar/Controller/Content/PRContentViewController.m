@@ -52,6 +52,8 @@ static NSString * const kToLoginSegueIdentifier = @"content_to_login_segue";
 
 static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
+@dynamic interactor;
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     [super prepareForSegue:segue sender:sender];

@@ -46,6 +46,8 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
 
 static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_identifier";
 
+@dynamic interactor;
+
 #pragma mark - LifeCycle
 
 - (void)viewDidLoad

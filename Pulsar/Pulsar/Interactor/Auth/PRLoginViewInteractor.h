@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "RPLoginViewInteractorProtocol.h"
+#import "PRRootInteractor.h"
 
-@interface PRLoginViewInteractor : NSObject<RPLoginViewInteractorProtocol>
+@interface PRLoginViewInteractor : PRRootInteractor<RPLoginViewInteractorProtocol>
 
 @end

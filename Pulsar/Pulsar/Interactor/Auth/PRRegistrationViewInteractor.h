@@ -7,11 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PREmailValidator.h"
 #import "RPRegistrationViewInteractorProtocol.h"
+#import "PRRootInteractor.h"
 
-@interface PRRegistrationViewInteractor : NSObject<RPRegistrationViewInteractorProtocol>
-
-@property (strong, nonatomic) PREmailValidator *validator;
+@interface PRRegistrationViewInteractor : PRRootInteractor<RPRegistrationViewInteractorProtocol>
 
 @end

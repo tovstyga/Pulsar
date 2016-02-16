@@ -22,6 +22,8 @@
 
 static NSString * const kToRegistrationSegueIdentifier = @"to_registration_segue";
 
+@dynamic interactor;
+
 #pragma mark - LifeCycle
 
 - (void)viewDidLoad

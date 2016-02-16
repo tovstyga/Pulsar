@@ -36,6 +36,8 @@
 static NSString * const kToContentSegueIdentifier = @"registration_to_content_segue";
 static int const kHeightFromKeyboard = 10;
 
+@dynamic interactor;
+
 #pragma mark - LifeCycle
 
 - (void)viewDidLoad

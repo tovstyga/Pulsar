@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "PRCreationViewInteractorProtocol.h"
+#import "PRRootInteractor.h"
 
-@interface PRCreationViewInteractor : NSObject<PRCreationViewInteractorProtocol>
+@interface PRCreationViewInteractor : PRRootInteractor<PRCreationViewInteractorProtocol>
 
 @end

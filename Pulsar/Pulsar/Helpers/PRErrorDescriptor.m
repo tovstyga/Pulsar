@@ -10,7 +10,18 @@
 
 @implementation PRErrorDescriptor
 
-+ (NSString *)descriptionForError:(NSError *)error
+static PRErrorDescriptor *sharedInstance;
+
++ (instancetype)sharedInstance
+{
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
+        sharedInstance = [[PRErrorDescriptor alloc] init];
+    });
+    return sharedInstance;
+}
+
+- (NSString *)descriptionForError:(NSError *)error
 {
     if (error) {
         return [error.userInfo objectForKey:NSLocalizedDescriptionKey];

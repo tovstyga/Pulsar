@@ -36,6 +36,8 @@ static NSString * const kLocationsSectionTitle = @"Locations";
 static NSString * const kAddLocationLabel = @"Add new location";
 static NSString * const kCurrentLocationLabel = @"Current location";
 
+@dynamic interactor;
+
 #pragma mark - Actions
 
 - (void)refreshing

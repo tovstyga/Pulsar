@@ -8,10 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "PRMapViewInteractorProtocol.h"
-#import "PRMapInteractorDelegate.h"
+#import "PRRootInteractor.h"
 
-@interface PRMapViewInteractor : NSObject<PRMapViewInteractorProtocol>
-
-@property (weak, nonatomic) id<PRMapInteractorDelegate> delegate;
+@interface PRMapViewInteractor : PRRootInteractor<PRMapViewInteractorProtocol>
 
 @end

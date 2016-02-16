@@ -16,6 +16,8 @@
 
 @implementation PRRootLoginViewController
 
+@dynamic interactor;
+
 #pragma mark - LifeCycle
 
 - (void)viewWillAppear:(BOOL)animated

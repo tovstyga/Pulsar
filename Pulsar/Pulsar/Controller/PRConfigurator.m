@@ -8,8 +8,6 @@
 
 #import "PRConfigurator.h"
 
-//protocols
-
 #import "PRRestoreAccountViewInteractorProtocol.h"
 #import "RPRegistrationViewInteractorProtocol.h"
 #import "RPLoginViewInteractorProtocol.h"
@@ -19,30 +17,14 @@
 #import "PRMapInteractorDelegate.h"
 #import "PRDetailsViewInteractorProtocol.h"
 #import "PRCreationViewInteractorProtocol.h"
+#import "PRRootInteractorProtocol.h"
 
-//interactors
-
-#import "PRLoginViewInteractor.h"
-#import "PRRestoreAccountInteractor.h"
-#import "PRRegistrationViewInteractor.h"
-#import "PRContentViewInteractor.h"
-#import "PRMenuViewInteractor.h"
-#import "PRMapViewInteractor.h"
-#import "PRCreationViewInteractor.h"
-#import "PRDetailsViewInteractor.h"
-
-//controllers
-
-#import "PRLoginViewController.h"
-#import "PRRegistrationViewController.h"
-#import "PRRestoreAccountViewController.h"
 #import "PRContentViewController.h"
 #import "PRMenuViewController.h"
-#import "PRMapViewController.h"
-#import "PRDetailsViewController.h"
-#import "PRCreationViewController.h"
 
 #import "PREmailValidator.h"
+#import "PRDataProvider.h"
+#import "PRErrorDescriptor.h"
 
 @implementation PRConfigurator
 
@@ -68,80 +50,44 @@ static PRConfigurator *sharedInstance;
 
 - (void)configureViewController:(UIViewController *)viewController sourceViewController:(UIViewController *)sourceViewController
 {
-    if (([viewController isKindOfClass:[UINavigationController class]]) && [[(UINavigationController *)viewController topViewController] isMemberOfClass:[PRLoginViewController class]]) {
-        [(PRLoginViewController *)[(UINavigationController *)viewController topViewController] setInteractor:[self loginInteractor]];
-    } else if ([viewController isMemberOfClass:[PRRegistrationViewController class]]) {
-        [(PRRegistrationViewController *)viewController setInteractor:[self registrationInteractor]];
-    } else if ([viewController isMemberOfClass:[PRRestoreAccountViewController class]]) {
-        [(PRRestoreAccountViewController *)viewController setInteractor:[self restoreAccountInteractor]];
-    } else if ([viewController isKindOfClass:[UINavigationController class]] && [[(UINavigationController *)viewController topViewController] isMemberOfClass:[PRContentViewController class]]) {
-        [(PRContentViewController *)[(UINavigationController *)viewController topViewController] setInteractor:[self contentInteractor]];
+    UIViewController *configuredController = viewController;
+    if ([viewController isKindOfClass:[UINavigationController class]]) {
+        configuredController = [(UINavigationController *)viewController topViewController];
     } else if ([viewController isMemberOfClass:[PRMenuViewController class]]) {
-        [(PRMenuViewController *)viewController setInteractor:[self menuInteractorWithDelegate:sourceViewController]];
         if ([viewController conformsToProtocol:@protocol(PRContentViewDelegate)] && [sourceViewController isKindOfClass:[PRContentViewController class]]) {
             [(PRContentViewController *)sourceViewController setDelegate:(id<PRContentViewDelegate>)viewController];
         }
-    } else if ([viewController isMemberOfClass:[PRMapViewController class]]) {
-        [(PRMapViewController *)viewController setInteractor:[self mapInteractorWithDelegate:sourceViewController]];
-    } else if ([viewController isMemberOfClass:[PRCreationViewController class]]) {
-        [(PRCreationViewController *)viewController setInteractor:[self creatorInteractor]];
-    } else if ([viewController isMemberOfClass:[PRDetailsViewController class]]) {
-        [(PRDetailsViewController *)viewController setInteractor:[self detailsInteractor]];
     }
+    [self configureViewController:configuredController withDelegate:sourceViewController];
 }
 
 #pragma mark - Interactors
 
-- (id<PRRestoreAccountViewInteractorProtocol>)restoreAccountInteractor
+- (void)configureViewController:(UIViewController *)controller withDelegate:(id)delegate;
 {
-    PRRestoreAccountInteractor *interactor = [[PRRestoreAccountInteractor alloc] init];
-    interactor.validator = [PREmailValidator sharedInstance];
-    return interactor;
-}
-
-- (id<RPRegistrationViewInteractorProtocol>)registrationInteractor
-{
-    PRRegistrationViewInteractor *interactor = [[PRRegistrationViewInteractor alloc] init];
-    interactor.validator = [PREmailValidator sharedInstance];
-    return interactor;
-}
-
-- (id<RPLoginViewInteractorProtocol>)loginInteractor
-{
-    return [[PRLoginViewInteractor alloc] init];
-}
-
-- (id<PRContentViewInteractorProtocol>)contentInteractor
-{
-    return [[PRContentViewInteractor alloc] init];
-}
-
-- (id<PRMenuViewInteractorProtocol>)menuInteractorWithDelegate:(id)delegate;
-{
-    PRMenuViewInteractor *interactor = [[PRMenuViewInteractor alloc] init];
-    if ([delegate conformsToProtocol:@protocol(PRMenuInteractorDelegate)]) {
-        interactor.delegate = delegate;
+    if (![controller isKindOfClass:[PRRootViewController class]]) {
+        return;
     }
-    return interactor;
-}
-
-- (id<PRMapViewInteractorProtocol>)mapInteractorWithDelegate:(id)delegate;
-{
-    PRMapViewInteractor *interactor = [[PRMapViewInteractor alloc] init];
-    if ([delegate conformsToProtocol:@protocol(PRMapInteractorDelegate)]) {
-        interactor.delegate = delegate;
+    
+    if ([[(PRRootViewController *)controller interactor] conformsToProtocol:@protocol(PRRootInteractorProtocol)]) {
+        id<PRRootInteractorProtocol> rootInteractor = (id<PRRootInteractorProtocol>)[(PRRootViewController *)controller interactor];
+        [rootInteractor setDataProvider:[PRDataProvider sharedInstance]];
+        [rootInteractor setErrorDescriptor:[PRErrorDescriptor sharedInstance]];
+        
+        if ([rootInteractor conformsToProtocol:@protocol(PRRestoreAccountViewInteractorProtocol)]) {
+            [(id<PRRestoreAccountViewInteractorProtocol>)rootInteractor setValidator:[PREmailValidator sharedInstance]];
+        } else if ([rootInteractor conformsToProtocol:@protocol(RPRegistrationViewInteractorProtocol)]) {
+            [(id<RPRegistrationViewInteractorProtocol>)rootInteractor setValidator:[PREmailValidator sharedInstance]];
+        } else if ([rootInteractor conformsToProtocol:@protocol(PRMenuViewInteractorProtocol)]) {
+            if ([delegate conformsToProtocol:@protocol(PRMenuInteractorDelegate)]) {
+                [(id<PRMenuViewInteractorProtocol>)rootInteractor setDelegate:delegate];
+            }
+        } else if ([rootInteractor conformsToProtocol:@protocol(PRMapViewInteractorProtocol)]) {
+            if ([delegate conformsToProtocol:@protocol(PRMapInteractorDelegate)]) {
+                [(id<PRMapViewInteractorProtocol>)rootInteractor setDelegate:delegate];
+            }
+        }
     }
-    return interactor;
-}
-
-- (id<PRDetailsViewInteractorProtocol>)detailsInteractor
-{
-    return [[PRDetailsViewInteractor alloc] init];
-}
-
-- (id<PRCreationViewInteractorProtocol>)creatorInteractor
-{
-    return [[PRCreationViewInteractor alloc] init];
 }
 
 @end
