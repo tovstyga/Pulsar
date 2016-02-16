@@ -56,7 +56,7 @@ static NSString * const kDetailsMediaCellIdentifier = @"details_media_cell_ident
     
     if (self.article.image.thumbnail) {
         self.imageView.image = [UIImage imageWithData:self.article.image.thumbnail];
-    } else {
+    } else if (self.article.image.thumbnailURL) {
         [self.interactor loadThumbnailForMedia:self.article.image completion:^(UIImage *image, NSString *errorMessage) {
             if (!errorMessage) {
                 dispatch_async(dispatch_get_main_queue(), ^{

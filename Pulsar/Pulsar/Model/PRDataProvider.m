@@ -33,12 +33,14 @@
 #define MONTH DAY*30
 #define YEAR DAY * 365
 
+typedef void(^ImageLoadCompletion)(NSData *data, NSError *error);
+
 @interface PRDataProvider()
 
 @property (strong, nonatomic) NSString *networkSessionKey;
 @property (strong, atomic) NSOperationQueue *uploadQueue;
 @property (strong, atomic) NSOperationQueue *downloadQueue;
-
+@property (strong, nonatomic) NSMutableDictionary *downloadInfo;
 @property (strong, atomic) PRLocalDataStoreManager *storeManager;
 
 @end
@@ -87,6 +89,7 @@ static NSString * const kMediaClassName = @"Media";
             _minRatingArticle = NSIntegerMin;
             _newArticleRequestTime = [NSDate date];
             
+            self.downloadInfo = [NSMutableDictionary new];
         }
         return self;
     }
@@ -434,24 +437,37 @@ static NSString * const kMediaClassName = @"Media";
     }];
 }
 
-- (void)loadDataFromUrl:(NSURL *)url completion:(void (^)(NSData *data, NSError *error))completion
+- (void)loadDataFromUrl:(NSURL *)url completion:(ImageLoadCompletion)completion
 {
-    [self.downloadQueue addOperationWithBlock:^{
-        dispatch_group_t downloadGroup = dispatch_group_create();
-        dispatch_group_enter(downloadGroup);
-        [[PRNetworkDataProvider sharedInstance] loadDataFromURL:url success:^(NSData *data, NSURLResponse *response) {
-            if (completion) {
-                completion(data, nil);
-            }
-            dispatch_group_leave(downloadGroup);
-        } failure:^(NSError *error) {
-            if (completion) {
-                completion(nil, error);
-            }
-            dispatch_group_leave(downloadGroup);
+    if ([self.downloadInfo objectForKey:[url absoluteString]]) {
+        [(NSMutableArray *)[self.downloadInfo objectForKey:[url absoluteString]] addObject:completion];
+    } else {
+        NSMutableArray *completions = [NSMutableArray new];
+        [completions addObject:completion];
+        [self.downloadInfo setObject:completions forKey:[url absoluteString]];
+        [self.downloadQueue addOperationWithBlock:^{
+            dispatch_group_t downloadGroup = dispatch_group_create();
+            dispatch_group_enter(downloadGroup);
+            [[PRNetworkDataProvider sharedInstance] loadDataFromURL:url success:^(NSData *data, NSURLResponse *response) {
+                NSMutableArray *complArray = [self.downloadInfo objectForKey:[url absoluteString]];
+                for (ImageLoadCompletion complete in complArray) {
+                    complete(data, nil);
+                }
+                [complArray removeAllObjects];
+                [self.downloadInfo removeObjectForKey:[url absoluteString]];
+                dispatch_group_leave(downloadGroup);
+            } failure:^(NSError *error) {
+                NSMutableArray *complArray = [self.downloadInfo objectForKey:[url absoluteString]];
+                for (ImageLoadCompletion complete in complArray) {
+                    complete(nil, error);
+                }
+                [complArray removeAllObjects];
+                [self.downloadInfo removeObjectForKey:[url absoluteString]];
+                dispatch_group_leave(downloadGroup);
+            }];
+            dispatch_group_wait(downloadGroup, DISPATCH_TIME_FOREVER);
         }];
-        dispatch_group_wait(downloadGroup, DISPATCH_TIME_FOREVER);
-    }];
+    }
 }
 
 - (void)loadMediaForArticle:(Article *)localArticle completion:(void(^)(NSArray<Media *> *mediaArray, NSError *error))completion

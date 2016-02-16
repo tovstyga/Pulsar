@@ -57,7 +57,7 @@
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 dispatch_group_t loadThumbnailsGorup = dispatch_group_create();
                 for (Media *media in mediaArray) {
-                    if (media.thumbnailURL) {
+                    if (media.thumbnailURL && !media.thumbnail) {
                         dispatch_group_enter(loadThumbnailsGorup);
                         [[PRDataProvider sharedInstance] loadThumbnailForMedia:media completion:^(UIImage *image, NSError *error) {
                              dispatch_group_leave(loadThumbnailsGorup);
