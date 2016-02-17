@@ -10,7 +10,7 @@
 
 @implementation PRThumbnailMaker
 
-+ (UIImage *)thumbnailWithImage:(UIImage *)source
+- (UIImage *)thumbnailWithImage:(UIImage *)source
 {
     CGSize thumbnailSize = CGSizeMake(80.f, 80.f);
     UIGraphicsBeginImageContext(thumbnailSize);
@@ -21,7 +21,7 @@
     return newImage;
 }
 
-+ (NSData *)dataWithImage:(UIImage *)source
+- (NSData *)dataWithImage:(UIImage *)source
 {
     return UIImagePNGRepresentation(source);
 }

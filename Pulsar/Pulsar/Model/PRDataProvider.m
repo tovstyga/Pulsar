@@ -26,6 +26,7 @@
 
 #import "PRLocalDataStoreManager.h"
 #import "PRLocalDataStore.h"
+#import "PRUploadImageManager.h"
 
 #define HOUR 60*60
 #define DAY HOUR*24
@@ -39,6 +40,7 @@ typedef void(^ImageLoadCompletion)(NSData *data, NSError *error);
 
 @property (strong, nonatomic) NSString *networkSessionKey;
 @property (strong, atomic) NSOperationQueue *uploadQueue;
+@property (strong, nonatomic) PRUploadImageManager *uploadManager;
 @property (strong, atomic) NSOperationQueue *downloadQueue;
 @property (strong, nonatomic) NSMutableDictionary *downloadInfo;
 @property (strong, atomic) PRLocalDataStoreManager *storeManager;
@@ -75,6 +77,8 @@ static NSString * const kMediaClassName = @"Media";
         self = [super init];
         if (self) {
             [PRNetworkDataProvider sharedInstance];
+            
+            self.uploadManager = [[PRUploadImageManager alloc] init];
             
             self.uploadQueue = [[NSOperationQueue alloc] init];
             self.uploadQueue.maxConcurrentOperationCount = 1;
@@ -365,17 +369,12 @@ static NSString * const kMediaClassName = @"Media";
         dispatch_group_enter(publishGroup);
         [self.uploadQueue addOperationWithBlock:^{
             [[PRNetworkDataProvider sharedInstance] requestPublishArticle:remoteArticle success:^(NSData *data, NSURLResponse *response) {
+                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+                for (UIImage *image in localArticle.images) {
+                    [self.uploadManager uploadImage:image articleWithId:[json objectForKey:kObjectIdentifierKey]];
+                }
                 if (completion) {
                     completion(nil);
-                }
-                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-                PRRemotePointer *pointerToNewArticle = [[PRRemotePointer alloc] initWithClass:kArticleClassName remoteObjectId:[json objectForKey:kObjectIdentifierKey]];
-                
-                for (UIImage *image in localArticle.images) {
-                    PRUploadMediaOperation *uploadOperation = [[PRUploadMediaOperation alloc] init];
-                    uploadOperation.uploadImage = image;
-                    uploadOperation.article = pointerToNewArticle;
-                    [self.uploadQueue addOperation:uploadOperation];
                 }
                 localArticle.images = nil;
                 dispatch_group_leave(publishGroup);
@@ -400,7 +399,8 @@ static NSString * const kMediaClassName = @"Media";
                 publishBlock(nil);
             }
         };
-        [self.uploadQueue addOperation:uploadImageOperation];
+        
+        [self.uploadManager performUploadOperation:uploadImageOperation];
     } else {
         publishBlock(nil);
     }

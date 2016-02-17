@@ -75,7 +75,6 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     self.refreshControll = [[UIRefreshControl alloc] init];
     [self.refreshControll addTarget:self action:@selector(refreshing) forControlEvents:UIControlEventValueChanged];
     [self.contentTableView addSubview:self.refreshControll];
-//    self.contentTableView.scrollIndicatorInsets = UIEdgeInsetsMake(-64, 0, 0, 0);
     
     _closedMenuDefaultConstraint = self.view.frame.size.width;
     _isOpenedMenu = NO;

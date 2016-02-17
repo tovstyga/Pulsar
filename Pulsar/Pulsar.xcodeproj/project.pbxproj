@@ -15,6 +15,8 @@
 		400517431C3BE70200FBFE11 /* PRLaunchScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 400517421C3BE70200FBFE11 /* PRLaunchScreenViewController.m */; };
 		400517461C3C171B00FBFE11 /* PRErrorDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 400517451C3C171B00FBFE11 /* PRErrorDescriptor.m */; };
 		400517491C3C19A900FBFE11 /* PRAlertHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 400517481C3C19A900FBFE11 /* PRAlertHelper.m */; };
+		401B5DE81C7491E500ADCA9C /* UploadTask+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 401B5DE51C7491E500ADCA9C /* UploadTask+CoreDataProperties.m */; };
+		401B5DE91C7491E500ADCA9C /* UploadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 401B5DE71C7491E500ADCA9C /* UploadTask.m */; };
 		404D33111C4E8CCB00C4735E /* PRRemotePointer.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D33101C4E8CCB00C4735E /* PRRemotePointer.m */; };
 		404D33141C4E901D00C4735E /* PRRemoteQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D33131C4E901D00C4735E /* PRRemoteQuery.m */; };
 		404D33181C4F806400C4735E /* PRRemoteBatchRequestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 404D33171C4F806400C4735E /* PRRemoteBatchRequestObject.m */; };
@@ -52,6 +54,7 @@
 		40C161E21C451D3600E1E6F5 /* PRContentViewInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 40C161E11C451D3600E1E6F5 /* PRContentViewInteractor.m */; };
 		40C161E61C45293200E1E6F5 /* PRRemoteCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 40C161E51C45293200E1E6F5 /* PRRemoteCategory.m */; };
 		40C630E81C7363E8003E2A20 /* PRRootInteractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 40C630E71C7363E8003E2A20 /* PRRootInteractor.m */; };
+		40C630EB1C748E38003E2A20 /* PRUploadImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 40C630EA1C748E38003E2A20 /* PRUploadImageManager.m */; };
 		40CFE88B1C5688D20065017C /* PRActionSheetPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40CFE88A1C5688D20065017C /* PRActionSheetPickerView.xib */; };
 		40CFE88E1C5688F70065017C /* PRActionSheetPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40CFE88D1C5688F70065017C /* PRActionSheetPickerView.m */; };
 		40CFE8911C5763110065017C /* PRPickerViewPresenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 40CFE8901C5763110065017C /* PRPickerViewPresenter.m */; };
@@ -113,6 +116,10 @@
 		400517451C3C171B00FBFE11 /* PRErrorDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRErrorDescriptor.m; sourceTree = "<group>"; };
 		400517471C3C19A900FBFE11 /* PRAlertHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRAlertHelper.h; sourceTree = "<group>"; };
 		400517481C3C19A900FBFE11 /* PRAlertHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRAlertHelper.m; sourceTree = "<group>"; };
+		401B5DE41C7491E500ADCA9C /* UploadTask+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UploadTask+CoreDataProperties.h"; path = "../DataBase/UploadTask+CoreDataProperties.h"; sourceTree = "<group>"; };
+		401B5DE51C7491E500ADCA9C /* UploadTask+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UploadTask+CoreDataProperties.m"; path = "../DataBase/UploadTask+CoreDataProperties.m"; sourceTree = "<group>"; };
+		401B5DE61C7491E500ADCA9C /* UploadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UploadTask.h; path = ../DataBase/UploadTask.h; sourceTree = "<group>"; };
+		401B5DE71C7491E500ADCA9C /* UploadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UploadTask.m; path = ../DataBase/UploadTask.m; sourceTree = "<group>"; };
 		404D330F1C4E8CCB00C4735E /* PRRemotePointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemotePointer.h; sourceTree = "<group>"; };
 		404D33101C4E8CCB00C4735E /* PRRemotePointer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRemotePointer.m; sourceTree = "<group>"; };
 		404D33121C4E901D00C4735E /* PRRemoteQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRemoteQuery.h; sourceTree = "<group>"; };
@@ -197,6 +204,8 @@
 		40C630E51C735431003E2A20 /* PRRootInteractorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRRootInteractorProtocol.h; sourceTree = "<group>"; };
 		40C630E61C7363E8003E2A20 /* PRRootInteractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRRootInteractor.h; sourceTree = "<group>"; };
 		40C630E71C7363E8003E2A20 /* PRRootInteractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRRootInteractor.m; sourceTree = "<group>"; };
+		40C630E91C748E38003E2A20 /* PRUploadImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRUploadImageManager.h; sourceTree = "<group>"; };
+		40C630EA1C748E38003E2A20 /* PRUploadImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRUploadImageManager.m; sourceTree = "<group>"; };
 		40CFE88A1C5688D20065017C /* PRActionSheetPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PRActionSheetPickerView.xib; sourceTree = "<group>"; };
 		40CFE88C1C5688F70065017C /* PRActionSheetPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRActionSheetPickerView.h; sourceTree = "<group>"; };
 		40CFE88D1C5688F70065017C /* PRActionSheetPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRActionSheetPickerView.m; sourceTree = "<group>"; };
@@ -319,6 +328,17 @@
 				4005173F1C3BAD8000FBFE11 /* PRTokenValidationResponse.m */,
 			);
 			path = TokenValidation;
+			sourceTree = "<group>";
+		};
+		401B5DEA1C7491EE00ADCA9C /* UploadTask */ = {
+			isa = PBXGroup;
+			children = (
+				401B5DE41C7491E500ADCA9C /* UploadTask+CoreDataProperties.h */,
+				401B5DE51C7491E500ADCA9C /* UploadTask+CoreDataProperties.m */,
+				401B5DE61C7491E500ADCA9C /* UploadTask.h */,
+				401B5DE71C7491E500ADCA9C /* UploadTask.m */,
+			);
+			path = UploadTask;
 			sourceTree = "<group>";
 		};
 		404D33191C4FABC200C4735E /* Categories */ = {
@@ -755,6 +775,8 @@
 				40F65DA61C33FAA900846449 /* Network */,
 				4005172C1C3A5FBB00FBFE11 /* PRDataProvider.h */,
 				4005172D1C3A5FBB00FBFE11 /* PRDataProvider.m */,
+				40C630E91C748E38003E2A20 /* PRUploadImageManager.h */,
+				40C630EA1C748E38003E2A20 /* PRUploadImageManager.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -825,6 +847,7 @@
 		40F65DB21C34331D00846449 /* LocalModel */ = {
 			isa = PBXGroup;
 			children = (
+				401B5DEA1C7491EE00ADCA9C /* UploadTask */,
 				40E1CB661C5F46F5002EFF72 /* User */,
 				4081B5B61C5BB1B90023383E /* DataBase */,
 				40FC3EAE1C5A17A100C528E9 /* Media */,
@@ -965,6 +988,7 @@
 				404D333E1C5135AE00C4735E /* PRMapViewController.m in Sources */,
 				4081B5B91C5BB55A0023383E /* PRDataModel.xcdatamodeld in Sources */,
 				404D334C1C52843200C4735E /* PRRemoteArray.m in Sources */,
+				401B5DE81C7491E500ADCA9C /* UploadTask+CoreDataProperties.m in Sources */,
 				40FC3EAD1C5A04D400C528E9 /* PRLocalArticle.m in Sources */,
 				40C161DC1C44E8DA00E1E6F5 /* PRContentViewController.m in Sources */,
 				40DFE1461C623AF900334C45 /* InterestCategory.m in Sources */,
@@ -979,6 +1003,7 @@
 				40CFE8981C57B1D00065017C /* PRLocalNewArticle.m in Sources */,
 				404D33481C5222C900C4735E /* PRMapAnnotation.m in Sources */,
 				404D33361C51266600C4735E /* PRRemoteGeoPoint.m in Sources */,
+				40C630EB1C748E38003E2A20 /* PRUploadImageManager.m in Sources */,
 				400517461C3C171B00FBFE11 /* PRErrorDescriptor.m in Sources */,
 				40E1CBBA1C5F4989002EFF72 /* User.m in Sources */,
 				4073DFC91C56135500D46C8E /* PRRemoteMedia.m in Sources */,
@@ -1006,6 +1031,7 @@
 				400517491C3C19A900FBFE11 /* PRAlertHelper.m in Sources */,
 				4073DFD71C5642E400D46C8E /* PRCreationViewInteractor.m in Sources */,
 				404D333A1C5129E800C4735E /* PRLocalGeoPoint.m in Sources */,
+				401B5DE91C7491E500ADCA9C /* UploadTask.m in Sources */,
 				40F65DB91C34353800846449 /* PRRemoteRegistrationResponse.m in Sources */,
 				404D332F1C50C8A200C4735E /* PRMenuCategoryCell.m in Sources */,
 				40F65D991C33C6C900846449 /* PREmailValidator.m in Sources */,

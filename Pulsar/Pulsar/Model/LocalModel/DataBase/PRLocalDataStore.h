@@ -13,6 +13,7 @@
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *mainContext;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *backgroundContext;
+@property (readonly, strong, nonatomic) NSManagedObjectContext *uploadBackgroundContext;
 
 + (instancetype)sharedInstance;
 

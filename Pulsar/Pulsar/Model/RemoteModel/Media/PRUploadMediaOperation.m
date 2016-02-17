@@ -36,7 +36,8 @@ static NSUInteger const kMaxImageSize = 1024 * 1024 * 11;
     __weak typeof(self) wSelf = self;
     dispatch_group_t uploadGroup = dispatch_group_create();
     dispatch_group_enter(uploadGroup);
-    NSData *imageData = [PRThumbnailMaker dataWithImage:self.uploadImage];
+    PRThumbnailMaker *thumbnailMaker = [[PRThumbnailMaker alloc] init];
+    NSData *imageData = [thumbnailMaker dataWithImage:self.uploadImage];
     if ([imageData length] >= kMaxImageSize) {
         dispatch_group_leave(uploadGroup);
     } else {
@@ -44,7 +45,7 @@ static NSUInteger const kMaxImageSize = 1024 * 1024 * 11;
         
             NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
             __block PRRemoteUploadFileResponse *uploadContentResponse = [[PRRemoteUploadFileResponse alloc] initWithJSON:json];
-            NSData *thumbnailData = [PRThumbnailMaker dataWithImage:[PRThumbnailMaker thumbnailWithImage:self.uploadImage]];
+            NSData *thumbnailData = [thumbnailMaker dataWithImage:[thumbnailMaker thumbnailWithImage:self.uploadImage]];
         
             [[PRNetworkDataProvider sharedInstance] uploadData:thumbnailData fileName:kThumbnailFileName success:^(NSData *data, NSURLResponse *response) {
             

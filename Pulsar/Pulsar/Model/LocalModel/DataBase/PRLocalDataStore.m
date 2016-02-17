@@ -48,6 +48,7 @@ static PRLocalDataStore *sharedInstance;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize mainContext = _mainContext;
 @synthesize backgroundContext = _backgroundContext;
+@synthesize uploadBackgroundContext = _uploadBackgroundContext;
 
 - (NSURL *)applicationDocumentsDirectory {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
@@ -117,6 +118,20 @@ static PRLocalDataStore *sharedInstance;
     _backgroundContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     [_backgroundContext setParentContext:self.mainContext];
     return _backgroundContext;
+}
+
+- (NSManagedObjectContext *)uploadBackgroundContext
+{
+    if (_uploadBackgroundContext != nil) {
+        return _uploadBackgroundContext;
+    }
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if (!coordinator) {
+        return nil;
+    }
+    _uploadBackgroundContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    [_uploadBackgroundContext setPersistentStoreCoordinator:coordinator];
+    return _uploadBackgroundContext;
 }
 
 #pragma mark - Core Data Saving support

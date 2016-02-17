@@ -11,8 +11,8 @@
 
 @interface PRThumbnailMaker : NSObject
 
-+ (UIImage *)thumbnailWithImage:(UIImage *)source;
+- (UIImage *)thumbnailWithImage:(UIImage *)source;
 
-+ (NSData *)dataWithImage:(UIImage *)source;
+- (NSData *)dataWithImage:(UIImage *)source;
 
 @end

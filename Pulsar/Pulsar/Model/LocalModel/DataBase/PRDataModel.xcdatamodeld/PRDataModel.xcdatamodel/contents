@@ -34,6 +34,10 @@
         <attribute name="thumbnail" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="thumbnailURL" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="UploadTask" representedClassName="UploadTask" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteIdentifier" optional="YES" attributeType="String" syncable="YES"/>
@@ -49,5 +53,6 @@
         <element name="InterestCategory" positionX="-200" positionY="-30" width="128" height="88"/>
         <element name="Media" positionX="-38" positionY="297" width="128" height="133"/>
         <element name="User" positionX="-506" positionY="-126" width="128" height="148"/>
+        <element name="UploadTask" positionX="-585" positionY="18" width="128" height="75"/>
     </elements>
 </model>
