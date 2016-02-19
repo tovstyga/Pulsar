@@ -449,20 +449,22 @@ static NSString * const kMediaClassName = @"Media";
             dispatch_group_t downloadGroup = dispatch_group_create();
             dispatch_group_enter(downloadGroup);
             [[PRNetworkDataProvider sharedInstance] loadDataFromURL:url success:^(NSData *data, NSURLResponse *response) {
-                NSMutableArray *complArray = [self.downloadInfo objectForKey:[url absoluteString]];
+                NSMutableArray *tmp = [self.downloadInfo objectForKey:[url absoluteString]];
+                [self.downloadInfo removeObjectForKey:[url absoluteString]];
+                NSMutableArray *complArray = [[NSMutableArray alloc] initWithArray:tmp];
+                [tmp removeAllObjects];
                 for (ImageLoadCompletion complete in complArray) {
                     complete(data, nil);
                 }
-                [complArray removeAllObjects];
-                [self.downloadInfo removeObjectForKey:[url absoluteString]];
                 dispatch_group_leave(downloadGroup);
             } failure:^(NSError *error) {
-                NSMutableArray *complArray = [self.downloadInfo objectForKey:[url absoluteString]];
+                NSMutableArray *tmp = [self.downloadInfo objectForKey:[url absoluteString]];
+                [self.downloadInfo removeObjectForKey:[url absoluteString]];
+                NSMutableArray *complArray = [[NSMutableArray alloc] initWithArray:tmp];
+                [tmp removeAllObjects];
                 for (ImageLoadCompletion complete in complArray) {
                     complete(nil, error);
                 }
-                [complArray removeAllObjects];
-                [self.downloadInfo removeObjectForKey:[url absoluteString]];
                 dispatch_group_leave(downloadGroup);
             }];
             dispatch_group_wait(downloadGroup, DISPATCH_TIME_FOREVER);
