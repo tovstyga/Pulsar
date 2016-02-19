@@ -11,6 +11,7 @@
 #import "PRContentViewCell.h"
 #import "PRDetailsViewController.h"
 #import "PRSocialHelper.h"
+#import "PRMacros.h"
 
 @interface PRContentViewController()<UITabBarDelegate, PRContentCellDelegate>
 
@@ -73,8 +74,10 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     [self.interactor setActiveFeed:PRFeedTypeTop];
     
     self.refreshControll = [[UIRefreshControl alloc] init];
+    [self.refreshControll setTintColor:[UIColor whiteColor]];
     [self.refreshControll addTarget:self action:@selector(refreshing) forControlEvents:UIControlEventValueChanged];
     [self.contentTableView addSubview:self.refreshControll];
+    self.contentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     _closedMenuDefaultConstraint = self.view.frame.size.width;
     _isOpenedMenu = NO;
@@ -168,17 +171,24 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     if (_isOpenedMenu) {
         [self hideMenu:YES];
     }
+    NSString *title = @"News";
     if (item == self.tabItemHot) {
         self.interactor.activeFeed = PRFeedTypeHot;
+        title = item.title;
     } else if (item == self.tabItemNew) {
         self.interactor.activeFeed = PRFeedTypeNew;
+        title = item.title;
     } else if (item == self.tabItemTop) {
         self.interactor.activeFeed = PRFeedTypeTop;
+        title = @"Most Viewed";
     } else if (item == self.tabItemFavorites) {
         self.interactor.activeFeed = PRFeedTypeFavorites;
+        title = @"Favorites";
     } else if (item == self.tabItemCreated) {
         self.interactor.activeFeed = PRFeedTypeCreated;
+        title = item.title;
     }
+    self.navigationController.navigationBar.topItem.title  = title;
     if ([self isDataAvailable]) {
         [self.contentTableView reloadData];
     } else {
@@ -211,6 +221,36 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     return [self.interactor titleForHeaderInSection:section];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if ([self.interactor numberOfSections] < 2) {
+        return [[UIView alloc] initWithFrame:CGRectZero];
+    }
+    CGRect headerRect = CGRectMake(tableView.separatorInset.left, 0, tableView.bounds.size.width - tableView.separatorInset.left - tableView.separatorInset.right, 30);
+    CGRect bgRect = CGRectMake(CGRectGetMinX(headerRect),
+                               CGRectGetMinY(headerRect),
+                               CGRectGetWidth(headerRect),
+                               CGRectGetHeight(headerRect) - 2);
+    CGFloat labelMargin = 8;
+    CGRect labelRect = CGRectMake(CGRectGetMinX(headerRect) + labelMargin,
+                                  CGRectGetMinY(headerRect) + labelMargin,
+                                  CGRectGetWidth(headerRect) - labelMargin * 2,
+                                  CGRectGetHeight(headerRect) - labelMargin * 2);
+    
+    UIImageView *bgView = [[UIImageView alloc] initWithFrame:bgRect];
+    [bgView setImage:[UIImage imageNamed:@"bg-cell-article"]];
+    
+    UILabel *title = [[UILabel alloc] initWithFrame:labelRect];
+    title.text = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
+    
+    UIView *header = [[UIView alloc] initWithFrame:headerRect];
+    [header addSubview:bgView];
+    [header addSubview:title];
+    header.backgroundColor = UIColorFromRGBWithAlpha(0x000000, 0.8);
+    
+    return header;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -385,5 +425,6 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
         }
     }];
 }
+
 
 @end

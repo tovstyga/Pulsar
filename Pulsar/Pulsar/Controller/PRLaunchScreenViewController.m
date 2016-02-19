@@ -14,15 +14,8 @@
 
 static NSString * const kToContentSegueIdentifier = @"launch_to_content_segue";
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
-    [PRDataProvider sharedInstance];
-    return [super initWithCoder:aDecoder];
-}
-
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [[PRDataProvider sharedInstance] resumeSession:^(BOOL success) {

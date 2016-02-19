@@ -32,8 +32,10 @@
 @implementation PRCreationViewController {
     NSMutableArray *_images;
     BOOL _gallerySelection;
+    BOOL _imageSelected;
     NSInteger _selectedCategory;
     NSInteger _acceptedCategory;
+    dispatch_once_t onceForView;
 }
 
 static NSString * const kAddImageCellIdentifier = @"add_image_cell_identifier";
@@ -47,6 +49,7 @@ static int const kHeightFromKeyboard = 10;
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     _images = [NSMutableArray new];
     UITapGestureRecognizer *tapOnImageRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectImageAction)];
     tapOnImageRecognizer.numberOfTapsRequired = 1;
@@ -57,9 +60,22 @@ static int const kHeightFromKeyboard = 10;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    for (UIView *view in @[self.mainTextView, self.annotationTextView, self.titleTextField, self.imageView, self.galletyCollectionView]) {
+        view.layer.cornerRadius = 5.f;
+    }
     [super viewWillAppear:animated];
     [self registerForKeyboardNotifications];
     self.currentOffset = 0;
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    dispatch_once(&onceForView, ^{
+        for (UIView *view in @[self.mainTextView, self.annotationTextView, self.titleTextField, self.imageView, self.galletyCollectionView]) {
+            [self addShadowAndCornerToView:view];
+        }
+    });
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -108,7 +124,7 @@ static int const kHeightFromKeyboard = 10;
                                          annotation:self.annotationTextView.text
                                                text:self.mainTextView.text
                                            gategory:[[self.interactor allAvailableCategoriesNames] objectAtIndex:_acceptedCategory]
-                                              image:self.imageView.image
+                                              image: _imageSelected ? self.imageView.image : nil
                                              images:_images completion:^(BOOL success, NSString *errorMessage) {
                                                  [[PRScreenLock sharedInstance] unlockAnimated:YES];
                                                  __strong typeof(wSelf) sSelf = wSelf;
@@ -267,6 +283,7 @@ static int const kHeightFromKeyboard = 10;
         [self.galletyCollectionView reloadData];
     } else {
         [self.imageView setImage:image];
+        _imageSelected = YES;
     }
     [self.imagePickerController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -312,6 +329,24 @@ static int const kHeightFromKeyboard = 10;
     if (self.currentOffset) {
         self.currentOffset = 0;
     }
+}
+
+- (void)addShadowAndCornerToView:(UIView *)view
+{
+    CALayer *shadowLayer = [CALayer layer];
+    shadowLayer.frame = view.layer.frame;
+    shadowLayer.bounds = view.layer.bounds;
+    shadowLayer.cornerRadius = view.layer.cornerRadius;
+    
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:shadowLayer.bounds];
+    shadowLayer.masksToBounds = NO;
+    shadowLayer.shadowColor = [UIColor blackColor].CGColor;
+    shadowLayer.shadowOffset = CGSizeMake(5.0f, 5.0f);
+    shadowLayer.shadowOpacity = 0.5f;
+    shadowLayer.shadowRadius = 5.0f;
+    shadowLayer.shadowPath = shadowPath.CGPath;
+    
+    [self.view.layer insertSublayer:shadowLayer below:view.layer];
 }
 
 @end

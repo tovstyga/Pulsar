@@ -16,10 +16,17 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        [self setBackgroundColor:UIColorFromRGB(kHexRedTextFieldColor)];
+        UIGraphicsBeginImageContext(self.contentView.frame.size);
+        [[UIImage imageNamed:@"bg-cell-article"] drawInRect:self.contentView.bounds];
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        [self setBackgroundColor:[UIColor colorWithPatternImage:image]];
         UIView *selectedBackgroundView = [[UIView alloc] init];
-        [selectedBackgroundView setBackgroundColor:UIColorFromRGB(kHexGreenTextFieldColor)];
+        [selectedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:image]];
         [self setSelectedBackgroundView:selectedBackgroundView];
+        
+        [self.textLabel setBackgroundColor:[UIColor clearColor]];
     }
     return self;
 }

@@ -17,6 +17,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIRefreshControl *refreshControll;
+@property (weak, nonatomic) IBOutlet UIImageView *menuBackground;
 
 @end
 
@@ -51,8 +52,10 @@ static NSString * const kCurrentLocationLabel = @"Current location";
 {
     _tasksInProcess = 0;
     self.refreshControll = [[UIRefreshControl alloc] init];
+    [self.refreshControll setTintColor:[UIColor whiteColor]];
     [self.refreshControll addTarget:self action:@selector(refreshing) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:self.refreshControll];
+    [self addShadowAndCornerToView:self.menuBackground];
 }
 
 - (void)menuWillOpen
@@ -125,10 +128,12 @@ static NSString * const kCurrentLocationLabel = @"Current location";
                 if (_selectedLocation) {
                     [tableView deselectRowAtIndexPath:_selectedLocation animated:YES];
                 }
+                NSIndexPath *oldPath = _selectedLocation;
                 _selectedLocation = indexPath;
                 NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
                 [indexSet addIndex:1];
-                [tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+                
+                [tableView reloadRowsAtIndexPaths:@[oldPath, indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 
                 if (indexPath.row == 1) {
                     [PRLocationManager sharedInstance].selectedCoordinate = [PRLocationManager sharedInstance].currentLocation.coordinate;
@@ -197,6 +202,7 @@ static NSString * const kCurrentLocationLabel = @"Current location";
             }
             locationCell.textLabel.text = kCurrentLocationLabel;
             if (!_selectedLocation || indexPath.row == _selectedLocation.row) {
+                _selectedLocation = indexPath;
                 [tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
             }
             cell = locationCell;
@@ -275,5 +281,15 @@ static NSString * const kCurrentLocationLabel = @"Current location";
         }
     }];
 }
+
+- (void)addShadowAndCornerToView:(UIView *)view
+{
+    view.layer.masksToBounds = NO;
+    view.layer.shadowColor = [UIColor blackColor].CGColor;
+    view.layer.shadowOffset = CGSizeMake(5.0f, 5.0f);
+    view.layer.shadowOpacity = 0.5f;
+    view.layer.shadowRadius = 5.0f;
+}
+
 
 @end

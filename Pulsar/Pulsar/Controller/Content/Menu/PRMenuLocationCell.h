@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "PRLocalGeoPoint.h"
+#import "PRMenuCategoryCell.h"
 
-@interface PRMenuLocationCell : UITableViewCell
+@interface PRMenuLocationCell : PRMenuCategoryCell
 
 @property (strong, nonatomic) PRLocalGeoPoint *geoPoint;
 @property (nonatomic) BOOL checked;

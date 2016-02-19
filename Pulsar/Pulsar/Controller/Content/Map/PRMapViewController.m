@@ -37,6 +37,11 @@
     [self applyMapViewMemoryFix];
 }
 
+-(BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 #pragma mark - Actions
 
 - (IBAction)closeAction:(UIBarButtonItem *)sender

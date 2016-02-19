@@ -36,6 +36,7 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleToTopLongConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleToTopShortConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *textToBottomConstraint;
 
 
 @end
@@ -45,12 +46,18 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
     PRLikeState _likeState;
 }
 
-static int const kRightBorderMargin = 100;
+static int const kRightBorderMargin = 70;
 
 - (void)awakeFromNib {
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickOnTitle)];
     [self.cellTitle addGestureRecognizer:tapRecognizer];
+    
+    UIView *selectedBackgroundView = [[UIView alloc] init];
+    [selectedBackgroundView setBackgroundColor:[UIColor clearColor]];
+    [self setSelectedBackgroundView:selectedBackgroundView];
+    
     _sharingContainer.alpha = 0;
+    self.textToBottomConstraint.constant = - self.separatorHeight;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

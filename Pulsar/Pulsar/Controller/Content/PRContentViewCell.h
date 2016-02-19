@@ -23,6 +23,7 @@
 
 @interface PRContentViewCell : UITableViewCell
 
+@property (nonatomic) IBInspectable CGFloat separatorHeight;
 @property (strong, nonatomic) Article *article;
 @property (weak, nonatomic) id<PRContentCellDelegate> delegate;
 

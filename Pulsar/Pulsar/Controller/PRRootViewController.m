@@ -19,6 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self applyCustomBackground];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,6 +34,17 @@
     
     [super didReceiveMemoryWarning];
 }
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+-(BOOL)prefersStatusBarHidden
+{
+    return NO;
+}
+
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
@@ -53,6 +65,16 @@
     } else {
         [PRAlertHelper showAlertWithMessage:message inViewController:self];
     }
+}
+
+- (void)applyCustomBackground
+{
+    UIGraphicsBeginImageContext(self.view.frame.size);
+    [[UIImage imageNamed:@"bg-world"] drawInRect:self.view.bounds];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    self.view.backgroundColor = [UIColor colorWithPatternImage:image];
 }
 
 
