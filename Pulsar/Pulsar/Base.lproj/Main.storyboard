@@ -89,7 +89,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg-cell-article" translatesAutoresizingMaskIntoConstraints="NO" id="lAV-ZH-NGU">
-                                                    <rect key="frame" x="0.0" y="0.0" width="376" height="399"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="381" height="399"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Pulse-icon" translatesAutoresizingMaskIntoConstraints="NO" id="7Yg-58-v5P">
                                                     <rect key="frame" x="8" y="8" width="80" height="80"/>
@@ -229,7 +229,7 @@
                                                 <constraint firstItem="yGR-Ks-aWM" firstAttribute="leading" secondItem="7Yg-58-v5P" secondAttribute="trailing" constant="8" id="IfO-l5-UkD"/>
                                                 <constraint firstItem="7J7-dN-064" firstAttribute="trailing" secondItem="1kR-Ke-6Af" secondAttribute="trailingMargin" id="LSv-Ha-PJz"/>
                                                 <constraint firstItem="C6q-sc-tbS" firstAttribute="leading" secondItem="7Yg-58-v5P" secondAttribute="trailing" constant="8" id="Nwt-Df-YLz"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="lAV-ZH-NGU" secondAttribute="trailing" constant="-43" id="PWF-gr-K0A"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="lAV-ZH-NGU" secondAttribute="trailing" constant="-48" id="PWF-gr-K0A"/>
                                                 <constraint firstItem="7J7-dN-064" firstAttribute="top" secondItem="C6q-sc-tbS" secondAttribute="bottom" priority="250" id="PmT-FJ-pQa"/>
                                                 <constraint firstItem="7J7-dN-064" firstAttribute="top" secondItem="C6q-sc-tbS" secondAttribute="bottom" priority="750" constant="12" id="Ujk-kY-M7T"/>
                                                 <constraint firstItem="C6q-sc-tbS" firstAttribute="trailing" secondItem="1kR-Ke-6Af" secondAttribute="trailingMargin" id="WO3-R8-i1g"/>
@@ -985,30 +985,30 @@
                                 <rect key="frame" x="0.0" y="0.0" width="394" height="736"/>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="3zH-pE-CM5">
-                                <rect key="frame" x="12" y="-8" width="382" height="752"/>
+                                <rect key="frame" x="0.0" y="0.0" width="394" height="736"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="menu_category_cell_identifier" selectionStyle="none" indentationWidth="10" id="NUv-4U-sR7" customClass="PRMenuCategoryCell">
-                                        <rect key="frame" x="0.0" y="28" width="382" height="44"/>
+                                        <rect key="frame" x="0.0" y="28" width="394" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NUv-4U-sR7" id="aba-wU-HmZ">
-                                            <rect key="frame" x="0.0" y="0.0" width="382" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="394" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="menu_location_cell_identifier" selectionStyle="default" indentationWidth="10" id="QMu-io-zpA" customClass="PRMenuLocationCell">
-                                        <rect key="frame" x="0.0" y="72" width="382" height="44"/>
+                                        <rect key="frame" x="0.0" y="72" width="394" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QMu-io-zpA" id="1kt-cF-AZj">
-                                            <rect key="frame" x="0.0" y="0.0" width="382" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="394" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Suo-58-4v1">
-                                        <rect key="frame" x="0.0" y="116" width="382" height="44"/>
+                                        <rect key="frame" x="0.0" y="116" width="394" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Suo-58-4v1" id="JFm-s4-WxB">
-                                            <rect key="frame" x="0.0" y="0.0" width="382" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="394" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -1025,10 +1025,10 @@
                             <constraint firstItem="byn-1D-hQz" firstAttribute="top" secondItem="QSo-rm-DiR" secondAttribute="bottom" id="EES-5B-Sea"/>
                             <constraint firstItem="QSo-rm-DiR" firstAttribute="leading" secondItem="QBG-dy-DfT" secondAttribute="leadingMargin" constant="-20" id="NTh-DY-saa"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3zH-pE-CM5" secondAttribute="trailing" id="TSM-cT-hru"/>
-                            <constraint firstItem="3zH-pE-CM5" firstAttribute="leading" secondItem="QBG-dy-DfT" secondAttribute="leadingMargin" constant="-8" id="U0d-Wc-Wjo"/>
-                            <constraint firstItem="3zH-pE-CM5" firstAttribute="top" secondItem="QBG-dy-DfT" secondAttribute="topMargin" constant="-8" id="kIS-DN-wvl"/>
+                            <constraint firstItem="3zH-pE-CM5" firstAttribute="leading" secondItem="QBG-dy-DfT" secondAttribute="leadingMargin" constant="-20" id="U0d-Wc-Wjo"/>
+                            <constraint firstItem="3zH-pE-CM5" firstAttribute="top" secondItem="QBG-dy-DfT" secondAttribute="topMargin" id="kIS-DN-wvl"/>
                             <constraint firstAttribute="trailingMargin" secondItem="QSo-rm-DiR" secondAttribute="trailing" id="lVS-04-cCP"/>
-                            <constraint firstItem="3zH-pE-CM5" firstAttribute="bottom" secondItem="QBG-dy-DfT" secondAttribute="bottomMargin" constant="8" id="nsr-Nb-UrV"/>
+                            <constraint firstItem="3zH-pE-CM5" firstAttribute="bottom" secondItem="QBG-dy-DfT" secondAttribute="bottomMargin" id="nsr-Nb-UrV"/>
                         </constraints>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
