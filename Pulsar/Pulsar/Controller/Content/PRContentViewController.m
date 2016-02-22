@@ -48,6 +48,7 @@
 }
 
 static CGFloat const kNavigationBarHeight = 64;
+static CGFloat const kToolBarHeight = 50;
 static CGFloat const kSpaceFromMenuToRightBorder = 40;
 static NSString * const kToLoginSegueIdentifier = @"content_to_login_segue";
 
@@ -68,6 +69,15 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    CGRect bounds = self.tabBar.bounds;
+    UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
+    visualEffectView.frame = bounds;
+    visualEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.view insertSubview:visualEffectView belowSubview:self.tabBar];
+    self.tabBar.backgroundColor = [UIColor clearColor];
+    
+    [self.contentTableView setContentInset:UIEdgeInsetsMake(0, 0, kToolBarHeight, 0)];
     
     [self.tabBar setDelegate:self];
     [self.tabBar setSelectedItem:self.tabItemTop];
@@ -233,7 +243,7 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
                                CGRectGetMinY(headerRect),
                                CGRectGetWidth(headerRect),
                                CGRectGetHeight(headerRect) - 2);
-    CGFloat labelMargin = 8;
+    CGFloat labelMargin = 6;
     CGRect labelRect = CGRectMake(CGRectGetMinX(headerRect) + labelMargin,
                                   CGRectGetMinY(headerRect) + labelMargin,
                                   CGRectGetWidth(headerRect) - labelMargin * 2,

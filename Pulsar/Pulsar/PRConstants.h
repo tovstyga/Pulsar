@@ -10,6 +10,7 @@
 
 static int const kHexRedTextFieldColor = 0xE2C4C9;
 static int const kHexGreenTextFieldColor = 0xCBE2CC;
+static int const kBarColor = 0xC80000;
 
 static NSString *const kPRParseServer = @"https://api.parse.com";
 static NSInteger const kPRParseAPIVersion = 1;

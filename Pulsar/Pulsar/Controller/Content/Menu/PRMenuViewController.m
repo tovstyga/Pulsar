@@ -85,7 +85,7 @@ static NSString * const kCurrentLocationLabel = @"Current location";
 
 - (void)menuDidOpen
 {
-
+    [self.tableView setNeedsDisplay];
 }
 
 - (void)menuWillClose

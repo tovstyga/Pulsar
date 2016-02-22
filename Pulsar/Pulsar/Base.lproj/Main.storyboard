@@ -77,7 +77,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="408" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="8iQ-Co-4u7">
-                                <rect key="frame" x="20" y="0.0" width="374" height="687"/>
+                                <rect key="frame" x="20" y="0.0" width="374" height="737"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
@@ -250,6 +250,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
+                                            <outlet property="backgroundCell" destination="lAV-ZH-NGU" id="rBW-9z-uMS"/>
                                             <outlet property="categoryToShareConstraint" destination="PmT-FJ-pQa" id="C5Q-7Q-CoB"/>
                                             <outlet property="categoryToTitleConstraint" destination="Ujk-kY-M7T" id="Ek3-4C-B3S"/>
                                             <outlet property="cellCategory" destination="2p1-yi-Eh0" id="5hR-v5-Kzl"/>
@@ -282,12 +283,12 @@
                                     <segue destination="0AP-6H-4U1" kind="embed" id="kbB-zN-YNL"/>
                                 </connections>
                             </containerView>
-                            <tabBar alpha="0.90000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x6l-uK-PnR">
+                            <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x6l-uK-PnR">
                                 <rect key="frame" x="0.0" y="687" width="414" height="49"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <items>
                                     <tabBarItem title="Hot" image="hot" id="6fB-ho-Dde"/>
-                                    <tabBarItem title="New" image="clock" id="eAf-Ag-QYO"/>
+                                    <tabBarItem title="New" image="clock" selectedImage="clock_selected" id="eAf-Ag-QYO"/>
                                     <tabBarItem systemItem="mostViewed" id="Oos-pU-63b"/>
                                     <tabBarItem systemItem="favorites" id="GqP-xX-JG6"/>
                                     <tabBarItem title="Created" image="created" id="cFG-tM-a46"/>
@@ -300,7 +301,7 @@
                             <constraint firstItem="x6l-uK-PnR" firstAttribute="top" secondItem="Ukm-zn-J62" secondAttribute="bottom" id="PjV-XR-fue"/>
                             <constraint firstAttribute="trailingMargin" secondItem="x6l-uK-PnR" secondAttribute="trailing" constant="-20" id="RTM-78-EwW"/>
                             <constraint firstItem="8iQ-Co-4u7" firstAttribute="leading" secondItem="XgY-Y3-ztO" secondAttribute="leadingMargin" id="Sm2-2t-dxG"/>
-                            <constraint firstItem="x6l-uK-PnR" firstAttribute="top" secondItem="8iQ-Co-4u7" secondAttribute="bottom" id="Tpj-wc-WRA"/>
+                            <constraint firstItem="x6l-uK-PnR" firstAttribute="top" secondItem="8iQ-Co-4u7" secondAttribute="bottom" constant="-50" id="Tpj-wc-WRA"/>
                             <constraint firstItem="Ukm-zn-J62" firstAttribute="top" secondItem="vZK-Ac-aGG" secondAttribute="bottom" id="USV-QK-erz"/>
                             <constraint firstItem="RB1-aF-W9y" firstAttribute="top" secondItem="x6l-uK-PnR" secondAttribute="bottom" id="VHl-Lg-tHJ"/>
                             <constraint firstItem="8iQ-Co-4u7" firstAttribute="top" secondItem="XgY-Y3-ztO" secondAttribute="topMargin" id="b0e-VC-D1f"/>
@@ -1244,11 +1245,16 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="glh-gV-e40" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="n0P-Wb-7OV">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="wQD-ZS-UFs">
+                        <rect key="frame" x="0.0" y="692" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="BQC-lu-wVt" kind="relationship" relationship="rootViewController" id="isn-zl-Vjj"/>
                     </connections>
@@ -1281,7 +1287,8 @@
         <image name="Pulse-icon" width="80" height="80"/>
         <image name="bg-cell-article" width="181" height="68"/>
         <image name="bg-world" width="320" height="480"/>
-        <image name="clock" width="32" height="31"/>
+        <image name="clock" width="25" height="25"/>
+        <image name="clock_selected" width="25" height="25"/>
         <image name="created" width="32" height="32"/>
         <image name="cross" width="80" height="80"/>
         <image name="dislike" width="32" height="36"/>

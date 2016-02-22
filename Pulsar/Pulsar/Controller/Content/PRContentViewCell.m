@@ -21,6 +21,7 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
 @property (weak, nonatomic) IBOutlet UILabel *cellTitle;
 @property (weak, nonatomic) IBOutlet UILabel *cellText;
 @property (weak, nonatomic) IBOutlet UILabel *cellCategory;
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundCell;
 
 @property (weak, nonatomic) IBOutlet UIButton *sharingTwitter;
 @property (weak, nonatomic) IBOutlet UIButton *sharingFacebook;
@@ -56,8 +57,11 @@ static int const kRightBorderMargin = 70;
     [selectedBackgroundView setBackgroundColor:[UIColor clearColor]];
     [self setSelectedBackgroundView:selectedBackgroundView];
     
+    self.backgroundCell.layer.masksToBounds = YES;
+    self.backgroundCell.layer.cornerRadius = 5.f;
     _sharingContainer.alpha = 0;
     self.textToBottomConstraint.constant = - self.separatorHeight;
+    [self layoutIfNeeded];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -65,6 +69,7 @@ static int const kRightBorderMargin = 70;
 
     // Configure the view for the selected state
 }
+
 
 #pragma mark - Accessors
 
