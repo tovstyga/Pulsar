@@ -43,6 +43,9 @@
     CGFloat _closedMenuDefaultConstraint;
     NSIndexPath *_selectedItem;
     
+    PRContentViewCell *_expandedCell;
+    NSIndexPath *_expandedIndexPath;
+    
     BOOL _loadingInProcess;
     dispatch_once_t once;
 }
@@ -124,6 +127,9 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
 - (IBAction)refresh:(UIBarButtonItem *)sender
 {
+    _expandedIndexPath = nil;
+    _expandedCell = nil;	
+    
     _loadingInProcess = YES;
     [self showRefreshControll:YES];
     [self.contentTableView scrollsToTop];
@@ -178,6 +184,8 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
+    _expandedIndexPath = nil;
+    _expandedCell = nil;
     if (_isOpenedMenu) {
         [self hideMenu:YES];
     }
@@ -292,6 +300,13 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
 #pragma mark - UITableViewDelegate
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([_expandedIndexPath isEqual:indexPath]) {
+        [(PRContentViewCell *)cell expandeCell];
+    }
+}
+
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _selectedItem = indexPath;
@@ -334,7 +349,13 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     }
     [self setupCell:cell atIndexPath:indexPath];
     
-    return [self calculateHeightForConfiguredSizingCell:cell];
+    CGFloat size = [self calculateHeightForConfiguredSizingCell:cell];
+    
+    if ([indexPath isEqual:_expandedIndexPath]) {
+        size += cell.expandedDelta;
+    }
+    
+    return size;
 }
 
 - (CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell {
@@ -374,6 +395,33 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 - (void)addArticleToFavorite:(Article *)article
 {
     [self.interactor addArticleToFavorite:article];
+}
+
+- (void)willExpandCell:(PRContentViewCell *)cell
+{
+    if (_expandedCell) {
+        [_expandedCell colapseCell];
+    }
+    _expandedCell = cell;
+    _expandedIndexPath = [self.contentTableView indexPathForCell:cell];
+    [self.contentTableView beginUpdates];
+}
+
+- (void)didExpandCell:(PRContentViewCell *)cell
+{
+    [self.contentTableView endUpdates];
+}
+
+- (void)willCollapseCell:(PRContentViewCell *)cell
+{
+    _expandedCell = nil;
+    _expandedIndexPath = nil;
+    [self.contentTableView beginUpdates];
+}
+
+- (void)didCollapseCell:(PRContentViewCell *)cell
+{
+    [self.contentTableView endUpdates];
 }
 
 #pragma mark - Internal

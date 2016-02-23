@@ -31,19 +31,16 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
 @property (weak, nonatomic) IBOutlet UIButton *downButton;
 @property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *categoryToShareConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *categoryToTitleConstraint;
-@property (weak, nonatomic) IBOutlet UIStackView *sharingContainer;
-
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleToTopLongConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleToTopShortConstraint;
+@property (weak, nonatomic) IBOutlet UIStackView *extendedContainer;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textToBottomConstraint;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *contentToImageShort;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *contentToImageLong;
 
 @end
 
 @implementation PRContentViewCell{
-    BOOL _sharingOpened;
+    BOOL _expanded;
     PRLikeState _likeState;
 }
 
@@ -57,11 +54,22 @@ static int const kRightBorderMargin = 70;
     [selectedBackgroundView setBackgroundColor:[UIColor clearColor]];
     [self setSelectedBackgroundView:selectedBackgroundView];
     
+    _expandedDelta = self.contentToImageLong.constant - self.contentToImageShort.constant;
+    
     self.backgroundCell.layer.masksToBounds = YES;
     self.backgroundCell.layer.cornerRadius = 5.f;
-    _sharingContainer.alpha = 0;
+    self.extendedContainer.alpha = _expanded ? 1 : 0;
     self.textToBottomConstraint.constant = - self.separatorHeight;
+    
+    self.cellText.layer.masksToBounds = NO;
+    
     [self layoutIfNeeded];
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    self.backgroundCell.frame = CGRectMake(CGRectGetMinX(rect), CGRectGetMinY(rect), CGRectGetWidth(rect), CGRectGetHeight(rect) - self.separatorHeight);
+    [super drawRect:rect];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -70,8 +78,36 @@ static int const kRightBorderMargin = 70;
     // Configure the view for the selected state
 }
 
+- (void)prepareForReuse
+{
+    self.contentToImageLong.priority = UILayoutPriorityDefaultLow;
+    self.contentToImageShort.priority = UILayoutPriorityDefaultHigh;
+    self.extendedContainer.alpha = 0;
+    _expanded = NO;
+    [self setNeedsDisplay];
+    [super prepareForReuse];
+}
+
 
 #pragma mark - Accessors
+
+- (void)expandeCell
+{
+    if (_expanded) {
+        return;
+    }
+    _expanded = YES;
+    [self expandeCell:_expanded callDelegate:NO];
+}
+
+- (void)colapseCell
+{
+    if (!_expanded) {
+        return;
+    }
+    _expanded = NO;
+    [self expandeCell:_expanded callDelegate:NO];
+}
 
 - (void)setMaxTextWidth:(CGFloat)width
 {
@@ -112,16 +148,15 @@ static int const kRightBorderMargin = 70;
     } else if (!self.upButton.enabled && self.downButton.enabled) {
         _likeState = PRLikeStateLiked;
     }
-    [self showShare:NO animated:NO];
-    _sharingOpened = NO;
+
 }
 
 #pragma mark - Actions
 
 - (void)clickOnTitle
 {
-    [self showShare:!_sharingOpened animated:YES];
-    _sharingOpened = !_sharingOpened;
+    _expanded = !_expanded;
+    [self expandeCell:_expanded callDelegate:YES];
 }
 
 - (IBAction)shareOnTwitter:(UIButton *)sender
@@ -171,34 +206,30 @@ static int const kRightBorderMargin = 70;
 
 #pragma mark - Internal
 
-- (void)showShare:(BOOL)show animated:(BOOL)animated
+- (void)expandeCell:(BOOL)expande callDelegate:(BOOL)call
 {
-    self.categoryToShareConstraint.priority = show ? UILayoutPriorityDefaultHigh : UILayoutPriorityDefaultLow;
-    self.categoryToTitleConstraint.priority = show ? UILayoutPriorityDefaultLow : UILayoutPriorityDefaultHigh;
+    self.contentToImageLong.priority = expande ? UILayoutPriorityDefaultHigh : UILayoutPriorityDefaultLow;
+    self.contentToImageShort.priority = expande ? UILayoutPriorityDefaultLow : UILayoutPriorityDefaultHigh;
     
-    self.titleToTopLongConstraint.priority = show ? UILayoutPriorityDefaultLow : UILayoutPriorityDefaultHigh;
-    self.titleToTopShortConstraint.priority = show ? UILayoutPriorityDefaultHigh : UILayoutPriorityDefaultLow;
-    
-    if (animated) {
-        if (show) {
+        if (expande) {
+            if (call) [self.delegate willExpandCell:self];
             [UIView animateWithDuration:0.3f animations:^{
                 [self layoutIfNeeded];
             } completion:^(BOOL finished) {
+                if (call) [self.delegate didExpandCell:self];
                 [UIView animateWithDuration:0.3f animations:^{
-                    self.sharingContainer.alpha = 1;
+                    self.extendedContainer.alpha = 1;
                 }];
             }];
         } else {
+            if (call) [self.delegate willCollapseCell:self];
             [UIView animateWithDuration:0.3f animations:^{
-                self.sharingContainer.alpha = 0;
+                self.extendedContainer.alpha = 0;
                 [self layoutIfNeeded];
+            } completion:^(BOOL finished) {
+                if (call) [self.delegate didCollapseCell:self];
             }];
         }
-        
-    } else {
-        self.sharingContainer.alpha = show ? 1 : 0;
-        [self layoutIfNeeded];
-    }
 }
 
 @end
