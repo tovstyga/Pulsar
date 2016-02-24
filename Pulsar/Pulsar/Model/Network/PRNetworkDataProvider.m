@@ -891,7 +891,9 @@ static PRNetworkDataProvider *sharedInstance;
 
 - (NSDictionary *)queryFetchFavorites
 {
-    return [[PRRemoteQuery sharedInstance] fetchFavoritesForUser:[self pointerToCurrentUser]];
+    NSMutableDictionary *result = [NSMutableDictionary dictionaryWithDictionary:[[PRRemoteQuery sharedInstance] fetchFavoritesForUser:[self pointerToCurrentUser]]];
+    [result setObject:kArticleIncludeFields forKey:kPathParamIncludeKey];
+    return result;
 }
 
 - (NSDictionary *)queryAddToFavorite
@@ -906,7 +908,9 @@ static PRNetworkDataProvider *sharedInstance;
 
 - (NSDictionary *)queryArticlesForUser
 {
-    return [[PRRemoteQuery sharedInstance] articlesForUser:[self pointerToCurrentUser]];
+    NSMutableDictionary *result = [NSMutableDictionary dictionaryWithDictionary:[[PRRemoteQuery sharedInstance] articlesForUser:[self pointerToCurrentUser]]];
+    [result setObject:kArticleIncludeFields forKey:kPathParamIncludeKey];
+    return result;
 }
 
 - (NSDictionary *)queryUserCategories

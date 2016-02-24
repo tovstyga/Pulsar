@@ -22,6 +22,7 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
 @property (weak, nonatomic) IBOutlet UILabel *cellText;
 @property (weak, nonatomic) IBOutlet UILabel *cellCategory;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundCell;
+@property (weak, nonatomic) IBOutlet UIButton *rotatedButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *sharingTwitter;
 @property (weak, nonatomic) IBOutlet UIButton *sharingFacebook;
@@ -83,6 +84,7 @@ static int const kRightBorderMargin = 70;
     self.contentToImageLong.priority = UILayoutPriorityDefaultLow;
     self.contentToImageShort.priority = UILayoutPriorityDefaultHigh;
     self.extendedContainer.alpha = 0;
+    self.rotatedButton.transform = CGAffineTransformMakeRotation(0);
     _expanded = NO;
     [self setNeedsDisplay];
     [super prepareForReuse];
@@ -158,6 +160,10 @@ static int const kRightBorderMargin = 70;
     _expanded = !_expanded;
     [self expandeCell:_expanded callDelegate:YES];
 }
+- (IBAction)expandeCell:(id)sender
+{
+    [self clickOnTitle];
+}
 
 - (IBAction)shareOnTwitter:(UIButton *)sender
 {
@@ -211,9 +217,12 @@ static int const kRightBorderMargin = 70;
     self.contentToImageLong.priority = expande ? UILayoutPriorityDefaultHigh : UILayoutPriorityDefaultLow;
     self.contentToImageShort.priority = expande ? UILayoutPriorityDefaultLow : UILayoutPriorityDefaultHigh;
     
+    CGAffineTransform transform = CGAffineTransformMakeRotation(expande ? M_PI : 0);
+    
         if (expande) {
             if (call) [self.delegate willExpandCell:self];
             [UIView animateWithDuration:0.3f animations:^{
+                [self.rotatedButton setTransform:transform];
                 [self layoutIfNeeded];
             } completion:^(BOOL finished) {
                 if (call) [self.delegate didExpandCell:self];
@@ -224,6 +233,7 @@ static int const kRightBorderMargin = 70;
         } else {
             if (call) [self.delegate willCollapseCell:self];
             [UIView animateWithDuration:0.3f animations:^{
+                [self.rotatedButton setTransform:transform];
                 self.extendedContainer.alpha = 0;
                 [self layoutIfNeeded];
             } completion:^(BOOL finished) {
