@@ -41,8 +41,10 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
 @end
 
 @implementation PRContentViewCell{
+    BOOL _animationInProcess;
     BOOL _expanded;
     PRLikeState _likeState;
+    CGRect _currentDrowRect;
 }
 
 static int const kRightBorderMargin = 70;
@@ -59,6 +61,7 @@ static int const kRightBorderMargin = 70;
     
     self.backgroundCell.layer.masksToBounds = YES;
     self.backgroundCell.layer.cornerRadius = 5.f;
+    
     self.extendedContainer.alpha = _expanded ? 1 : 0;
     self.textToBottomConstraint.constant = - self.separatorHeight;
     
@@ -69,7 +72,10 @@ static int const kRightBorderMargin = 70;
 
 - (void)drawRect:(CGRect)rect
 {
-    self.backgroundCell.frame = CGRectMake(CGRectGetMinX(rect), CGRectGetMinY(rect), CGRectGetWidth(rect), CGRectGetHeight(rect) - self.separatorHeight);
+    _currentDrowRect = rect;
+    if (!_animationInProcess) {
+        self.backgroundCell.frame = CGRectMake(CGRectGetMinX(rect), CGRectGetMinY(rect), CGRectGetWidth(rect), CGRectGetHeight(rect) - self.separatorHeight);
+    }
     [super drawRect:rect];
 }
 
@@ -221,23 +227,31 @@ static int const kRightBorderMargin = 70;
     
         if (expande) {
             if (call) [self.delegate willExpandCell:self];
+            _animationInProcess = YES;
             [UIView animateWithDuration:0.3f animations:^{
                 [self.rotatedButton setTransform:transform];
                 [self layoutIfNeeded];
-            } completion:^(BOOL finished) {
                 if (call) [self.delegate didExpandCell:self];
+            } completion:^(BOOL finished) {
+                _animationInProcess = NO;
+                self.backgroundCell.frame = CGRectMake(CGRectGetMinX(_currentDrowRect), CGRectGetMinY(_currentDrowRect), CGRectGetWidth(_currentDrowRect), CGRectGetHeight(_currentDrowRect) - self.separatorHeight);
+//                if (call) [self.delegate didExpandCell:self];
                 [UIView animateWithDuration:0.3f animations:^{
                     self.extendedContainer.alpha = 1;
                 }];
             }];
         } else {
             if (call) [self.delegate willCollapseCell:self];
+            _animationInProcess = YES;
             [UIView animateWithDuration:0.3f animations:^{
                 [self.rotatedButton setTransform:transform];
                 self.extendedContainer.alpha = 0;
                 [self layoutIfNeeded];
-            } completion:^(BOOL finished) {
                 if (call) [self.delegate didCollapseCell:self];
+            } completion:^(BOOL finished) {
+                _animationInProcess = NO;
+                self.backgroundCell.frame = CGRectMake(CGRectGetMinX(_currentDrowRect), CGRectGetMinY(_currentDrowRect), CGRectGetWidth(_currentDrowRect), CGRectGetHeight(_currentDrowRect) - self.separatorHeight);
+//                if (call) [self.delegate didCollapseCell:self];
             }];
         }
 }
