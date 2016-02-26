@@ -85,12 +85,14 @@ static NSString * const kCurrentLocationLabel = @"Current location";
 
 - (void)menuDidOpen
 {
-//    [self.tableView setNeedsLayout];
+    [self updateShadowPathForView:self.menuBackground];
+    self.menuBackground.layer.shadowColor = [UIColor blackColor].CGColor;
 }
 
 - (void)menuWillClose
 {
-
+    [self updateShadowPathForView:self.menuBackground];
+    self.menuBackground.layer.shadowColor = [UIColor clearColor].CGColor;
 }
 
 - (void)menuDidClose
@@ -284,12 +286,18 @@ static NSString * const kCurrentLocationLabel = @"Current location";
 
 - (void)addShadowAndCornerToView:(UIView *)view
 {
+    view.layer.shadowColor = [UIColor clearColor].CGColor;
     view.layer.masksToBounds = NO;
-    view.layer.shadowColor = [UIColor blackColor].CGColor;
     view.layer.shadowOffset = CGSizeMake(5.0f, 5.0f);
     view.layer.shadowOpacity = 0.5f;
     view.layer.shadowRadius = 5.0f;
+    [self updateShadowPathForView:view];
 }
 
+- (void)updateShadowPathForView:(UIView *)view
+{
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:view.layer.bounds];
+    view.layer.shadowPath = shadowPath.CGPath;
+}
 
 @end
