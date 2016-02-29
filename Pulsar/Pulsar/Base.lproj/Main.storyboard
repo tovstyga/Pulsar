@@ -82,15 +82,15 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="content_cell_identifier" rowHeight="408" id="rk1-gh-pbU" customClass="PRContentViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="content_cell_identifier" rowHeight="408" id="rk1-gh-pbU" customClass="PRContentViewCell">
                                         <rect key="frame" x="0.0" y="92" width="374" height="408"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rk1-gh-pbU" id="1kR-Ke-6Af">
-                                            <rect key="frame" x="0.0" y="0.0" width="341" height="407"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="407"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg-cell-article" translatesAutoresizingMaskIntoConstraints="NO" id="lAV-ZH-NGU">
-                                                    <rect key="frame" x="0.0" y="0.0" width="381" height="399"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="366" height="399"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Pulse-icon" translatesAutoresizingMaskIntoConstraints="NO" id="7Yg-58-v5P">
                                                     <rect key="frame" x="8" y="8" width="80" height="80"/>
@@ -109,8 +109,8 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2p1-yi-Eh0">
-                                                    <rect key="frame" x="96" y="57" width="160" height="30"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2p1-yi-Eh0">
+                                                    <rect key="frame" x="96" y="57" width="193" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="5zX-jZ-ch3"/>
                                                     </constraints>
@@ -119,30 +119,30 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I72-n5-XVO">
-                                                    <rect key="frame" x="8" y="96" width="325" height="35"/>
+                                                    <rect key="frame" x="8" y="96" width="358" height="35"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="doO-70-AwY">
-                                                            <rect key="frame" x="0.0" y="0.0" width="325" height="35"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="358" height="35"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yGR-Ks-aWM">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="163" height="35"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="179" height="35"/>
                                                                     <subviews>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IJK-Jw-9Kx">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="54" height="35"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="60" height="35"/>
                                                                             <state key="normal" image="twitter_filled-50"/>
                                                                             <connections>
                                                                                 <action selector="shareOnTwitter:" destination="rk1-gh-pbU" eventType="touchUpInside" id="uHf-Hw-wWt"/>
                                                                             </connections>
                                                                         </button>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OYp-Y5-hDZ">
-                                                                            <rect key="frame" x="54" y="0.0" width="54" height="35"/>
+                                                                            <rect key="frame" x="60" y="0.0" width="59" height="35"/>
                                                                             <state key="normal" image="facebook_filled-50"/>
                                                                             <connections>
                                                                                 <action selector="shareOnFacebook:" destination="rk1-gh-pbU" eventType="touchUpInside" id="g1B-Qj-whI"/>
                                                                             </connections>
                                                                         </button>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PjN-tA-cMe">
-                                                                            <rect key="frame" x="108" y="0.0" width="55" height="35"/>
+                                                                            <rect key="frame" x="119" y="0.0" width="60" height="35"/>
                                                                             <state key="normal" image="star"/>
                                                                             <connections>
                                                                                 <action selector="saveAsFavorite:" destination="rk1-gh-pbU" eventType="touchUpInside" id="iQy-F4-baD"/>
@@ -165,24 +165,24 @@
                                                                     </constraints>
                                                                 </stackView>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5DX-3B-vc7">
-                                                                    <rect key="frame" x="163" y="0.0" width="162" height="35"/>
+                                                                    <rect key="frame" x="179" y="0.0" width="179" height="35"/>
                                                                     <subviews>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kUX-5P-rVM">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="54" height="35"/>
-                                                                            <state key="normal" image="apps-ok"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="60" height="35"/>
+                                                                            <state key="normal" image="Facebook_like_thumb_new"/>
                                                                             <connections>
                                                                                 <action selector="upRating:" destination="rk1-gh-pbU" eventType="touchUpInside" id="DyQ-95-u1t"/>
                                                                             </connections>
                                                                         </button>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4pL-lA-evk">
-                                                                            <rect key="frame" x="54" y="0.0" width="54" height="35"/>
+                                                                            <rect key="frame" x="60" y="0.0" width="59" height="35"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Myc-gh-luP">
-                                                                            <rect key="frame" x="108" y="0.0" width="54" height="35"/>
-                                                                            <state key="normal" image="apps-ko"/>
+                                                                            <rect key="frame" x="119" y="0.0" width="60" height="35"/>
+                                                                            <state key="normal" image="facebook-dislike_new"/>
                                                                             <connections>
                                                                                 <action selector="downRating:" destination="rk1-gh-pbU" eventType="touchUpInside" id="f7W-uA-bpJ"/>
                                                                             </connections>
@@ -213,13 +213,13 @@
                                                     </constraints>
                                                 </stackView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Text" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="365" translatesAutoresizingMaskIntoConstraints="NO" id="7J7-dN-064">
-                                                    <rect key="frame" x="8" y="99" width="325" height="300"/>
+                                                    <rect key="frame" x="8" y="99" width="358" height="300"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vHb-yA-FsR">
-                                                    <rect key="frame" x="287" y="59" width="32" height="25"/>
+                                                    <rect key="frame" x="334" y="8" width="32" height="25"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="32" id="meX-nt-5Lh"/>
                                                         <constraint firstAttribute="height" constant="25" id="r9p-Pn-SZk"/>
@@ -232,21 +232,20 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="7J7-dN-064" firstAttribute="bottom" secondItem="1kR-Ke-6Af" secondAttribute="bottomMargin" id="0N3-Nd-3fU"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="Agf-Xv-QIL" secondAttribute="trailing" id="2NM-T4-ehx"/>
                                                 <constraint firstItem="7Yg-58-v5P" firstAttribute="top" secondItem="1kR-Ke-6Af" secondAttribute="topMargin" id="2rZ-wp-PmJ"/>
                                                 <constraint firstItem="7Yg-58-v5P" firstAttribute="leading" secondItem="1kR-Ke-6Af" secondAttribute="leadingMargin" id="3I9-sU-IEf"/>
                                                 <constraint firstItem="2p1-yi-Eh0" firstAttribute="leading" secondItem="7Yg-58-v5P" secondAttribute="trailing" constant="8" id="5b2-eb-bap"/>
-                                                <constraint firstItem="I72-n5-XVO" firstAttribute="top" secondItem="vHb-yA-FsR" secondAttribute="bottom" constant="12" id="AW7-pV-EN5"/>
-                                                <constraint firstItem="vHb-yA-FsR" firstAttribute="top" secondItem="Agf-Xv-QIL" secondAttribute="bottom" constant="10" id="Ie3-hE-LbJ"/>
+                                                <constraint firstItem="vHb-yA-FsR" firstAttribute="leading" secondItem="Agf-Xv-QIL" secondAttribute="trailing" constant="1" id="E1K-oK-5u4"/>
                                                 <constraint firstItem="7J7-dN-064" firstAttribute="trailing" secondItem="1kR-Ke-6Af" secondAttribute="trailingMargin" id="LSv-Ha-PJz"/>
                                                 <constraint firstItem="2p1-yi-Eh0" firstAttribute="trailing" secondItem="1kR-Ke-6Af" secondAttribute="trailingMargin" constant="-77" id="MWe-xt-kpi"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="lAV-ZH-NGU" secondAttribute="trailing" constant="-48" id="PWF-gr-K0A"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="lAV-ZH-NGU" secondAttribute="trailing" id="PWF-gr-K0A"/>
                                                 <constraint firstItem="2p1-yi-Eh0" firstAttribute="top" secondItem="Agf-Xv-QIL" secondAttribute="bottom" constant="8" id="Zmy-cV-NN0"/>
                                                 <constraint firstItem="Agf-Xv-QIL" firstAttribute="leading" secondItem="7Yg-58-v5P" secondAttribute="trailing" constant="8" id="bMd-qo-LOn"/>
                                                 <constraint firstItem="7J7-dN-064" firstAttribute="top" secondItem="7Yg-58-v5P" secondAttribute="bottom" priority="750" constant="11" id="bZQ-Et-AZB"/>
+                                                <constraint firstItem="vHb-yA-FsR" firstAttribute="top" secondItem="1kR-Ke-6Af" secondAttribute="topMargin" id="cT4-nc-zhe"/>
+                                                <constraint firstItem="vHb-yA-FsR" firstAttribute="trailing" secondItem="1kR-Ke-6Af" secondAttribute="trailingMargin" id="dH6-zj-TvM"/>
                                                 <constraint firstItem="7J7-dN-064" firstAttribute="top" secondItem="7Yg-58-v5P" secondAttribute="bottom" priority="250" constant="51" id="dbQ-43-I9l"/>
                                                 <constraint firstItem="Agf-Xv-QIL" firstAttribute="top" secondItem="1kR-Ke-6Af" secondAttribute="topMargin" constant="5" id="dut-Z9-hWx"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="vHb-yA-FsR" secondAttribute="trailing" constant="14" id="gX9-li-OmD"/>
                                                 <constraint firstItem="lAV-ZH-NGU" firstAttribute="top" secondItem="1kR-Ke-6Af" secondAttribute="topMargin" constant="-8" id="lQu-42-93O"/>
                                                 <constraint firstItem="I72-n5-XVO" firstAttribute="top" secondItem="7Yg-58-v5P" secondAttribute="bottom" constant="8" id="owX-cK-IDf"/>
                                                 <constraint firstItem="I72-n5-XVO" firstAttribute="leading" secondItem="1kR-Ke-6Af" secondAttribute="leadingMargin" id="r6Q-HS-Hn7"/>
@@ -298,11 +297,11 @@
                                 <rect key="frame" x="0.0" y="687" width="414" height="49"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <items>
-                                    <tabBarItem title="Hot" image="hot" id="6fB-ho-Dde"/>
+                                    <tabBarItem title="Hot" image="fire" selectedImage="fire_selected" id="6fB-ho-Dde"/>
                                     <tabBarItem title="New" image="clock" selectedImage="clock_selected" id="eAf-Ag-QYO"/>
-                                    <tabBarItem systemItem="mostViewed" id="Oos-pU-63b"/>
-                                    <tabBarItem systemItem="favorites" id="GqP-xX-JG6"/>
-                                    <tabBarItem title="Created" image="created" id="cFG-tM-a46"/>
+                                    <tabBarItem title="Most Viewed" image="top" selectedImage="top_selected" id="Oos-pU-63b"/>
+                                    <tabBarItem title="Favorites" image="star-1" selectedImage="star_selected" id="GqP-xX-JG6"/>
+                                    <tabBarItem title="Created" image="edit_column-50" selectedImage="edit_column_filled-50" id="cFG-tM-a46"/>
                                 </items>
                             </tabBar>
                         </subviews>
@@ -333,7 +332,7 @@
                                     <action selector="toggleFilters:" destination="BQC-lu-wVt" id="nDW-R1-rMZ"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem systemItem="reply" id="nNX-dP-dP1">
+                            <barButtonItem image="export-50" id="nNX-dP-dP1">
                                 <connections>
                                     <action selector="logout:" destination="BQC-lu-wVt" id="BKM-4j-zix"/>
                                 </connections>
@@ -353,6 +352,11 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="unselectedTabBarColor">
+                            <color key="value" red="1" green="1" blue="1" alpha="0.24730785472972974" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="addButton" destination="HYW-UZ-MqU" id="LWb-1i-fZd"/>
                         <outlet property="categoriesMenuConstraint" destination="e8s-J6-dYN" id="2Da-e3-wkm"/>
@@ -526,7 +530,9 @@
                                     <constraint firstAttribute="width" constant="120" id="Fet-X9-fAs"/>
                                     <constraint firstAttribute="height" constant="30" id="wxK-9o-dJC"/>
                                 </constraints>
-                                <state key="normal" title="Category"/>
+                                <state key="normal" title="Category">
+                                    <color key="titleColor" red="0.7843137255" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="selectCategoryAction:" destination="qli-vd-Vwn" eventType="touchUpInside" id="kdi-Qr-9WU"/>
                                 </connections>
@@ -1146,7 +1152,7 @@
                                     <constraint firstAttribute="height" constant="30" id="pdH-TY-QR3"/>
                                     <constraint firstAttribute="width" constant="46" id="tih-y7-WP4"/>
                                 </constraints>
-                                <state key="normal" image="apps-ok"/>
+                                <state key="normal" image="Facebook_like_thumb_new"/>
                                 <connections>
                                     <action selector="upRationgAction:" destination="IMN-rm-sOR" eventType="touchUpInside" id="e0V-Tr-iS0"/>
                                 </connections>
@@ -1157,7 +1163,7 @@
                                     <constraint firstAttribute="width" constant="46" id="U4g-yb-BA8"/>
                                     <constraint firstAttribute="height" constant="30" id="vJf-nH-3Fe"/>
                                 </constraints>
-                                <state key="normal" image="apps-ko"/>
+                                <state key="normal" image="facebook-dislike_new"/>
                                 <connections>
                                     <action selector="downRatingAction:" destination="IMN-rm-sOR" eventType="touchUpInside" id="dA3-u7-F6W"/>
                                 </connections>
@@ -1278,20 +1284,27 @@
     </scenes>
     <resources>
         <image name="AttachmentFrame" width="152" height="151"/>
+        <image name="Facebook_like_thumb_new" width="24" height="20"/>
         <image name="Pulse-icon" width="80" height="80"/>
-        <image name="apps-ko" width="30" height="30"/>
-        <image name="apps-ok" width="30" height="30"/>
         <image name="bg-cell-article" width="181" height="68"/>
         <image name="bg-world" width="320" height="480"/>
         <image name="clock" width="25" height="25"/>
         <image name="clock_selected" width="25" height="25"/>
-        <image name="created" width="32" height="32"/>
         <image name="cross" width="80" height="80"/>
         <image name="down4-50" width="16" height="16"/>
+        <image name="edit_column-50" width="25" height="25"/>
+        <image name="edit_column_filled-50" width="25" height="25"/>
+        <image name="export-50" width="16" height="16"/>
+        <image name="facebook-dislike_new" width="24" height="20"/>
         <image name="facebook_filled-50" width="25" height="25"/>
-        <image name="hot" width="32" height="32"/>
+        <image name="fire" width="25" height="25"/>
+        <image name="fire_selected" width="25" height="25"/>
         <image name="ic-menu" width="19" height="11"/>
         <image name="star" width="24" height="24"/>
+        <image name="star-1" width="25" height="24"/>
+        <image name="star_selected" width="25" height="24"/>
+        <image name="top" width="50" height="50"/>
+        <image name="top_selected" width="25" height="25"/>
         <image name="twitter_filled-50" width="25" height="25"/>
     </resources>
 </document>

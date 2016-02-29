@@ -13,6 +13,8 @@
 
 @interface PRContentViewController : PRRootViewController<PRMenuInteractorDelegate, UITableViewDataSource, UITableViewDelegate>
 
+@property (strong, nonatomic) IBInspectable UIColor *unselectedTabBarColor;
+
 @property (strong, nonatomic) id<PRContentViewInteractorProtocol> interactor;
 
 @property (weak, nonatomic) id<PRContentViewDelegate> delegate;

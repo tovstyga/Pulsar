@@ -99,6 +99,7 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     if (_isOpenedMenu) {
         [self toggleMenu];
     }
+    [self customizeTabBar];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -484,5 +485,24 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     }];
 }
 
+- (void)customizeTabBar
+{
+    if (!self.unselectedTabBarColor) {
+        return;
+    }
+    
+    [self.tabBar setTintColor:[UIColor whiteColor]];
+    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor whiteColor], NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
+    
+    
+    UIColor *unselectedColor = self.unselectedTabBarColor;
+    
+    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:unselectedColor, NSForegroundColorAttributeName, nil]
+                                             forState:UIControlStateNormal];
+    
+    for(UITabBarItem *item in self.tabBar.items) {
+        item.image = [item.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+}
 
 @end

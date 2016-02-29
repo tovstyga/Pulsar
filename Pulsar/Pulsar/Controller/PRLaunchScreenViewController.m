@@ -39,14 +39,10 @@ static NSString * const kToContentSegueIdentifier = @"launch_to_content_segue";
                                                            shadow, NSShadowAttributeName,
                                                            [UIFont fontWithName:@"System" size:21.0], NSFontAttributeName, nil]];
     
-    
     [[UINavigationBar appearance] setBarTintColor:UIColorFromRGBWithAlpha(kBarColor, 1)];
-//    [[UINavigationBar appearance] setBarTintColor:[UIColor clearColor]];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UITabBar appearance] setBarTintColor:UIColorFromRGBWithAlpha(kBarColor, 1)];
-//    [[UITabBar appearance] setBarTintColor:[UIColor clearColor]];
     [[UITabBar appearance] setTintColor:[UIColor whiteColor]];
-    
 }
 
 @end

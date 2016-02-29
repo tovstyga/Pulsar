@@ -44,10 +44,9 @@ typedef NS_ENUM(NSUInteger, PRLikeState) {
     BOOL _animationInProcess;
     BOOL _expanded;
     PRLikeState _likeState;
-    CGRect _currentDrowRect;
 }
 
-static int const kRightBorderMargin = 70;
+static int const kRightBorderMargin = 30;
 
 - (void)awakeFromNib {
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickOnTitle)];
@@ -72,10 +71,7 @@ static int const kRightBorderMargin = 70;
 
 - (void)drawRect:(CGRect)rect
 {
-    _currentDrowRect = rect;
-    if (!_animationInProcess) {
-        self.backgroundCell.frame = CGRectMake(CGRectGetMinX(rect), CGRectGetMinY(rect), CGRectGetWidth(rect), CGRectGetHeight(rect) - self.separatorHeight);
-    }
+    self.backgroundCell.frame = CGRectMake(CGRectGetMinX(rect), CGRectGetMinY(rect), CGRectGetWidth(rect), CGRectGetHeight(rect) - self.separatorHeight);
     [super drawRect:rect];
 }
 
@@ -234,8 +230,6 @@ static int const kRightBorderMargin = 70;
                 if (call) [self.delegate didExpandCell:self];
             } completion:^(BOOL finished) {
                 _animationInProcess = NO;
-                self.backgroundCell.frame = CGRectMake(CGRectGetMinX(_currentDrowRect), CGRectGetMinY(_currentDrowRect), CGRectGetWidth(_currentDrowRect), CGRectGetHeight(_currentDrowRect) - self.separatorHeight);
-//                if (call) [self.delegate didExpandCell:self];
                 [UIView animateWithDuration:0.3f animations:^{
                     self.extendedContainer.alpha = 1;
                 }];
@@ -250,8 +244,6 @@ static int const kRightBorderMargin = 70;
                 if (call) [self.delegate didCollapseCell:self];
             } completion:^(BOOL finished) {
                 _animationInProcess = NO;
-                self.backgroundCell.frame = CGRectMake(CGRectGetMinX(_currentDrowRect), CGRectGetMinY(_currentDrowRect), CGRectGetWidth(_currentDrowRect), CGRectGetHeight(_currentDrowRect) - self.separatorHeight);
-//                if (call) [self.delegate didCollapseCell:self];
             }];
         }
 }
