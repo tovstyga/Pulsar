@@ -332,7 +332,8 @@
                                     <action selector="toggleFilters:" destination="BQC-lu-wVt" id="nDW-R1-rMZ"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem image="export-50" id="nNX-dP-dP1">
+                            <barButtonItem enabled="NO" image="export-50" id="nNX-dP-dP1">
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="logout:" destination="BQC-lu-wVt" id="BKM-4j-zix"/>
                                 </connections>
@@ -1303,7 +1304,7 @@
         <image name="star" width="24" height="24"/>
         <image name="star-1" width="25" height="24"/>
         <image name="star_selected" width="25" height="24"/>
-        <image name="top" width="50" height="50"/>
+        <image name="top" width="25" height="25"/>
         <image name="top_selected" width="25" height="25"/>
         <image name="twitter_filled-50" width="25" height="25"/>
     </resources>

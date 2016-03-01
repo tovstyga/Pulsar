@@ -31,4 +31,6 @@
 
 - (void)removeLocationAtIndex:(NSInteger)index;
 
+- (void)logout;
+
 @end

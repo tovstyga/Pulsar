@@ -29,13 +29,17 @@
 static NSString * const kCategoryCellIdentifier = @"menu_category_cell_identifier";
 static NSString * const kLocationCellIdentifier = @"menu_location_cell_identifier";
 static NSString * const kAddLocationCellIdentifier = @"menu_add_location_cell_identifier";
+static NSString * const kBasicCellIdentifier = @"menu_basic_cell_identifier";
 
 static NSString * const kToMapSegueIdentifier = @"map_screen_segue_identifier";
 
+static NSString * const kSystemOptions = @"System Options";
 static NSString * const kCategoriesSectionTitle = @"Categories";
 static NSString * const kLocationsSectionTitle = @"Locations";
 static NSString * const kAddLocationLabel = @"Add new location";
 static NSString * const kCurrentLocationLabel = @"Current location";
+static NSString * const kLogoutLabel = @"Logout";
+static NSString * const kLogoutImageName = @"export-50";
 
 @dynamic interactor;
 
@@ -124,7 +128,7 @@ static NSString * const kCurrentLocationLabel = @"Current location";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section) {
+    if (indexPath.section == 1) {
         if (indexPath.row) {
             if (_selectedLocation.row != indexPath.row) {
                 if (_selectedLocation) {
@@ -148,6 +152,9 @@ static NSString * const kCurrentLocationLabel = @"Current location";
             [tableView deselectRowAtIndexPath:indexPath animated:NO];
             [self performSegueWithIdentifier:kToMapSegueIdentifier sender:self];
         }
+    } else if (indexPath.section == 2) {
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self.interactor logout];
     } else {
         [[self.interactor categoryForIndex:[indexPath row]] setSelected:@(YES)];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -176,8 +183,10 @@ static NSString * const kCurrentLocationLabel = @"Current location";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section) {
+    if (section == 1) {
         return [self.interactor availableLocations] + 2;
+    } else if (section == 2) {
+        return 1;
     }
     return [self.interactor availableCategories];
 }
@@ -185,7 +194,7 @@ static NSString * const kCurrentLocationLabel = @"Current location";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = nil;
-    if (indexPath.section) {
+    if (indexPath.section == 1) {
         if (indexPath.row > 1) {
             PRMenuLocationCell *locationCell = [tableView dequeueReusableCellWithIdentifier:kLocationCellIdentifier];
             if (!locationCell) {
@@ -217,6 +226,15 @@ static NSString * const kCurrentLocationLabel = @"Current location";
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.textLabel.text = kAddLocationLabel;
         }
+    } else if (indexPath.section == 2) {
+        cell = [tableView dequeueReusableCellWithIdentifier:kBasicCellIdentifier];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBasicCellIdentifier];
+        }
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.textLabel.text = kLogoutLabel;
+        cell.imageView.image = [UIImage imageNamed:kLogoutImageName];
     } else {
         PRMenuCategoryCell *categoryCell = [tableView dequeueReusableCellWithIdentifier:kCategoryCellIdentifier];
         if (!categoryCell) {
@@ -234,20 +252,22 @@ static NSString * const kCurrentLocationLabel = @"Current location";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section) {
+    if (section == 1) {
         return kLocationsSectionTitle;
+    } else if (section == 2) {
+        return kSystemOptions;
     }
     return kCategoriesSectionTitle;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section && indexPath.row > 1) {
+    if (indexPath.section && indexPath.row == 1) {
         return YES;
     }
     return NO;

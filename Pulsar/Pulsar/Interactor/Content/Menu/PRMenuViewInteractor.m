@@ -21,6 +21,7 @@
     NSMutableArray *_editableLocations;
     
     NSOperationQueue *_loadingQueue;
+    BOOL _rollbackChanges;
 }
 
 @synthesize delegate;
@@ -117,6 +118,14 @@
 
 - (void)saveDataWithCompletion:(void(^)(BOOL success, NSString *errorMessage))completion
 {
+    if (_rollbackChanges) {
+        _categories = [NSArray new];
+        _defaultState = [NSArray new];
+        _locations = [NSArray new];
+        _editableLocations = [NSMutableArray new];
+        _rollbackChanges = NO;
+    }
+    
     if ([self.delegate respondsToSelector:@selector(willUpdateUserSettings)]) {
         [self.delegate willUpdateUserSettings];
     }
@@ -237,6 +246,12 @@
         [_editableLocations removeObjectAtIndex:(index - 2)];
     }
 
+}
+
+- (void)logout
+{
+    _rollbackChanges = YES;
+    [self.delegate logoutAction];
 }
 
 #pragma mark - Internal

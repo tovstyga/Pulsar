@@ -217,6 +217,14 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
 
 #pragma mark - MenuInteractorDelegate
 
+- (void)logoutAction
+{
+    if (_isOpenedMenu) {
+        [self toggleMenu];
+    }
+    [self logout:nil];
+}
+
 - (void)willUpdateUserSettings
 {
     _lockOpenMenuInteraction = YES;
@@ -470,16 +478,20 @@ static NSString * const kContentCellIdentifier = @"content_cell_identifier";
     
     _isOpenedMenu = !hide;
     self.categoriesMenuConstraint.constant = hide ? _closedMenuDefaultConstraint : kSpaceFromMenuToRightBorder;
+    __weak typeof(self) wSelf = self;
     [UIView animateWithDuration:0.3f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
-        if (hide) {
-            if ([self.delegate respondsToSelector:@selector(menuDidClose)]) {
-                [self.delegate menuDidClose];
-            }
-        } else {
-            if ([self.delegate respondsToSelector:@selector(menuDidOpen)]) {
-                [self.delegate menuDidOpen];
+        __strong typeof(wSelf) sSelf = wSelf;
+        if (sSelf) {
+            if (hide) {
+                if ([sSelf.delegate respondsToSelector:@selector(menuDidClose)]) {
+                    [sSelf.delegate menuDidClose];
+                }
+            } else {
+                if ([sSelf.delegate respondsToSelector:@selector(menuDidOpen)]) {
+                    [sSelf.delegate menuDidOpen];
+                }
             }
         }
     }];

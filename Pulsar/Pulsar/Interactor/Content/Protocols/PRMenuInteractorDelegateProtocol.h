@@ -11,4 +11,6 @@
 - (void)willUpdateUserSettings;
 - (void)didUpdateUserSettings;
 
+- (void)logoutAction;
+
 @end
